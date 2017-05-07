@@ -11,7 +11,7 @@ export function selectRover(rover){
 
 export const INVALIDATE_ROVER = "invalidateRover";
 
-function invalidateRover(rover){
+export function invalidateRover(rover){
     return{
         type: INVALIDATE_ROVER,
         rover

@@ -12,14 +12,29 @@ import 'babel-polyfill';
 //** Stuff for Rover project
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
-import store from './store'
-// import App from './App'
+import configureStore from './configureStore'
+import AsyncApp from './Containers/AsyncApp'
 //** END Stuff for Rover project
 
 import 'sanitize.css/sanitize.css';
 
-// Import root app
-import App from 'containers/App';
+// Import root routes
+// import createRoutes from './routes';
+
+// Create redux store with history
+// this uses the singleton browserHistory provided by react-router
+// Optionally, this could be changed to leverage a created history
+// e.g. `const browserHistory = useRouterHistory(createBrowserHistory)();`
+// const initialState = {};
+// const store = configureStore(initialState, browserHistory);
+
+
+// Sync history and store, as the react-router-redux reducer
+// is under the non-default key ("routing"), selectLocationState
+// must be provided for resolving how to retrieve the "route" in the state
+// const history = syncHistoryWithStore(browserHistory, store, {
+//     selectLocationState: makeSelectLocationState(),
+// });
 
 // Load the favicon, the manifest.json file and the .htaccess file
 /* eslint-disable import/no-unresolved, import/extensions */
@@ -32,11 +47,12 @@ import 'file-loader?name=[name].[ext]!./.htaccess';
 // Import CSS reset and Global Styles
 import './global-styles';
 
+const store = configureStore();
 
 const render = (messages) => {
   ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <AsyncApp />
     </Provider>,
     document.getElementById('app')
   );
