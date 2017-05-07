@@ -50,12 +50,12 @@ const routeInitialState = fromJS({
 // }
 
 // *** Rover reducers
-function selectedRover(state="", action){
+function selectedRover(state={selectedRover: "Curiosity"}, action){
   switch(action.type){
       case SELECT_ROVER:
         return action.rover
       default:
-        state
+        return state
   }
 }
 
@@ -79,8 +79,8 @@ function roversData(state={
         return Object.assign({}, state, {
             isFetching: false,
             didInvalidate, false,
-            name: action.data.name,
-            status: action.data.status,
+            name: action.name,
+            status: action.status,
             lastUpdated: action.receivedAt
         })
       default:

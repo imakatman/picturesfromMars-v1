@@ -12,8 +12,8 @@ import 'babel-polyfill';
 //** Stuff for Rover project
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
-import store from '../store'
-import AsyncApp from './AsyncApp'
+import store from './store'
+// import App from './App'
 //** END Stuff for Rover project
 
 import 'sanitize.css/sanitize.css';
@@ -36,11 +36,12 @@ import './global-styles';
 const render = (messages) => {
   ReactDOM.render(
     <Provider store={store}>
-        <AsyncApp />
+        <App />
     </Provider>,
     document.getElementById('app')
   );
 };
+
 
 // Hot reloadable translation json files
 if (module.hot) {

@@ -38,11 +38,18 @@ function requestRoversData(rover){
 
 export const RECEIVE_ROVERS_DATA = "receiveRoversData"
 
-function receiveRoversData(rover){
+function receiveRoversData(rover, json){
+    console.log(json.rover);
     return{
         type: RECEIVE_ROVERS_DATA,
         rover,
-        data: json.data.children.map(child => child.data),
+        id: json.rover.id,
+        landingDate: json.rover.landing_date,
+        launchDate: json.rover.launch_date,
+        maxDate: json.rover.max_date,
+        name: json.rover.name,
+        status: json.rover.status,
+        totalPhotos: json.rover.total_photos,
         recievedAt: Date.now()
     }
 }
