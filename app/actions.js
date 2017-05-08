@@ -44,12 +44,13 @@ function receiveRoversData(rover, json){
         type: RECEIVE_ROVERS_DATA,
         rover,
         id: json.rover.id,
-        landingDate: json.rover.landing_date,
-        launchDate: json.rover.launch_date,
-        maxDate: json.rover.max_date,
-        name: json.rover.name,
-        status: json.rover.status,
-        totalPhotos: json.rover.total_photos,
+        data: json.rover.map(property=>property.data),
+        // landingDate: json.rover.landing_date,
+        // launchDate: json.rover.launch_date,
+        // maxDate: json.rover.max_date,
+        // name: json.rover.name,
+        // status: json.rover.status,
+        // totalPhotos: json.rover.total_photos,
         recievedAt: Date.now()
     }
 }

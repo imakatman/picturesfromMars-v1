@@ -9,14 +9,28 @@
 import 'babel-polyfill';
 
 // Import all the third party stuff
-//** Stuff for Rover project
-import React, { Component } from 'react'
-import { Provider } from 'react-redux'
-import configureStore from './configureStore'
-import AsyncApp from './Containers/AsyncApp'
-//** END Stuff for Rover project
+// ** Stuff for Rover project
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+// import { Router, Route } from 'react-router';
+import store from './store';
+// ** END Stuff for Rover project
+
+// import { applyRouterMiddleware, Router} from 'react-router';
+
+// import { syncHistoryWithStore } from 'react-router-redux';
+// import { useScroll } from 'react-router-scroll';
 
 import 'sanitize.css/sanitize.css';
+
+// Import root app
+// import App from 'containers/App';
+import AsyncApp from 'containers/AsyncApp';
+
+// Import i18n messages
+// import { translationMessages } from './i18n';
+
 
 // Import root routes
 // import createRoutes from './routes';
@@ -47,26 +61,28 @@ import 'file-loader?name=[name].[ext]!./.htaccess';
 // Import CSS reset and Global Styles
 import './global-styles';
 
-const store = configureStore();
+// const store = configureStore();
 
-const render = (messages) => {
+// Set up the router, wrapping all Routes in the App component
+
+// const render = () => {
   ReactDOM.render(
     <Provider store={store}>
-        <AsyncApp />
+        <AsyncApp/>
     </Provider>,
     document.getElementById('app')
   );
-};
+// };
 
 
 // Hot reloadable translation json files
-if (module.hot) {
-  // modules.hot.accept does not accept dynamic dependencies,
-  // have to be constants at compile-time
-  module.hot.accept('./i18n', () => {
-    render(translationMessages);
-  });
-}
+// if (module.hot) {
+//   // modules.hot.accept does not accept dynamic dependencies,
+//   // have to be constants at compile-time
+//   module.hot.accept('./i18n', () => {
+//     render(translationMessages);
+//   });
+// }
 
 // Install ServiceWorker and AppCache in the end since
 // it's not most important operation and if main code fails,
