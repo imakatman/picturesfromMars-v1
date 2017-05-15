@@ -1,32 +1,31 @@
 import thunkMiddleware from 'redux-thunk'
 import {createLogger} from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux'
-import { selectSubreddit, fetchPosts } from './actions'
+import { selectRover, fetchRoversData } from './actions'
 import rootReducer from './reducers'
 
-const loggerMiddleware = createLogger()
+const loggerMiddleware = createLogger();
 
-// export default function configureStore(preloadedState) {
-//     return createStore(
-//         rootReducer,
-//         preloadedState,
-//         applyMiddleware(
-//             thunkMiddleware,
-//             loggerMiddleware
-//         )
-//     )
-// };
-
-const store = createStore(
-    rootReducer,
-    // preloadedState,
-    applyMiddleware(
-        thunkMiddleware,
-        loggerMiddleware
+export default function configureStore() {
+    return createStore(
+        rootReducer,
+        applyMiddleware(
+            thunkMiddleware,
+            loggerMiddleware
+        )
     )
-)
+};
 
-export default store;
+// const store = createStore(
+//     rootReducer,
+//     // preloadedState,
+//     applyMiddleware(
+//         thunkMiddleware,
+//         loggerMiddleware
+//     )
+// )
+//
+// export default store;
 
 // store.dispatch(selectRover('Curiostiy'));
 // store.dispatch(fetchRoversData('Curiosity')).then(() =>

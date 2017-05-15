@@ -50,7 +50,7 @@ const routeInitialState = fromJS({
 // }
 
 // *** Rover reducers
-function selectedRover(state={selectedRover: "Curiosity"}, action){
+function selectedRover(state = {selectedRover:  "Curiosity"}, action){
   switch(action.type){
       case SELECT_ROVER:
         return action.rover
@@ -63,6 +63,7 @@ function roversData(state={
     isFetching: false,
     didInvalidate: false,
     name: "",
+    data: {},
     status: "",
   }, action){
   switch(action.type){
@@ -78,7 +79,7 @@ function roversData(state={
       case RECEIVE_ROVERS_DATA:
         return Object.assign({}, state, {
             isFetching: false,
-            didInvalidate, false,
+            // didInvalidate, false,
             data: action.data,
             lastUpdated: action.receivedAt
         })
@@ -87,7 +88,7 @@ function roversData(state={
   }
 }
 
-function getDataByRover(state={}, action){
+function getDataByRover(state={ }, action){
   switch(action.type){
       case INVALIDATE_ROVER:
         return Object.assign({}, state, {
@@ -104,8 +105,8 @@ function getDataByRover(state={}, action){
 }
 
 const rootReducer = combineReducers({
-    getDataByRover,
     selectedRover,
+    getDataByRover,
 });
 
 export default rootReducer;

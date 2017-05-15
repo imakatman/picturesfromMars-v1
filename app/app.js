@@ -14,7 +14,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 // import { Router, Route } from 'react-router';
-import store from './store';
+import configureStore from './store';
 // ** END Stuff for Rover project
 
 // import { applyRouterMiddleware, Router} from 'react-router';
@@ -61,7 +61,7 @@ import 'file-loader?name=[name].[ext]!./.htaccess';
 // Import CSS reset and Global Styles
 import './global-styles';
 
-// const store = configureStore();
+const store = configureStore();
 
 // Set up the router, wrapping all Routes in the App component
 

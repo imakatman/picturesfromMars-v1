@@ -39,12 +39,12 @@ function requestRoversData(rover){
 export const RECEIVE_ROVERS_DATA = "receiveRoversData"
 
 function receiveRoversData(rover, json){
-    console.log(json.rover);
     return{
         type: RECEIVE_ROVERS_DATA,
         rover,
         id: json.rover.id,
-        data: json.rover.map(property=>property.data),
+        data: json.rover,
+        // data: json.rover.map(property=>property.data),
         // landingDate: json.rover.landing_date,
         // launchDate: json.rover.launch_date,
         // maxDate: json.rover.max_date,
@@ -67,7 +67,8 @@ export function fetchRoversData(rover){
 }
 
 function shouldFetchRoverData(state, rover) {
-    const data = state.getDataByRover[rover]
+    const data = state.getDataByRover
+    // const data = state.getDataByRover[rover]
     if (!data) {
         return true
     } else if (posts.isFetching) {
