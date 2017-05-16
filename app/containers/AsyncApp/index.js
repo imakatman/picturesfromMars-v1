@@ -20,7 +20,10 @@ class AsyncApp extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        // console.log(prevProps);
+
+        console.log("component updated");
+        console.log(prevProps);
+        console.log(this.props);
 
         // if (this.props.selectedSubreddit !== prevProps.selectedSubreddit) {
         //     const { dispatch, selectedSubreddit } = this.props
@@ -50,14 +53,14 @@ function mapStateToProps(state) {
 
     // console.log(state);
 
-    // const {
-    //           isFetching,
-    //           lastUpdated,
-    //           data: roverData
-    //       } = getDataByRover[selectedRover] || {
-    //     isFetching: true,
-    //     data: []
-    // }
+    const {
+              isFetching,
+              lastUpdated,
+              data: roverData
+          } = getDataByRover[selectedRover] || {
+        isFetching: true,
+        data: []
+    }
 
     return {
         selectedRover,
