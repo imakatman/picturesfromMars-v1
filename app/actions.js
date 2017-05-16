@@ -42,6 +42,7 @@ function receiveRoversData(rover, json){
     return{
         type: RECEIVE_ROVERS_DATA,
         rover,
+        name: json.rover.name,
         id: json.rover.id,
         data: json.rover,
         // data: json.rover.map(property=>property.data),
@@ -67,11 +68,11 @@ export function fetchRoversData(rover){
 }
 
 function shouldFetchRoverData(state, rover) {
-    const data = state.getDataByRover
-    // const data = state.getDataByRover[rover]
+    // const data = state.getDataByRover;
+    const data = state.getDataByRover[rover]
     if (!data) {
         return true
-    } else if (posts.isFetching) {
+    } else if (roverData.isFetching) {
         return false
     } else {
         return data.didInvalidate
@@ -79,7 +80,6 @@ function shouldFetchRoverData(state, rover) {
 }
 
 export function fetchRoverDataIfNeeded(rover) {
-
     // Note that the function also receives getState()
     // which lets you choose what to dispatch next.
 

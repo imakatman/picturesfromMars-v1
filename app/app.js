@@ -63,8 +63,9 @@ import './global-styles';
 
 const store = configureStore();
 
-// Set up the router, wrapping all Routes in the App component
+console.log(store.getState());
 
+// Set up the router, wrapping all Routes in the App component
 // const render = () => {
   ReactDOM.render(
     <Provider store={store}>
