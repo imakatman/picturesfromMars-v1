@@ -79,6 +79,7 @@ function roversData(state={
       case RECEIVE_ROVERS_DATA:
         return Object.assign({}, state, {
             isFetching: false,
+            didInvalidate: false,
             name: action.name,
             data: action.data,
             lastUpdated: action.receivedAt
