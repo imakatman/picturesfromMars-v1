@@ -11,7 +11,7 @@ export function selectRover(rover){
 
 export const INVALIDATE_ROVER = "invalidateRover";
 
-function invalidateRover(rover){
+export function invalidateRover(rover){
     return{
         type: INVALIDATE_ROVER,
         rover
@@ -38,12 +38,14 @@ function requestRoversData(rover){
 
 export const RECEIVE_ROVERS_DATA = "receiveRoversData"
 
-function receiveRoversData(rover){
+function receiveRoversData(rover, json){
     return{
         type: RECEIVE_ROVERS_DATA,
         rover,
-        data: json.data.children.map(child => child.data),
-        recievedAt: Date.now()
+        name: json.rover.name,
+        id: json.rover.id,
+        data: json.rover,
+        receivedAt: Date.now()
     }
 }
 
@@ -59,10 +61,11 @@ export function fetchRoversData(rover){
 }
 
 function shouldFetchRoverData(state, rover) {
+    // const data = state.getDataByRover;
     const data = state.getDataByRover[rover]
     if (!data) {
         return true
-    } else if (posts.isFetching) {
+    } else if (roverData.isFetching) {
         return false
     } else {
         return data.didInvalidate
@@ -70,7 +73,6 @@ function shouldFetchRoverData(state, rover) {
 }
 
 export function fetchRoverDataIfNeeded(rover) {
-
     // Note that the function also receives getState()
     // which lets you choose what to dispatch next.
 

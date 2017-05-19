@@ -3,9 +3,9 @@
  * If we were to do this in store.js, reducers wouldn't be hot reloadable.
  */
 
-import { combineReducers } from 'redux-immutable';
-import { fromJS } from 'immutable';
-import { LOCATION_CHANGE } from 'react-router-redux';
+import { combineReducers } from 'redux';
+// import { fromJS } from 'immutable';
+// import { LOCATION_CHANGE } from 'react-router-redux';
 import {SELECT_ROVER, INVALIDATE_ROVER, REFRESH_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DATA} from './actions.js';
 
 // import languageProviderReducer from 'containers/LanguageProvider/reducer';
@@ -19,9 +19,9 @@ import {SELECT_ROVER, INVALIDATE_ROVER, REFRESH_ROVER, REQUEST_ROVERS_DATA, RECE
  */
 
 // Initial routing state
-const routeInitialState = fromJS({
-  locationBeforeTransitions: null,
-});
+// const routeInitialState = fromJS({
+//   locationBeforeTransitions: null,
+// });
 
 /**
  * Merge route into the global application state
@@ -50,12 +50,12 @@ const routeInitialState = fromJS({
 // }
 
 // *** Rover reducers
-function selectedRover(state="", action){
+function selectedRover(state = "Curiosity", action){
   switch(action.type){
       case SELECT_ROVER:
         return action.rover
       default:
-        state
+        return state
   }
 }
 
@@ -63,6 +63,7 @@ function roversData(state={
     isFetching: false,
     didInvalidate: false,
     name: "",
+    data: {},
     status: "",
   }, action){
   switch(action.type){
@@ -78,9 +79,9 @@ function roversData(state={
       case RECEIVE_ROVERS_DATA:
         return Object.assign({}, state, {
             isFetching: false,
-            didInvalidate, false,
-            name: action.data.name,
-            status: action.data.status,
+            didInvalidate: false,
+            name: action.name,
+            data: action.data,
             lastUpdated: action.receivedAt
         })
       default:
@@ -88,14 +89,11 @@ function roversData(state={
   }
 }
 
-function getDataByRover(state={}, action){
+function getDataByRover(state={ }, action){
   switch(action.type){
       case INVALIDATE_ROVER:
-        return Object.assign({}, state, {
-          didInvalidate: true,
-        })
-      case REQUEST_ROVERS_DATA:
       case RECEIVE_ROVERS_DATA:
+      case REQUEST_ROVERS_DATA:
         return Object.assign({}, state, {
           [action.rover]: roversData(state[action.rover], action)
         })
