@@ -1,5 +1,9 @@
 import fetch from 'isomorphic-fetch';
 
+// *****
+// ** INDIVIDUAL ROVER ACTIONS
+//
+
 export const SELECT_ROVER = "selectRover";
 
 export function selectRover(rover){
@@ -83,6 +87,89 @@ export function fetchRoverDataIfNeeded(rover) {
         if (shouldFetchRoverData(getState(), rover)) {
             // Dispatch a thunk from thunk!
             return dispatch(fetchRoversData(rover))
+        } else {
+            // Let the calling code know there's nothing to wait for.
+            return Promise.resolve()
+        }
+    }
+}
+
+
+
+// *****
+// ** REDUCERS FOR ALL ROVER ACTIONS
+//
+
+export const INVALIDATE_ALL_ROVERS = "invalidateAllRovers";
+
+export function invalidateAllRovers(rovers){
+    return{
+        type: INVALIDATE_ALL_ROVERS,
+        rovers
+    }
+};
+
+export const REFRESH_ROVERS = "refreshRovers";
+
+function refreshRover(rovers){
+    return{
+        type: REFRESH_ROVERS,
+        rovers
+    }
+};
+
+export const REQUEST_ALL_ROVERS_DATA = "requestAllRoversData";
+
+function requestAllRoversData(rovers){
+    return{
+        type: REQUEST_ALL_ROVERS_DATA,
+        rovers
+    }
+}
+
+export const RECEIVE_ALL_ROVERS_DATA = "receiveAllRoversData"
+
+function receiveAllRoversData(rovers, json){
+    return{
+        type: RECEIVE_ALL_ROVERS_DATA,
+        simpleDataAboutAllRovers: json.rovers
+    }
+}
+
+export function fetchAllRoversData(rovers){
+    return function(dispatch){
+        dispatch(requestAllRoversData())
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`)
+        .then(response => response.json())
+        .then(json=>
+            dispatch(receiveAllRoversData(rovers, json))
+        )
+    }
+}
+
+function shouldFetchAllRoverData(state, rovers) {
+    // const data = state.getDataByRover;
+    const data = state.getAllRoversData[rovers]
+    if (!data) {
+        return true
+    } else if (roverData.isFetching) {
+        return false
+    } else {
+        return data.didInvalidate
+    }
+}
+
+export function fetchAllRoverDataIfNeeded(rovers) {
+    // Note that the function also receives getState()
+    // which lets you choose what to dispatch next.
+
+    // This is useful for avoiding a network request if
+    // a cached value is already available.
+
+    return (dispatch, getState) => {
+        if (shouldFetchAllRoverData(getState(), rovers)) {
+            // Dispatch a thunk from thunk!
+            return dispatch(fetchAllRoversData(rovers))
         } else {
             // Let the calling code know there's nothing to wait for.
             return Promise.resolve()

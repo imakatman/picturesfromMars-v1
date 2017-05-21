@@ -7,6 +7,7 @@ import { combineReducers } from 'redux';
 // import { fromJS } from 'immutable';
 // import { LOCATION_CHANGE } from 'react-router-redux';
 import {SELECT_ROVER, INVALIDATE_ROVER, REFRESH_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DATA} from './actions.js';
+import {INVALIDATE_ALL_ROVERS, REQUEST_ALL_ROVERS_DATA, RECEIVE_ALL_ROVERS_DATA} from './actions.js';
 
 // import languageProviderReducer from 'containers/LanguageProvider/reducer';
 
@@ -71,18 +72,18 @@ function roversData(state={
         return Object.assign({}, state, {
           didInvalidate: true,
         })
+      case RECEIVE_ROVERS_DATA:
+          return Object.assign({}, state, {
+              isFetching: false,
+              didInvalidate: false,
+              name: action.name,
+              data: action.data,
+              lastUpdated: action.receivedAt
+          })
       case REQUEST_ROVERS_DATA:
         return Object.assign({}, state, {
             isFetching: true,
             didInvalidate: false,
-        })
-      case RECEIVE_ROVERS_DATA:
-        return Object.assign({}, state, {
-            isFetching: false,
-            didInvalidate: false,
-            name: action.name,
-            data: action.data,
-            lastUpdated: action.receivedAt
         })
       default:
         return state
@@ -95,16 +96,57 @@ function getDataByRover(state={ }, action){
       case RECEIVE_ROVERS_DATA:
       case REQUEST_ROVERS_DATA:
         return Object.assign({}, state, {
-          [action.rover]: roversData(state[action.rover], action)
+          Rover: roversData(state[action.rover], action)
         })
       default:
         return state
   }
 }
 
+function allRoversData(state={
+    isFetchingAll: false,
+    didInvalidateAll: false,
+    simpleDataAboutAllRovers: {},
+}, action){
+    switch(action.type){
+        case INVALIDATE_ALL_ROVERS:
+            return Object.assign({}, state, {
+                didInvalidate: true,
+            })
+        case RECEIVE_ALL_ROVERS_DATA:
+            return Object.assign({}, state, {
+                isFetchingAll: false,
+                didInvalidateAll: false,
+                simpleDataAboutAllRovers: action.simpleDataAboutAllRovers,
+                lastUpdatedAll: action.receivedAt
+            })
+        case REQUEST_ALL_ROVERS_DATA:
+            return Object.assign({}, state, {
+                isFetchingAll: true,
+                didInvalidateAll: false,
+            })
+        default:
+            return state
+    }
+}
+
+function getAllRoversData(state={ }, action){
+    switch(action.type){
+        case INVALIDATE_ALL_ROVERS:
+        case RECEIVE_ALL_ROVERS_DATA:
+        case REQUEST_ALL_ROVERS_DATA:
+            return Object.assign({}, state, {
+                AllRovers: allRoversData(state[action.rovers], action)
+            })
+        default:
+            return state
+    }
+}
+
 const rootReducer = combineReducers({
     getDataByRover,
     selectedRover,
+    getAllRoversData
 });
 
 export default rootReducer;

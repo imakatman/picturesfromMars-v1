@@ -1,45 +1,54 @@
-import React from 'react';
-// import React, {PropTypes} from 'react'
+import React, {PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { selectRover, fetchRoverDataIfNeeded, invalidateRover } from '../../actions'
+import { fetchAllRoverDataIfNeeded, invalidateAllRovers, selectRover, fetchRoverDataIfNeeded, invalidateRover } from '../../actions'
+import Picker from 'components/Picker'
+import InsideRoverContainer from 'components/InsideRoverContainer'
+
 
 class AsyncApp extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log(this.props);
+        this.state ={
+            roversNames: []
+        }
+
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
+        const { dispatch, getAllRoversData } = this.props;
 
-        const { dispatch, selectedRover } = this.props;
+        dispatch(fetchAllRoverDataIfNeeded());
 
-        // dispatch(fetchRoversData(selectedRover));
-        // dispatch(selectRover("Curiosity"));
-        dispatch(fetchRoverDataIfNeeded("Curiosity"));
+        const roversNames = getAllRoversData.AllRovers.simpleDataAboutAllRovers.map(rover=>
+            rover.name
+        );
+
+        this.setState({
+            roversNames: roversNames
+        })
     }
 
     componentDidUpdate(prevProps) {
-
-        console.log("component updated");
-        console.log(prevProps);
-        console.log(this.props);
-
-        // if (this.props.selectedSubreddit !== prevProps.selectedSubreddit) {
-        //     const { dispatch, selectedSubreddit } = this.props
-        //     dispatch(fetchPostsIfNeeded(selectedSubreddit))
-        // }
+        if (this.props.selectedRover !== prevProps.selectedRover) {
+            const { dispatch, selectedRover} = this.props
+            dispatch(fetchRoverDataIfNeeded(selectedRover))
+        }
     }
 
-    render() {
-        const { selectedRover, roverData } = this.props;
+    handleChange(selectedRover){
 
-        // console.log("updated");
+    }
+
+
+    render() {
+        const { selectedRover, getDataByRover, getAllRoversData } = this.props;
 
         return (
             <div>
-                <h1>{selectedRover}</h1>
-                <p>{roverData}</p>
+                <Picker onChange={this.handleChange}
+                        values={"roversNames"}/>
             </div>
         )
     }
@@ -47,11 +56,7 @@ class AsyncApp extends React.Component {
 
 function mapStateToProps(state) {
 
-    const { selectedRover, getDataByRover } = state;
-
-    // console.log("map state to props");
-
-    // console.log(state);
+    const { selectedRover, getDataByRover, getAllRoversData } = state;
 
     const {
               isFetching,
@@ -62,9 +67,19 @@ function mapStateToProps(state) {
         data: []
     }
 
+    const {
+              isFetchingAll,
+              lastUpdatedAll,
+              simpleDataAboutAllRovers: allRoversData
+          } = getAllRoversData[selectedRover] || {
+        isFetching: true,
+        simpleDataAboutAllRovers: []
+    }
+
     return {
         selectedRover,
         getDataByRover,
+        getAllRoversData
     };
 }
 
