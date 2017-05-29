@@ -5,18 +5,24 @@
  */
 
 import React from 'react';
-// import styled from 'styled-components';
+import SelectARover from 'components/SelectARover';
 
-function Picker() {
+function Picker(props) {
+    console.log(props.values);
     return (
         <form>
-            <input type="radio" name="rover" value="Curiosity" /> <h2>Curiosity</h2>
+            {props.values.map(value =>
+                <SelectARover
+                    key={value.id}
+                    name={value.name}
+                    totalPhotos={value.total_photos}
+                    onClick={() => value.onClick()}
+                />
+            )}
         </form>
     );
 }
 
-Picker.propTypes = {
-
-};
+Picker.propTypes = {};
 
 export default Picker;

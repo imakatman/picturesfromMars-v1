@@ -7,7 +7,7 @@ import { combineReducers } from 'redux';
 // import { fromJS } from 'immutable';
 // import { LOCATION_CHANGE } from 'react-router-redux';
 import {SELECT_ROVER, INVALIDATE_ROVER, REFRESH_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DATA} from './actions.js';
-import {INVALIDATE_ALL_ROVERS, REQUEST_ALL_ROVERS_DATA, RECEIVE_ALL_ROVERS_DATA} from './actions.js';
+import {INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA} from './actions.js';
 
 // import languageProviderReducer from 'containers/LanguageProvider/reducer';
 
@@ -72,6 +72,11 @@ function roversData(state={
         return Object.assign({}, state, {
           didInvalidate: true,
         })
+      case REQUEST_ROVERS_DATA:
+        return Object.assign({}, state, {
+            isFetching: true,
+            didInvalidate: false,
+        })
       case RECEIVE_ROVERS_DATA:
           return Object.assign({}, state, {
               isFetching: false,
@@ -80,11 +85,6 @@ function roversData(state={
               data: action.data,
               lastUpdated: action.receivedAt
           })
-      case REQUEST_ROVERS_DATA:
-        return Object.assign({}, state, {
-            isFetching: true,
-            didInvalidate: false,
-        })
       default:
         return state
   }
@@ -93,8 +93,8 @@ function roversData(state={
 function getDataByRover(state={ }, action){
   switch(action.type){
       case INVALIDATE_ROVER:
-      case RECEIVE_ROVERS_DATA:
       case REQUEST_ROVERS_DATA:
+      case RECEIVE_ROVERS_DATA:
         return Object.assign({}, state, {
           Rover: roversData(state[action.rover], action)
         })
@@ -103,11 +103,7 @@ function getDataByRover(state={ }, action){
   }
 }
 
-function allRoversData(state={
-    isFetchingAll: false,
-    didInvalidateAll: false,
-    simpleDataAboutAllRovers: {},
-}, action){
+function allRoversData(state={ }, action){
     switch(action.type){
         case INVALIDATE_ALL_ROVERS:
             return Object.assign({}, state, {
@@ -118,23 +114,17 @@ function allRoversData(state={
                 isFetchingAll: false,
                 didInvalidateAll: false,
                 simpleDataAboutAllRovers: action.simpleDataAboutAllRovers,
-                lastUpdatedAll: action.receivedAt
-            })
-        case REQUEST_ALL_ROVERS_DATA:
-            return Object.assign({}, state, {
-                isFetchingAll: true,
-                didInvalidateAll: false,
+                lastUpdatedAll: Date.now()
             })
         default:
             return state
     }
 }
 
-function getAllRoversData(state={ }, action){
+function getAllRoversData(state={AllRovers: {}}, action){
     switch(action.type){
         case INVALIDATE_ALL_ROVERS:
         case RECEIVE_ALL_ROVERS_DATA:
-        case REQUEST_ALL_ROVERS_DATA:
             return Object.assign({}, state, {
                 AllRovers: allRoversData(state[action.rovers], action)
             })

@@ -26,7 +26,7 @@ import 'sanitize.css/sanitize.css';
 
 // Import root app
 // import App from 'containers/App';
-import AsyncApp from 'containers/AsyncApp';
+import RoversApp from 'containers/RoversApp';
 
 // Import i18n messages
 // import { translationMessages } from './i18n';
@@ -67,7 +67,7 @@ const store = configureStore();
 // const render = () => {
   ReactDOM.render(
     <Provider store={store}>
-        <AsyncApp/>
+        <RoversApp/>
     </Provider>,
     document.getElementById('app')
   );

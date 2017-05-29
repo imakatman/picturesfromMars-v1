@@ -49,7 +49,7 @@ function receiveRoversData(rover, json){
         name: json.rover.name,
         id: json.rover.id,
         data: json.rover,
-        receivedAt: Date.now()
+        receivedAt: Date.now(),
     }
 }
 
@@ -118,14 +118,13 @@ function refreshRover(rovers){
     }
 };
 
-export const REQUEST_ALL_ROVERS_DATA = "requestAllRoversData";
-
-function requestAllRoversData(rovers){
-    return{
-        type: REQUEST_ALL_ROVERS_DATA,
-        rovers
-    }
-}
+// export const REQUEST_ALL_ROVERS_DATA = "requestAllRoversData";
+//
+// function requestAllRoversData(){
+//     return{
+//         type: REQUEST_ALL_ROVERS_DATA,
+//     }
+// }
 
 export const RECEIVE_ALL_ROVERS_DATA = "receiveAllRoversData"
 
@@ -138,8 +137,8 @@ function receiveAllRoversData(rovers, json){
 
 export function fetchAllRoversData(rovers){
     return function(dispatch){
-        dispatch(requestAllRoversData())
-        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`)
+        // dispatch(requestAllRoversData())
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`)
         .then(response => response.json())
         .then(json=>
             dispatch(receiveAllRoversData(rovers, json))
