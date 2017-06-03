@@ -20,6 +20,10 @@ class RoversApp extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            clickStateOfRovers: Array(3).fill(false)
+        }
+
         this.handleClick = this.handleClick.bind(this);
     }
 
@@ -29,8 +33,11 @@ class RoversApp extends React.Component {
         dispatch(fetchAllRoverDataIfNeeded());
     }
 
-    handleClick(selectedRover) {
-        console.log("click!");
+    handleClick(i) {
+        const {dispatch, getAllRoversData} = this.props;
+        const selectedRover = getAllRoversData.AllRovers.simpleDataAboutAllRovers[i].name;
+
+        dispatch(selectRover(selectedRover));
     }
 x
     render() {
@@ -40,7 +47,8 @@ x
             <div>
                 {getAllRoversData.AllRovers.simpleDataAboutAllRovers &&
                     <Picker
-                        onClick={() => this.handleClick()}
+                        activeState={this.state.clickStateOfRovers}
+                        onClick={(i) => this.handleClick(i)}
                         values={getAllRoversData.AllRovers.simpleDataAboutAllRovers} />
                 }
             </div>

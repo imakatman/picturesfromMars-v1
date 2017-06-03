@@ -22,7 +22,7 @@ export default function createRoutes(store) {
       name: 'home',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          import('containers/AsyncApp'),
+            System.import('containers/RoversApp'),
         ]);
 
         const renderRoute = loadModule(cb);
@@ -34,6 +34,12 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+          path: '/r/:selectedRover',
+          name: 'dynamicPage',
+          getComponent(nextState, cb) {
+              System.import('containers/SelectedRover').then(loadModule(cb)).catch(errorLoading);
+          },
+      },{
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {

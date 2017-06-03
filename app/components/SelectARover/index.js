@@ -5,15 +5,18 @@
  */
 
 import React from 'react';
-// import styled from 'styled-components';
+import {Link} from 'react-router';
 
 function SelectARover(props) {
     return (
-        <span>
-            <input type="radio" value={props.name} onClick={() => props.onClick}/>
-            <h3>{props.name}</h3>
+        <div>
+            <h3>
+                <Link to={"r/" + props.name} onClick={props.onClick}>
+                    {props.name}
+                </Link>
+            </h3>
             <p>{props.totalPhotos}</p>
-        </span>
+        </div>
     );
 }
 
