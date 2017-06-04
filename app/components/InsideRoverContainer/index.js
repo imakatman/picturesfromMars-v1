@@ -62,4 +62,5 @@ class InsideRoverContainer extends React.Component {
 
 InsideRoverContainer.propTypes = {};
 
+ReactDOM.render(<InsideRoverContainer/>, document.body);
 export default InsideRoverContainer;

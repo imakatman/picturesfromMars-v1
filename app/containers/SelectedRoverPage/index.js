@@ -12,7 +12,6 @@ import {
     invalidateRover
 } from '../../actions'
 import Helmet from 'react-helmet';
-import ReactDOM from 'react-dom';
 import InsideRoverContainer from 'components/InsideRoverContainer';
 
 class SelectedRoverPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -89,5 +88,5 @@ SelectedRoverPage.propTypes = {
     dispatch: PropTypes.func.isRequired,
 };
 
-ReactDOM.render(<InsideRoverContainer/>, document.body);
+
 export default connect(mapStateToProps)(SelectedRoverPage);
