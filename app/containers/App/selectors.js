@@ -4,7 +4,8 @@ const makeSelectLocationState = () => {
   let prevRoutingStateJS;
 
   return (state) => {
-    const routingState = state.get('route'); // or state.route
+    console.log(state);
+    const routingState = state.route; // or state.route or state.get('route')
 
     if (!routingState.equals(prevRoutingState)) {
       prevRoutingState = routingState;

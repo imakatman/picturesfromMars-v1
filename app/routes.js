@@ -14,8 +14,7 @@ const loadModule = (cb) => (componentModule) => {
 
 export default function createRoutes(store) {
   // Create reusable async injectors using getAsyncInjectors factory
-  const { injectReducer, injectSagas } = getAsyncInjectors(store); // eslint-disable-line no-unused-vars
-
+  // const { injectReducer, injectSagas } = getAsyncInjectors(store); // eslint-disable-line no-unused-vars
   return [
     {
       path: '/',
@@ -35,15 +34,15 @@ export default function createRoutes(store) {
       },
     }, {
           path: '/r/:selectedRover',
-          name: 'dynamicPage',
+          name: 'selectedRover',
           getComponent(nextState, cb) {
-              System.import('containers/SelectedRover').then(loadModule(cb)).catch(errorLoading);
+              System.import('containers/SelectedRoverPage').then(loadModule(cb)).catch(errorLoading);
           },
       },{
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
-        import('containers/NotFoundPage')
+          System.import('containers/NotFoundPage')
           .then(loadModule(cb))
           .catch(errorLoading);
       },

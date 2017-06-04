@@ -10,21 +10,22 @@ import {
     selectRover,
     fetchRoverDataIfNeeded,
     invalidateRover
-} from './actions'
+} from '../../actions'
 import Helmet from 'react-helmet';
 
-export class SelectedRoverPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+class SelectedRoverPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
         super(props);
 
         this.state = {
-            selectedRover: this.props.routeParams.dynamic
+            selectedRover: this.props.routeParams.selectedRover
         }
     }
 
     componentDidMount() {
-        const {dispatch, fetchRoverDataIfNeeded} = this.props;
+        const {dispatch} = this.props;
 
+        dispatch(selectRover(this.state.selectedRover));
         dispatch(fetchRoverDataIfNeeded(this.state.selectedRover));
     }
 
@@ -42,14 +43,28 @@ export class SelectedRoverPage extends React.PureComponent { // eslint-disable-l
     }
 }
 
+function mapStateToProps(state) {
+    const {selectedRover, getDataByRover} = state;
+
+    const {
+              isFetching,
+              lastUpdated,
+              data: roverData
+          } = getDataByRover[selectedRover] || {
+        isFetching: true,
+        data: []
+    }
+
+    return {
+        selectedRover,
+        roverData,
+        isFetching,
+        lastUpdated,
+    };
+}
+
 SelectedRoverPage.propTypes = {
     dispatch: PropTypes.func.isRequired,
 };
 
-function mapDispatchToProps(dispatch) {
-    return {
-        dispatch,
-    };
-}
-
-export default connect(null, mapDispatchToProps)(SelectedRoverPage);
+export default connect(mapStateToProps)(SelectedRoverPage);

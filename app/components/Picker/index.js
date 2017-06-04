@@ -16,7 +16,6 @@ function Picker(props) {
                     name={value.name}
                     totalPhotos={value.total_photos}
                     activeState={props.activeState[i]}
-                    onClick={() => props.onClick(i)}
                 />
             )}
         </div>

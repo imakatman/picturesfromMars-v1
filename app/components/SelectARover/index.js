@@ -11,7 +11,7 @@ function SelectARover(props) {
     return (
         <div>
             <h3>
-                <Link to={"r/" + props.name} onClick={props.onClick}>
+                <Link to={"/r/" + props.name}>
                     {props.name}
                 </Link>
             </h3>

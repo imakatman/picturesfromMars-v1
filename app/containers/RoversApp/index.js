@@ -12,7 +12,7 @@ import {
     selectRover,
     fetchRoverDataIfNeeded,
     invalidateRover
-} from './actions'
+} from '../../actions'
 import Picker from 'components/Picker'
 import InsideRoverContainer from 'components/InsideRoverContainer'
 
@@ -24,7 +24,7 @@ class RoversApp extends React.Component {
             clickStateOfRovers: Array(3).fill(false)
         }
 
-        this.handleClick = this.handleClick.bind(this);
+        // this.handleClick = this.handleClick.bind(this);
     }
 
     componentDidMount() {
@@ -33,12 +33,12 @@ class RoversApp extends React.Component {
         dispatch(fetchAllRoverDataIfNeeded());
     }
 
-    handleClick(i) {
-        const {dispatch, getAllRoversData} = this.props;
-        const selectedRover = getAllRoversData.AllRovers.simpleDataAboutAllRovers[i].name;
-
-        dispatch(selectRover(selectedRover));
-    }
+    // handleClick(i) {
+    //     const {dispatch, getAllRoversData} = this.props;
+    //     const selectedRover = getAllRoversData.AllRovers.simpleDataAboutAllRovers[i].name;
+    //
+    //     dispatch(selectRover(selectedRover));
+    // }
 x
     render() {
         const {getAllRoversData, isFetchingAll} = this.props;
@@ -48,7 +48,6 @@ x
                 {getAllRoversData.AllRovers.simpleDataAboutAllRovers &&
                     <Picker
                         activeState={this.state.clickStateOfRovers}
-                        onClick={(i) => this.handleClick(i)}
                         values={getAllRoversData.AllRovers.simpleDataAboutAllRovers} />
                 }
             </div>
@@ -58,7 +57,7 @@ x
 
 function mapStateToProps(state) {
 
-    const {selectedRover, getDataByRover, getAllRoversData} = state;
+    const {selectedRover, getDataByRover, getAllRoversData, route} = state;
 
     const {
               isFetching,
@@ -94,3 +93,4 @@ RoversApp.propTypes = {
 };
 
 export default connect(mapStateToProps)(RoversApp);
+
