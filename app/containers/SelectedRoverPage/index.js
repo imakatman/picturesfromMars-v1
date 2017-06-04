@@ -12,6 +12,8 @@ import {
     invalidateRover
 } from '../../actions'
 import Helmet from 'react-helmet';
+import ReactDOM from 'react-dom';
+import InsideRoverContainer from 'components/InsideRoverContainer';
 
 class SelectedRoverPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
@@ -20,16 +22,24 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         this.state = {
             selectedRover: this.props.routeParams.selectedRover
         }
+
+        this.fetchImages = this.fetchImages.bind(this);
+    }
+
+    fetchImages(){
+
     }
 
     componentDidMount() {
         const {dispatch} = this.props;
 
-        dispatch(selectRover(this.state.selectedRover));
         dispatch(fetchRoverDataIfNeeded(this.state.selectedRover));
+        dispatch(selectRover(this.state.selectedRover));
     }
 
     render() {
+        const {selectedRover, getDataByRover} = this.props;
+
         return (
             <div>
                 <Helmet
@@ -38,10 +48,21 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                         {name: 'description', content: 'Description of SelectedRoverPage'},
                     ]}
                 />
+                {selectedRover &&
+                    <h1>{selectedRover}</h1>
+                }
+                {getDataByRover.Rover.data ? (
+                    <p>{getDataByRover.Rover.data.landing_date}</p>
+                    ) : (
+                        <p>Loading...</p>
+                    )
+                }
+                <InsideRoverContainer/>
             </div>
         );
     }
 }
+
 
 function mapStateToProps(state) {
     const {selectedRover, getDataByRover} = state;
@@ -58,6 +79,7 @@ function mapStateToProps(state) {
     return {
         selectedRover,
         roverData,
+        getDataByRover,
         isFetching,
         lastUpdated,
     };
@@ -67,4 +89,5 @@ SelectedRoverPage.propTypes = {
     dispatch: PropTypes.func.isRequired,
 };
 
+ReactDOM.render(<InsideRoverContainer/>, document.body);
 export default connect(mapStateToProps)(SelectedRoverPage);

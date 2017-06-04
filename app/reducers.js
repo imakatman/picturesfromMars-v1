@@ -31,11 +31,6 @@ function roversData(state = {
             return Object.assign({}, state, {
                 didInvalidate: true,
             })
-        case REQUEST_ROVERS_DATA:
-            return Object.assign({}, state, {
-                isFetching: true,
-                didInvalidate: false,
-            })
         case RECEIVE_ROVERS_DATA:
             return Object.assign({}, state, {
                 isFetching: false,
@@ -52,7 +47,6 @@ function roversData(state = {
 function getDataByRover(state = {}, action) {
     switch (action.type) {
         case INVALIDATE_ROVER:
-        case REQUEST_ROVERS_DATA:
         case RECEIVE_ROVERS_DATA:
             return Object.assign({}, state, {
                 Rover: roversData(state[action.rover], action)
