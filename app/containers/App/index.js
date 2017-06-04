@@ -19,6 +19,10 @@ export default class App extends React.PureComponent { // eslint-disable-line re
     children: React.PropTypes.node,
   };
 
+  componentDidMount(){
+    console.log("App has mounted");
+  }
+
   render() {
     return (
       <div>
