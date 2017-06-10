@@ -32,13 +32,15 @@ export default function createRoutes(store) {
 
         importModules.catch(errorLoading);
       },
-    }, {
+    },
+      {
           path: '/r/:selectedRover',
           name: 'selectedRover',
           getComponent(nextState, cb) {
               System.import('containers/SelectedRoverPage').then(loadModule(cb)).catch(errorLoading);
           },
-      },{
+      },
+      {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {

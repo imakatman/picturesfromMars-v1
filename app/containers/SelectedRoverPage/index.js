@@ -37,6 +37,8 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     }
 
     render() {
+        console.log("selected rover page");
+
         const {selectedRover, getDataByRover} = this.props;
 
         return (

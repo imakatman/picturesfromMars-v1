@@ -41,6 +41,8 @@ class RoversApp extends React.Component {
     // }
 x
     render() {
+        console.log("rovers app");
+
         const {getAllRoversData, isFetchingAll} = this.props;
 
         return (
