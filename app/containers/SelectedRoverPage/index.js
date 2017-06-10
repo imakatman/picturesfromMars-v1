@@ -13,6 +13,7 @@ import {
 } from '../../actions'
 import Helmet from 'react-helmet';
 import InsideRoverContainer from 'components/InsideRoverContainer';
+import PicsNavigation from 'components/PicsNavigation';
 
 class SelectedRoverPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
@@ -22,10 +23,10 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
             selectedRover: this.props.routeParams.selectedRover
         }
 
-        this.fetchImages = this.fetchImages.bind(this);
+        this.fetchPictures = this.fetchPictures.bind(this);
     }
 
-    fetchImages(){
+    fetchPictures(){
 
     }
 
@@ -53,7 +54,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                     <h1>{selectedRover}</h1>
                 }
                 {getDataByRover.Rover.data ? (
-                    <p>{getDataByRover.Rover.data.landing_date}</p>
+                    <PicsNavigation cameras={getDataByRover.Rover.data.cameras} fetchPictures={(i)=>fetchPictures()}/>
                     ) : (
                         <p>Loading...</p>
                     )

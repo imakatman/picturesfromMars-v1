@@ -71,7 +71,7 @@ class InsideRoverContainer extends React.Component {
 
         this.setState(function(prevState){
             return{
-                lon: prevState.lon + 0.1,
+                // lon: prevState.lon + 0.1,
                 lat: Math.max(-85, Math.min(85, prevState.lat)),
                 phi: THREE.Math.degToRad(90 - this.state.lat),
                 theta: THREE.Math.degToRad(this.state.lon),
