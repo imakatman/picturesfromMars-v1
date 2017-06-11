@@ -9,6 +9,7 @@ import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 import OpportunityPanorama from 'assets/panorama/opportunity.jpg';
+import SpiritPanorama from 'assets/panorama/spirit.jpg';
 
 class InsideRoverContainer extends React.Component {
     constructor(props, context) {
@@ -88,6 +89,8 @@ class InsideRoverContainer extends React.Component {
         const width  = window.innerWidth; // canvas width
         const height = window.innerHeight; // canvas height
 
+
+
         return (
             <React3 mainCamera="camera" width={width} height={height} ref={(three) => this.threeObj = three} onAnimate={this.onAnimate}>
                 <scene>
@@ -104,9 +107,11 @@ class InsideRoverContainer extends React.Component {
                         <mesh>
                             <sphereGeometry
                                 radius={5000}
+                                widthSegments={60}
+                                heightSegments={40}
                             />
-                            <meshBasicMaterial>
-                                <texture url={OpportunityPanorama} />
+                            <meshBasicMaterial overdraw={0.9}>
+                                <texture url={SpiritPanorama} anisotropy={10} ref={(texture) => this.texture = texture}/>
                             </meshBasicMaterial>
                         </mesh>
                     </object3D>
