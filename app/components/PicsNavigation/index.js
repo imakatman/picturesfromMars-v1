@@ -9,13 +9,13 @@ import React from 'react';
 
 
 function PicsNavigation(props) {
-  console.log(props.cameras);
+  console.log(props);
   return (
-    <div>
-        {props.cameras.map((camera) =>
-            <a href={"#" + camera.name}>{camera.full_name}</a>
+    <ul>
+        {props.cameras.map((camera, i) =>
+            <li data-camera={camera.name} key={i} onClick={()=>props.fetchPictures(i)}>{camera.full_name}</li>
         )}
-    </div>
+    </ul>
   );
 }
 

@@ -97,7 +97,7 @@ export function fetchRoverDataIfNeeded(rover) {
 
 
 // *****
-// ** REDUCERS FOR ALL ROVER ACTIONS
+// ** ACTIONS FOR INFORMATION OF ALL ROVERS
 //
 
 export const INVALIDATE_ALL_ROVERS = "invalidateAllRovers";
@@ -175,5 +175,88 @@ export function fetchAllRoverDataIfNeeded(rovers) {
         }
     }
 }
+
+// LOOK AT http://redux.js.org/docs/introduction/Examples.html#real-world for ERROR MESSAGE HANDLING
+
+
+// *****
+// ** ACTIONS FOR ROVERS PICTURES
+//
+
+// export const INVALIDATE_ROVERS_IMAGES = "invalidateAllRoversImages";
+//
+// export function invalidateRoversImages(rovers){
+//     return{
+//         type: INVALIDATE_ROVERS_IMAGES,
+//         rovers
+//     }
+// };
+//
+// export const REFRESH_ROVERS_IMAGES = "refreshRoversImages";
+//
+// function refreshRover(rovers){
+//     return{
+//         type: REFRESH_ROVERS_IMAGES,
+//         rovers
+//     }
+// };
+//
+// // export const REQUEST_ALL_ROVERS_DATA = "requestAllRoversData";
+// //
+// // function requestAllRoversData(){
+// //     return{
+// //         type: REQUEST_ALL_ROVERS_DATA,
+// //     }
+// // }
+//
+// export const RECEIVE_ROVERS_IMAGES = "receiveRoversImages"
+//
+// function receiveAllRoversData(rovers, json){
+//     return{
+//         type: RECEIVE_ROVERS_IMAGES,
+//         simpleDataAboutAllRovers: json.rovers
+//     }
+// }
+
+// export function fetchAllRoversData(rovers){
+//     return function(dispatch){
+//         // dispatch(requestAllRoversData())
+//         return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`)
+//         .then(response => response.json())
+//         .then(json=>
+//             dispatch(receiveAllRoversData(rovers, json))
+//         )
+//     }
+// }
+//
+// function shouldFetchAllRoverData(state, rovers) {
+//     // const data = state.getDataByRover;
+//     const data = state.getAllRoversData[rovers]
+//     if (!data) {
+//         return true
+//     } else if (roverData.isFetching) {
+//         return false
+//     } else {
+//         return data.didInvalidate
+//     }
+// }
+//
+// export function fetchAllRoverDataIfNeeded(rovers) {
+//     // Note that the function also receives getState()
+//     // which lets you choose what to dispatch next.
+//
+//     // This is useful for avoiding a network request if
+//     // a cached value is already available.
+//
+//     return (dispatch, getState) => {
+//         if (shouldFetchAllRoverData(getState(), rovers)) {
+//             // Dispatch a thunk from thunk!
+//             return dispatch(fetchAllRoversData(rovers))
+//         } else {
+//             // Let the calling code know there's nothing to wait for.
+//             return Promise.resolve()
+//         }
+//     }
+// }
 
 // LOOK AT http://redux.js.org/docs/introduction/Examples.html#real-world for ERROR MESSAGE HANDLING

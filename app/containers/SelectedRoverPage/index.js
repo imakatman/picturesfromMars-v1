@@ -26,8 +26,8 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         this.fetchPictures = this.fetchPictures.bind(this);
     }
 
-    fetchPictures(){
-
+    fetchPictures(i){
+        console.log(i);
     }
 
     componentDidMount() {
@@ -54,7 +54,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                     <h1>{selectedRover}</h1>
                 }
                 {getDataByRover.Rover.data ? (
-                    <PicsNavigation cameras={getDataByRover.Rover.data.cameras} fetchPictures={(i)=>fetchPictures()}/>
+                    <PicsNavigation cameras={getDataByRover.Rover.data.cameras} fetchPictures={(i)=>this.fetchPictures(i)}/>
                     ) : (
                         <p>Loading...</p>
                     )
