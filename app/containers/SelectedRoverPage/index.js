@@ -33,8 +33,8 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     componentDidMount() {
         const {dispatch} = this.props;
 
-        dispatch(fetchRoverDataIfNeeded(this.state.selectedRover));
         dispatch(selectRover(this.state.selectedRover));
+        dispatch(fetchRoverDataIfNeeded(this.state.selectedRover));
     }
 
     render() {
@@ -53,8 +53,8 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                 {selectedRover &&
                     <h1>{selectedRover}</h1>
                 }
-                {getDataByRover.Rover.data ? (
-                    <PicsNavigation cameras={getDataByRover.Rover.data.cameras} fetchPictures={(i)=>this.fetchPictures(i)}/>
+                {getDataByRover[selectedRover].data ? (
+                    <PicsNavigation cameras={getDataByRover[selectedRover].data.cameras} fetchPictures={(i)=>this.fetchPictures(i)}/>
                     ) : (
                         <p>Loading...</p>
                     )

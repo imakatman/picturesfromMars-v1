@@ -10,7 +10,7 @@ import {INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA} from './actions.js';
 
 
 // *** Rover reducers
-function selectedRover(state = "z", action) {
+function selectedRover(state = "", action) {
     switch (action.type) {
         case SELECT_ROVER:
             return action.rover
@@ -28,9 +28,9 @@ function roversData(state = {
 }, action) {
     switch (action.type) {
         case INVALIDATE_ROVER:
-            return Object.assign({}, state, {
+            return Object.assign({}, state, {[rover]: {
                 didInvalidate: true,
-            })
+            }})
         case RECEIVE_ROVERS_DATA:
             return Object.assign({}, state, {
                 isFetching: false,
@@ -45,11 +45,14 @@ function roversData(state = {
 }
 
 function getDataByRover(state = {}, action) {
+    const rover = action.name;
+
     switch (action.type) {
         case INVALIDATE_ROVER:
         case RECEIVE_ROVERS_DATA:
+            console.log(state);
             return Object.assign({}, state, {
-                Rover: roversData(state[action.rover], action)
+               [rover]: roversData(state[action.rover], action)
             })
         default:
             return state

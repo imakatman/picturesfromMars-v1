@@ -9,7 +9,6 @@ import React from 'react';
 
 
 function PicsNavigation(props) {
-  console.log(props);
   return (
     <ul>
         {props.cameras.map((camera, i) =>
