@@ -89,6 +89,45 @@ function getAllRoversData(state = {AllRovers: {}}, action) {
     }
 }
 
+function roversImages(state = {
+    isFetching: false,
+    didInvalidate: false,
+    photos: {},
+    status: "",
+}, action) {
+    switch (action.type) {
+        case INVALIDATE_ROVER:
+            return Object.assign({}, state, {[rover]: {
+                didInvalidate: true,
+            }})
+        case RECEIVE_ROVERS_DATA:
+            return Object.assign({}, state, {
+                isFetching: false,
+                didInvalidate: false,
+                name: action.name,
+                data: action.data,
+                lastUpdated: action.receivedAt
+            })
+        default:
+            return state
+    }
+}
+
+function getDataByRover(state = {}, action) {
+    const rover = action.name;
+
+    switch (action.type) {
+        case INVALIDATE_ROVER:
+        case RECEIVE_ROVERS_DATA:
+            console.log(state);
+            return Object.assign({}, state, {
+                [rover]: roversData(state[action.rover], action)
+            })
+        default:
+            return state
+    }
+}
+
 const rootReducer = combineReducers({
     getDataByRover,
     selectedRover,

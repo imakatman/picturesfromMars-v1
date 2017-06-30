@@ -9,7 +9,8 @@ import {connect} from 'react-redux';
 import {
     selectRover,
     fetchRoverDataIfNeeded,
-    invalidateRover
+    invalidateRover,
+    fetchRoverImagesIfNeeded
 } from '../../actions'
 import Helmet from 'react-helmet';
 import InsideRoverContainer from 'components/InsideRoverContainer';
@@ -27,14 +28,24 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     }
 
     fetchPictures(i){
-        console.log(i);
+        const {dispatch} = this.props;
+
+        dispatch(fetchRoverImagesIfNeeded(this.state.selectedRover));
     }
 
     componentDidMount() {
-        const {dispatch} = this.props;
+        const {dispatch, getDataByRover} = this.props;
 
-        dispatch(selectRover(this.state.selectedRover));
-        dispatch(fetchRoverDataIfNeeded(this.state.selectedRover));
+        const rover = this.state.selectedRover;
+
+        // dispatch(selectRover(this.state.selectedRover));
+        dispatch(fetchRoverDataIfNeeded(rover));
+
+        const maxSol = getDataByRover[rover].data.max_sol;
+
+        this.setState({
+            maxSol: maxSol
+        })
     }
 
     render() {

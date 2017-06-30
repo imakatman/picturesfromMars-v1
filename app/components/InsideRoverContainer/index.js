@@ -110,7 +110,7 @@ class InsideRoverContainer extends React.Component {
                                 widthSegments={60}
                                 heightSegments={40}
                             />
-                            <meshBasicMaterial overdraw={0.9}>
+                            <meshBasicMaterial>
                                 <texture url={SpiritPanorama} anisotropy={10} ref={(texture) => this.texture = texture}/>
                             </meshBasicMaterial>
                         </mesh>
