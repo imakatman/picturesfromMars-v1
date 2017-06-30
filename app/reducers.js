@@ -10,7 +10,7 @@ import {INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA} from './actions.js';
 
 
 // *** Rover reducers
-function selectedRover(state = "Curiosity", action) {
+function selectedRover(state = "z", action) {
     switch (action.type) {
         case SELECT_ROVER:
             return action.rover

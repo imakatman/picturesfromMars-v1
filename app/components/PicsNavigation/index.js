@@ -13,7 +13,10 @@ function PicsNavigation(props) {
   return (
     <ul>
         {props.cameras.map((camera, i) =>
-            <li data-camera={camera.name} key={i} onClick={()=>props.fetchPictures(i)}>{camera.full_name}</li>
+            <li data-camera={camera.name}
+                key={i} onClick={()=>props.fetchPictures(i)}>
+                  {camera.full_name}
+              </li>
         )}
     </ul>
   );

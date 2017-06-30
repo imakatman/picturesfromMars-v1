@@ -126,39 +126,42 @@ function refreshRover(rovers){
 //     }
 // }
 
-export const RECEIVE_ALL_ROVERS_DATA = "receiveAllRoversData"
+export const RECEIVE_ALL_ROVERS_DATA = "receiveAllRoversData";
 
-function receiveAllRoversData(rovers, json){
+function receiveAllRoversData(json){
     return{
         type: RECEIVE_ALL_ROVERS_DATA,
         simpleDataAboutAllRovers: json.rovers
     }
 }
 
-export function fetchAllRoversData(rovers){
+export function fetchAllRoversData(){
     return function(dispatch){
         // dispatch(requestAllRoversData())
         return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`)
         .then(response => response.json())
         .then(json=>
-            dispatch(receiveAllRoversData(rovers, json))
+            dispatch(receiveAllRoversData(json))
         )
     }
 }
 
-function shouldFetchAllRoverData(state, rovers) {
+function shouldFetchAllRoverData(state) {
     // const data = state.getDataByRover;
-    const data = state.getAllRoversData[rovers]
+    const data = state.getAllRoversData.AllRovers;
+    console.log(state.getAllRoversData.AllRovers);
     if (!data) {
+        console.log("there is no data");
         return true
-    } else if (roverData.isFetching) {
+    } else if (data.isFetching) {
+        console.log("rover is still fetching");
         return false
     } else {
         return data.didInvalidate
     }
 }
 
-export function fetchAllRoverDataIfNeeded(rovers) {
+export function fetchAllRoverDataIfNeeded() {
     // Note that the function also receives getState()
     // which lets you choose what to dispatch next.
 
@@ -166,11 +169,12 @@ export function fetchAllRoverDataIfNeeded(rovers) {
     // a cached value is already available.
 
     return (dispatch, getState) => {
-        if (shouldFetchAllRoverData(getState(), rovers)) {
+        if (shouldFetchAllRoverData(getState())) {
             // Dispatch a thunk from thunk!
-            return dispatch(fetchAllRoversData(rovers))
+            return dispatch(fetchAllRoversData())
         } else {
             // Let the calling code know there's nothing to wait for.
+            console.log("no need to fetch data is there!")
             return Promise.resolve()
         }
     }
