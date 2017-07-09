@@ -3,6 +3,7 @@
 // See http://blog.mxstbr.com/2016/01/react-apps-with-pages for more information
 // about the code splitting business
 import { getAsyncInjectors } from 'utils/asyncInjectors';
+import {persistStore} from 'redux-persist'
 
 const errorLoading = (err) => {
   console.error('Dynamic page loading failed', err); // eslint-disable-line no-console
@@ -20,6 +21,7 @@ export default function createRoutes(store) {
       path: '/',
       name: 'home',
       getComponent(nextState, cb) {
+
         const importModules = Promise.all([
             System.import('containers/RoversApp'),
         ]);
@@ -34,8 +36,8 @@ export default function createRoutes(store) {
       },
     },
       {
-          path: '/r/:selectedRover',
-          name: 'selectedRover',
+          path: '/r/:rover',
+          name: 'rover',
           getComponent(nextState, cb) {
               System.import('containers/SelectedRoverPage').then(loadModule(cb)).catch(errorLoading);
           },

@@ -41,8 +41,7 @@ import createRoutes from './routes';
 const store = configureStore();
 
 // begin periodically persisting the store
-persistStore(store);
-//persistStore(store).purge()
+persistStore(store, {blacklist: "routing: routerReducer"});
 
 const history = syncHistoryWithStore(browserHistory, store);
 
