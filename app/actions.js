@@ -54,12 +54,9 @@ export function fetchAllRoversData(){
 function shouldFetchAllRoverData(state) {
     // const data = state.getDataByRover;
     const data = state.getAllRoversData.AllRovers.simpleDataAboutAllRovers;
-    console.log(state.getAllRoversData.AllRovers);
     if (!data) {
-        console.log("there is no data");
         return true
     } else if (data.isFetching) {
-        console.log("rover is still fetching");
         return false
     } else {
         return data.didInvalidate
@@ -79,7 +76,6 @@ export function fetchAllRoverDataIfNeeded() {
             return dispatch(fetchAllRoversData())
         } else {
             // Let the calling code know there's nothing to wait for.
-            console.log("no need to fetch data is there!")
             return Promise.resolve()
         }
     }
@@ -175,7 +171,6 @@ export function fetchRoverDataIfNeeded(rover) {
             return dispatch(fetchRoversData(rover))
         } else {
             // Let the calling code know there's nothing to wait for.
-            console.log("rover data is here no need to fetch!");
             return Promise.resolve()
         }
     }

@@ -64,7 +64,6 @@ function roversData(state = {
                 lastUpdated: action.receivedAt
             })
         case RECEIVE_ROVER_IMAGES:
-            console.log("receive rover images");
             return Object.assign({}, state, {
                 photos: roversImages(state[action.rover], action)
             })
@@ -79,7 +78,6 @@ function getDataByRover(state = {}, action) {
     switch (action.type) {
         case INVALIDATE_ROVER:
         case RECEIVE_ROVERS_DATA:
-            console.log(state);
             return Object.assign({}, state, {
                [rover]: roversData(state[action.rover], action)
             })

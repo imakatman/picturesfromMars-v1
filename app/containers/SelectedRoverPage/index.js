@@ -41,7 +41,6 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         for (var [key, value] of Object.entries(getDataByRover[rover].photos.photoData)) {
             if (value["id"]) photos["id"] = value["id"];
             if (value["img_src"]) photos["img_src"] = value["img_src"];
-            console.log(photos);
             this.setState({
                 photos
             });
@@ -66,8 +65,12 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         }
     }
 
+    componentWillUnmount(){
+        console.log("Component will unmount");
+        dispatch(selectRover(undefined));
+    }
+
     render() {
-        console.log(this.state);
 
         const {selectedRover, getDataByRover} = this.props;
 
