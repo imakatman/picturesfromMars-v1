@@ -21,7 +21,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         super(props);
 
         this.state = {
-            selectedRover: this.props.routeParams.selectedRover
+            selectedRover: this.props.routeParams.rover
         }
 
         this.fetchPictures = this.fetchPictures.bind(this);
@@ -63,11 +63,6 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                 data
             });
         }
-    }
-
-    componentWillUnmount(){
-        console.log("Component will unmount");
-        dispatch(selectRover(undefined));
     }
 
     render() {
