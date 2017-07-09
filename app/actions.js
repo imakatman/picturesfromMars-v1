@@ -155,10 +155,8 @@ function shouldFetchRoverData(state, rover) {
     // const data = state.getDataByRover;
     const data = state.getDataByRover[rover]
     if (!data) {
-        console.log("this rovers data is not here");
         return true
     } else if (data.isFetching) {
-        console.log("rover data is fetching!");
         return false
     } else {
         return data.didInvalidate

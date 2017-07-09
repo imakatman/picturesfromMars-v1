@@ -48,7 +48,6 @@ function roversData(state = {
     didInvalidate: false,
     name: "",
     data: {},
-    photos: {},
     status: "",
 }, action) {
     switch (action.type) {

@@ -28,20 +28,30 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     }
 
     fetchPictures(i) {
-        const {dispatch} = this.props;
+        const {dispatch, getDataByRover} = this.props;
 
-        const rover = this.state.selectedRover,
-            maxSol = this.state.data.max_sol,
-            camera = this.state.data.cameras[i].name;
+        const rover  = this.state.selectedRover,
+              maxSol = this.state.data.max_sol,
+              camera = this.state.data.cameras[i].name;
 
-        console.log("fetch pictures");
+        const photos = {};
 
         dispatch(fetchRoverImagesIfNeeded(rover, maxSol, camera));
+
+        for (var [key, value] of Object.entries(getDataByRover[rover].photos.photoData)) {
+            if (value["id"]) photos["id"] = value["id"];
+            if (value["img_src"]) photos["img_src"] = value["img_src"];
+            console.log(photos);
+            this.setState({
+                photos
+            });
+        }
+
     }
 
     componentDidMount() {
         const {dispatch, getDataByRover} = this.props;
-        const rover = this.state.selectedRover;
+        const rover                      = this.state.selectedRover;
 
         const data = {};
 
@@ -49,7 +59,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         dispatch(fetchRoverDataIfNeeded(rover));
 
         for (var [key, value] of Object.entries(getDataByRover[rover].data)) {
-            data[key]  = value;
+            data[key] = value;
             this.setState({
                 data
             });
@@ -57,7 +67,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     }
 
     render() {
-        console.log("selected rover page");
+        console.log(this.state);
 
         const {selectedRover, getDataByRover} = this.props;
 
@@ -80,6 +90,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                     )
                 }
                 <InsideRoverContainer />
+
             </div>
         );
     }
@@ -91,15 +102,18 @@ function mapStateToProps(state) {
     const {
               isFetching,
               lastUpdated,
-              data: roverData
+              data: roverData,
+              photos: roverPhotos,
           } = getDataByRover[selectedRover] || {
         isFetching: true,
-        data: []
+        data: [],
+        photos: []
     }
 
     return {
         selectedRover,
         roverData,
+        roverPhotos,
         getDataByRover,
         isFetching,
         lastUpdated,
