@@ -7,6 +7,7 @@ import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux'
 import {SELECT_ROVER, INVALIDATE_ROVER, REFRESH_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DATA} from './actions.js';
 import {INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA} from './actions.js';
+import {INVALIDATE_ROVER_IMAGES, RECEIVE_ROVER_IMAGES} from './actions.js';
 
 
 // *** Rover reducers
@@ -19,11 +20,35 @@ function selectedRover(state = "", action) {
     }
 }
 
+function roversImages(state = {
+    isFetching: false,
+    didInvalidate: false,
+    photos: {},
+    status: "",
+}, action) {
+    switch (action.type) {
+        case INVALIDATE_ROVER_IMAGES:
+            return Object.assign({}, state, {[rover]: {
+                didInvalidate: true,
+            }})
+        case RECEIVE_ROVER_IMAGES:
+            return Object.assign({}, state, {
+                isFetching: false,
+                didInvalidate: false,
+                photoData: action.photos,
+                lastUpdated: action.receivedAt
+            })
+        default:
+            return state
+    }
+}
+
 function roversData(state = {
     isFetching: false,
     didInvalidate: false,
     name: "",
     data: {},
+    photos: {},
     status: "",
 }, action) {
     switch (action.type) {
@@ -39,6 +64,11 @@ function roversData(state = {
                 data: action.data,
                 lastUpdated: action.receivedAt
             })
+        case RECEIVE_ROVER_IMAGES:
+            console.log("receive rover images");
+            return Object.assign({}, state, {
+                photos: roversImages(state[action.rover], action)
+            })
         default:
             return state
     }
@@ -53,6 +83,10 @@ function getDataByRover(state = {}, action) {
             console.log(state);
             return Object.assign({}, state, {
                [rover]: roversData(state[action.rover], action)
+            })
+        case RECEIVE_ROVER_IMAGES:
+            return Object.assign({}, state, {
+                [rover]: roversData(state[action.rover], action)
             })
         default:
             return state
@@ -83,45 +117,6 @@ function getAllRoversData(state = {AllRovers: {}}, action) {
         case RECEIVE_ALL_ROVERS_DATA:
             return Object.assign({}, state, {
                 AllRovers: allRoversData(state[action.rovers], action)
-            })
-        default:
-            return state
-    }
-}
-
-function roversImages(state = {
-    isFetching: false,
-    didInvalidate: false,
-    photos: {},
-    status: "",
-}, action) {
-    switch (action.type) {
-        case INVALIDATE_ROVER:
-            return Object.assign({}, state, {[rover]: {
-                didInvalidate: true,
-            }})
-        case RECEIVE_ROVERS_DATA:
-            return Object.assign({}, state, {
-                isFetching: false,
-                didInvalidate: false,
-                name: action.name,
-                data: action.data,
-                lastUpdated: action.receivedAt
-            })
-        default:
-            return state
-    }
-}
-
-function getDataByRover(state = {}, action) {
-    const rover = action.name;
-
-    switch (action.type) {
-        case INVALIDATE_ROVER:
-        case RECEIVE_ROVERS_DATA:
-            console.log(state);
-            return Object.assign({}, state, {
-                [rover]: roversData(state[action.rover], action)
             })
         default:
             return state

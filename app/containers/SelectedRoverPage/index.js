@@ -27,25 +27,33 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         this.fetchPictures = this.fetchPictures.bind(this);
     }
 
-    fetchPictures(i){
+    fetchPictures(i) {
         const {dispatch} = this.props;
 
-        dispatch(fetchRoverImagesIfNeeded(this.state.selectedRover));
+        const rover = this.state.selectedRover,
+            maxSol = this.state.data.max_sol,
+            camera = this.state.data.cameras[i].name;
+
+        console.log("fetch pictures");
+
+        dispatch(fetchRoverImagesIfNeeded(rover, maxSol, camera));
     }
 
     componentDidMount() {
         const {dispatch, getDataByRover} = this.props;
-
         const rover = this.state.selectedRover;
 
-        // dispatch(selectRover(this.state.selectedRover));
+        const data = {};
+
+        dispatch(selectRover(rover));
         dispatch(fetchRoverDataIfNeeded(rover));
 
-        const maxSol = getDataByRover[rover].data.max_sol;
-
-        this.setState({
-            maxSol: maxSol
-        })
+        for (var [key, value] of Object.entries(getDataByRover[rover].data)) {
+            data[key]  = value;
+            this.setState({
+                data
+            });
+        }
     }
 
     render() {
@@ -62,20 +70,20 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                     ]}
                 />
                 {selectedRover &&
-                    <h1>{selectedRover}</h1>
+                <h1>{selectedRover}</h1>
                 }
                 {getDataByRover[selectedRover].data ? (
-                    <PicsNavigation cameras={getDataByRover[selectedRover].data.cameras} fetchPictures={(i)=>this.fetchPictures(i)}/>
+                        <PicsNavigation cameras={getDataByRover[selectedRover].data.cameras}
+                            fetchPictures={(i) => this.fetchPictures(i)} />
                     ) : (
                         <p>Loading...</p>
                     )
                 }
-                <InsideRoverContainer/>
+                <InsideRoverContainer />
             </div>
         );
     }
 }
-
 
 function mapStateToProps(state) {
     const {selectedRover, getDataByRover} = state;
@@ -101,6 +109,5 @@ function mapStateToProps(state) {
 SelectedRoverPage.propTypes = {
     dispatch: PropTypes.func.isRequired,
 };
-
 
 export default connect(mapStateToProps)(SelectedRoverPage);
