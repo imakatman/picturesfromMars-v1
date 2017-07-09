@@ -28,7 +28,7 @@ class RoversApp extends React.Component {
     }
 
     componentDidMount() {
-        const {dispatch, getAllRoversData} = this.props;
+        const {dispatch} = this.props;
 
         dispatch(fetchAllRoverDataIfNeeded());
     }
@@ -39,9 +39,9 @@ class RoversApp extends React.Component {
     //
     //     dispatch(selectRover(selectedRover));
     // }
-x
+
     render() {
-        const {getAllRoversData, isFetchingAll} = this.props;
+        const {dispatch, getAllRoversData, isFetchingAll} = this.props;
 
         return (
             <div>

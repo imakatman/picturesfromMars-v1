@@ -235,6 +235,7 @@
     "redux": "3.6.0",
     "redux-immutable": "3.0.8",
     "redux-logger": "^3.0.1",
+    "redux-persist": "^4.8.2",
     "redux-saga": "0.14.0",
     "redux-thunk": "^2.2.0",
     "reselect": "2.5.4",

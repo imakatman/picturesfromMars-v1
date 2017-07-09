@@ -9,32 +9,90 @@ import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import ReactDOM from 'react-dom';
 import OpportunityPanorama from 'assets/panorama/opportunity.jpg';
+import SpiritPanorama from 'assets/panorama/spirit.jpg';
 
 class InsideRoverContainer extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        this.cameraPosition = new THREE.Vector3(0, 0, 5);
-
         this.state = {
             name: "",
+            lon: 90,
+            lat: 0,
+            phi: 0,
+            theta: 0,
+            cameraPosition: new THREE.Vector3(0, 0, 0),
+            cameraLookAt: new THREE.Vector3(0, 0, 0),
         }
+
+        this.onDocumentMouseDown = this.onDocumentMouseDown.bind(this);
+        this.onDocumentMouseMove = this.onDocumentMouseMove.bind(this);
+        this.onDocumentMouseUp   = this.onDocumentMouseUp.bind(this);
+        this.onAnimate = this.onAnimate.bind(this);
     }
 
     componentDidMount() {
         this.setState({
             name: this.props.name
-        })
+        });
+
+        document.querySelector("canvas").addEventListener("mousedown", this.onDocumentMouseDown, false);
+    }
+
+    onDocumentMouseDown(event) {
+        event.preventDefault();
+        document.querySelector("canvas").addEventListener('mousemove', this.onDocumentMouseMove, false);
+        document.querySelector("canvas").addEventListener('mouseup', this.onDocumentMouseUp, false);
+    }
+
+    onDocumentMouseMove(event) {
+        const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+        const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+
+        console.log(movementX);
+
+        this.setState(function(prevState){
+            return{
+                lon: prevState.lon - movementX * 0.1,
+                lat: prevState.lat + movementY * 0.1
+            }
+        });
+    }
+
+    onDocumentMouseUp(event) {
+        document.querySelector("canvas").removeEventListener('mousemove', this.onDocumentMouseMove);
+        document.querySelector("canvas").removeEventListener('mouseup', this.onDocumentMouseUp);
+    }
+
+    onAnimate() {
+        const x = Math.sin(this.state.phi) * Math.cos((this.state.theta), 0, 0);
+        const y = Math.cos(this.state.phi);
+        const z = Math.sin(this.state.phi) * Math.sin(this.state.theta);
+        // const cameraPosition = new THREE.Vector(x, y, z);
+
+        this.setState(function(prevState){
+            return{
+                // lon: prevState.lon + 0.1,
+                lat: Math.max(-85, Math.min(85, prevState.lat)),
+                phi: THREE.Math.degToRad(90 - this.state.lat),
+                theta: THREE.Math.degToRad(this.state.lon),
+                cameraLookAt: new THREE.Vector3(
+                    (Math.sin(this.state.phi) * Math.cos((this.state.theta), 0, 0)),
+                    (Math.cos(this.state.phi)),
+                    (Math.sin(this.state.phi) * Math.sin(this.state.theta))
+                )
+            }
+        });
     }
 
     render() {
         const width  = window.innerWidth; // canvas width
         const height = window.innerHeight; // canvas height
 
-        console.log();
+
 
         return (
-            <React3 mainCamera="camera" width={width} height={height}>
+            <React3 mainCamera="camera" width={width} height={height} ref={(three) => this.threeObj = three} onAnimate={this.onAnimate}>
                 <scene>
                     <perspectiveCamera
                         name="camera"
@@ -42,15 +100,18 @@ class InsideRoverContainer extends React.Component {
                         aspect={width / height}
                         near={0.1}
                         far={10000}
-                        position={this.cameraPosition}
+                        position={this.state.cameraPosition}
+                        lookAt={this.state.cameraLookAt}
                     />
                     <object3D scale={new THREE.Vector3(-1, 1, 1)}>
                         <mesh>
                             <sphereGeometry
                                 radius={5000}
+                                widthSegments={60}
+                                heightSegments={40}
                             />
                             <meshBasicMaterial>
-                                <texture url={OpportunityPanorama} />
+                                <texture url={SpiritPanorama} anisotropy={10} ref={(texture) => this.texture = texture}/>
                             </meshBasicMaterial>
                         </mesh>
                     </object3D>
@@ -62,5 +123,5 @@ class InsideRoverContainer extends React.Component {
 
 InsideRoverContainer.propTypes = {};
 
-ReactDOM.render(<InsideRoverContainer/>, document.body);
+// ReactDOM.render(<InsideRoverContainer/>, document.body);
 export default InsideRoverContainer;

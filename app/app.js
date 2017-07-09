@@ -15,6 +15,7 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {Router, browserHistory} from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
+import {persistStore} from 'redux-persist'
 import configureStore from './store';
 
 
@@ -38,6 +39,9 @@ import createRoutes from './routes';
 // e.g. `const browserHistory = useRouterHistory(createBrowserHistory)();`
 // const initialState = {};
 const store = configureStore();
+
+// begin periodically persisting the store
+persistStore(store, {blacklist: "routing: routerReducer"});
 
 const history = syncHistoryWithStore(browserHistory, store);
 
