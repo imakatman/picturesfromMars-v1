@@ -214,7 +214,11 @@ function receiveRoverImages(rover, json){
         type: RECEIVE_ROVER_IMAGES,
         rover,
         name: rover,
-        photos: json.photos
+        earthDate: json.photos[0].earth_date,
+        camera: json.photos[0].camera.name,
+        cameraFullName: json.photos[0].camera.full_name,
+        photos: json.photos,
+        sol: json.photos[0].sol
     }
 }
 

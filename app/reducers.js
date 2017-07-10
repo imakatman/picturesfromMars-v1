@@ -23,6 +23,10 @@ function selectedRover(state = "", action) {
 function roversImages(state = {
     isFetching: false,
     didInvalidate: false,
+    sol: "",
+    earthDate: "",
+    camera: "",
+    cameraFullName: "",
     photos: {},
     status: "",
 }, action) {
@@ -35,7 +39,11 @@ function roversImages(state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 didInvalidate: false,
+                earthDate: action.earthDate,
+                camera: action.camera,
+                cameraFullName: action.cameraFullName,
                 photoData: action.photos,
+                sol: action.sol,
                 lastUpdated: action.receivedAt
             })
         default:
@@ -49,7 +57,9 @@ function roversData(state = {
     name: "",
     data: {},
     status: "",
+    cameras: {}
 }, action) {
+    const camera = action.camera;
     switch (action.type) {
         case INVALIDATE_ROVER:
             return Object.assign({}, state, {[rover]: {
@@ -65,7 +75,9 @@ function roversData(state = {
             })
         case RECEIVE_ROVER_IMAGES:
             return Object.assign({}, state, {
-                photos: roversImages(state[action.rover], action)
+                cameras: {
+                    [camera]: roversImages(state[action.rover], action)
+                }
             })
         default:
             return state
