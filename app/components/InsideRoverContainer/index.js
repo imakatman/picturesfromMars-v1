@@ -45,15 +45,13 @@ class InsideRoverContainer extends React.Component {
     }
 
     chooseAppropriatePanorama(rover){
-        console.log(rover);
-        console.log(this.state.texture);
         switch(rover){
             case "Curiosity":
                 var Panorama = {CuriosityPanorama};
                 var key = Object.keys({CuriosityPanorama})[0];
                 Panorama[key];
                 this.setState({
-                    texture: a[key]
+                    texture: Panorama[key]
                 })
                 break;
             case "Opportunity":
@@ -61,13 +59,12 @@ class InsideRoverContainer extends React.Component {
                 var key = Object.keys({OpportunityPanorama})[0];
                 Panorama[key];
                 this.setState({
-                    texture: a[key]
+                    texture: Panorama[key]
                 })
                 break;
             default:
                 return;
         }
-        console.log(this.state.texture);
     }
 
     onDocumentMouseDown(event) {

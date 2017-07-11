@@ -5,6 +5,7 @@
  */
 
 import React, {PropTypes} from 'react';
+import styled from 'styled-components';
 import {connect} from 'react-redux';
 import {
     selectRover,
@@ -15,6 +16,10 @@ import {
 import Helmet from 'react-helmet';
 import InsideRoverContainer from 'components/InsideRoverContainer';
 import PicsNavigation from 'components/PicsNavigation';
+
+const RoverName = styled.h1`
+    position: absolute;
+`
 
 class SelectedRoverPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
@@ -82,10 +87,10 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                     ]}
                 />
                 {selectedRover &&
-                <h1>{selectedRover}</h1>
+                <RoverName>{selectedRover}</RoverName>
                 }
                 {getDataByRover[selectedRover].data ? (
-                        <PicsNavigation cameras={getDataByRover[selectedRover].data.cameras}
+                        <PicsNavigation latestEarthDate={this.state.data.max_date} cameras={getDataByRover[selectedRover].data.cameras}
                             fetchPictures={(i) => this.fetchPictures(i)} />
                     ) : (
                         <p>Loading...</p>
