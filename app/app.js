@@ -42,7 +42,7 @@ const store = configureStore();
 
 // begin periodically persisting the store
 persistStore(store, {blacklist: "routing: routerReducer"});
-// persistStore(store).purge();
+//persistStore(store).purge();
 
 const history = syncHistoryWithStore(browserHistory, store);
 

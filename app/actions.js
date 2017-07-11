@@ -222,13 +222,11 @@ function receiveRoverImages(rover, json){
     }
 }
 
-export function fetchRoverImages(rover, sol, camera){
+export function fetchRoverImages(rover, sol, page, camera){
     return function(dispatch){
-        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/`+ rover +`/photos?sol=`+ sol +`&page=`+ +`&camera=`+ camera + `&api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`)
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/`+ rover +`/photos?sol=`+ sol +`&camera=`+ camera + `&page=`+ page + `&api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`)
         .then(response => response.json())
-        .then(json=>
-            dispatch(receiveRoverImages(rover, json))
-        )
+        .then(json=> dispatch(receiveRoverImages(rover, json)))
     }
 }
 
@@ -243,7 +241,7 @@ function shouldFetchRoverImages(state, rover) {
     }
 }
 
-export function fetchRoverImagesIfNeeded(rover, sol, camera) {
+export function fetchRoverImagesIfNeeded(rover, sol, page, camera) {
     // Note that the function also receives getState()
     // which lets you choose what to dispatch next.
 
@@ -252,7 +250,7 @@ export function fetchRoverImagesIfNeeded(rover, sol, camera) {
     return (dispatch, getState) => {
         if (shouldFetchRoverImages(getState(), rover)) {
             // Dispatch a thunk from thunk!
-            return dispatch(fetchRoverImages(rover, sol, camera))
+            return dispatch(fetchRoverImages(rover, sol, page, camera))
         } else {
             // Let the calling code know there's nothing to wait for.
             return Promise.resolve()

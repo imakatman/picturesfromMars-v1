@@ -9,7 +9,6 @@ import {SELECT_ROVER, INVALIDATE_ROVER, REFRESH_ROVER, REQUEST_ROVERS_DATA, RECE
 import {INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA} from './actions.js';
 import {INVALIDATE_ROVER_IMAGES, RECEIVE_ROVER_IMAGES} from './actions.js';
 
-
 // *** Rover reducers
 function selectedRover(state = "", action) {
     switch (action.type) {
@@ -27,24 +26,29 @@ function roversImages(state = {
     earthDate: "",
     camera: "",
     cameraFullName: "",
-    photos: {},
+    photoData: {},
     status: "",
 }, action) {
+    const camera = action.camera;
     switch (action.type) {
         case INVALIDATE_ROVER_IMAGES:
-            return Object.assign({}, state, {[rover]: {
-                didInvalidate: true,
-            }})
+            return Object.assign({}, state, {
+                [camera]: {
+                    didInvalidate: true,
+                }
+            })
         case RECEIVE_ROVER_IMAGES:
             return Object.assign({}, state, {
-                isFetching: false,
-                didInvalidate: false,
-                earthDate: action.earthDate,
-                camera: action.camera,
-                cameraFullName: action.cameraFullName,
-                photoData: action.photos,
-                sol: action.sol,
-                lastUpdated: action.receivedAt
+                [camera]: {
+                    isFetching: false,
+                    didInvalidate: false,
+                    sol: action.sol,
+                    earthDate: action.earthDate,
+                    camera: action.camera,
+                    cameraFullName: action.cameraFullName,
+                    photoData: action.photos,
+                    lastUpdated: action.receivedAt
+                }
             })
         default:
             return state
@@ -56,15 +60,15 @@ function roversData(state = {
     didInvalidate: false,
     name: "",
     data: {},
-    status: "",
-    cameras: {}
+    status: ""
 }, action) {
-    const camera = action.camera;
     switch (action.type) {
         case INVALIDATE_ROVER:
-            return Object.assign({}, state, {[rover]: {
-                didInvalidate: true,
-            }})
+            return Object.assign({}, state, {
+                [rover]: {
+                    didInvalidate: true,
+                }
+            })
         case RECEIVE_ROVERS_DATA:
             return Object.assign({}, state, {
                 isFetching: false,
@@ -73,12 +77,6 @@ function roversData(state = {
                 data: action.data,
                 lastUpdated: action.receivedAt
             })
-        case RECEIVE_ROVER_IMAGES:
-            return Object.assign({}, state, {
-                cameras: {
-                    [camera]: roversImages(state[action.rover], action)
-                }
-            })
         default:
             return state
     }
@@ -86,16 +84,15 @@ function roversData(state = {
 
 function getDataByRover(state = {}, action) {
     const rover = action.name;
-
     switch (action.type) {
         case INVALIDATE_ROVER:
         case RECEIVE_ROVERS_DATA:
             return Object.assign({}, state, {
-               [rover]: roversData(state[action.rover], action)
+                [rover]: roversData(state[action.rover], action)
             })
         case RECEIVE_ROVER_IMAGES:
             return Object.assign({}, state, {
-                [rover]: roversData(state[action.rover], action)
+                [rover]: roversImages(state[action.rover], action)
             })
         default:
             return state

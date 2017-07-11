@@ -21,7 +21,8 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         super(props);
 
         this.state = {
-            selectedRover: this.props.routeParams.rover
+            selectedRover: this.props.routeParams.rover,
+            page: 1
         }
 
         this.fetchPictures = this.fetchPictures.bind(this);
@@ -32,19 +33,23 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
 
         const rover  = this.state.selectedRover,
               maxSol = this.state.data.max_sol,
-              camera = this.state.data.cameras[i].name;
+              camera = this.state.data.cameras[i].name,
+              page = this.state.page;
 
         const photos = {};
 
-        dispatch(fetchRoverImagesIfNeeded(rover, maxSol, camera));
-
-        for (var [key, value] of Object.entries(getDataByRover[rover].photos.photoData)) {
+        dispatch(fetchRoverImagesIfNeeded(rover, maxSol, page, camera));
+        for (var [key, value] of Object.entries(getDataByRover[rover][camera].photoData)) {
             if (value["id"]) photos["id"] = value["id"];
             if (value["img_src"]) photos["img_src"] = value["img_src"];
             this.setState({
                 photos
             });
         }
+
+        this.setState((prevState)=>{
+            page: prevState + 1
+        });
 
     }
 
@@ -66,7 +71,6 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     }
 
     render() {
-
         const {selectedRover, getDataByRover} = this.props;
 
         return (
@@ -87,7 +91,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                         <p>Loading...</p>
                     )
                 }
-                <InsideRoverContainer />
+                <InsideRoverContainer name={this.state.selectedRover}/>
 
             </div>
         );
