@@ -90,7 +90,10 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                 <RoverName>{selectedRover}</RoverName>
                 }
                 {getDataByRover[selectedRover].data ? (
-                        <PicsNavigation latestEarthDate={this.state.data.max_date} cameras={getDataByRover[selectedRover].data.cameras}
+                        <PicsNavigation
+                            rover={this.state.selectedRover}
+                            latestEarthDate={this.state.data.max_date}
+                            cameras={this.state.data.cameras}
                             fetchPictures={(i) => this.fetchPictures(i)} />
                     ) : (
                         <p>Loading...</p>
