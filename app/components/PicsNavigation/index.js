@@ -35,6 +35,7 @@ class PicsNavigation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            readyToRender: false,
             noOfCameras: "",
             latestEarthDate: "",
             curiosityCameras: ['FHAZ.jpg', 'NAVCAM.jpg', 'MAST.jpg'],
@@ -70,10 +71,9 @@ class PicsNavigation extends React.Component {
         );
 
         this.setState({
-            cameraImages: imageFiles
+            cameraImages: imageFiles,
+            readyToRender: true,
         })
-
-        console.log(this.state.cameraImages);
 
 
         // switch(rover){
@@ -94,7 +94,6 @@ class PicsNavigation extends React.Component {
 
         // console.log(this.state);
         // style={{backgroundImage: "url(" + this.state.cameraImages[i] + ")"}}
-
         return (
             <Wrapper style={widthOfWrapper}>
                 <H4>{this.state.latestEarthDate}</H4>
