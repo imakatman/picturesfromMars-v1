@@ -49,7 +49,6 @@ class InsideRoverContainer extends React.Component {
             case "Curiosity":
                 var Panorama = {CuriosityPanorama};
                 var key = Object.keys({CuriosityPanorama})[0];
-                Panorama[key];
                 this.setState({
                     texture: Panorama[key]
                 })
@@ -57,7 +56,6 @@ class InsideRoverContainer extends React.Component {
             case "Opportunity":
                 var Panorama = {OpportunityPanorama};
                 var key = Object.keys({OpportunityPanorama})[0];
-                Panorama[key];
                 this.setState({
                     texture: Panorama[key]
                 })
@@ -76,8 +74,6 @@ class InsideRoverContainer extends React.Component {
     onDocumentMouseMove(event) {
         const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
         const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-
-        console.log(movementX);
 
         this.setState(function(prevState){
             return{

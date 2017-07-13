@@ -11,10 +11,6 @@ import { Flex, Box } from 'grid-styled';
 const pathToCuriosityCameraImages = require.context('assets/cameras/Curiosity');
 const curiosityCameras = ['FHAZ.jpg', 'NAVCAM.jpg', 'MAST.jpg'];
 
-function route(path, query) {
-    return import(`assets/cameras/Curiosity/${path}`);
-}
-
 const Wrapper = styled.div`
     position: absolute;
     bottom: 0;
@@ -39,8 +35,11 @@ class PicsNavigation extends React.Component {
         this.state = {
             noOfCameras: "",
             latestEarthDate: "",
+            curiosityCameras: ['FHAZ.jpg', 'NAVCAM.jpg', 'MAST.jpg'],
+            cameraImages: [],
         }
 
+        this.dynamicImport = this.dynamicImport.bind(this);
         this.selectAppropriateImages = this.selectAppropriateImages.bind(this);
     }
 
@@ -52,15 +51,26 @@ class PicsNavigation extends React.Component {
             latestEarthDate: this.props.latestEarthDate,
         });
 
-        this.selectAppropriateImages(this.state.rover)
+        this.selectAppropriateImages(this.state.rover);
+    }
+
+    dynamicImport(path){
+        return import(`assets/cameras/Curiosity/${path}`);
     }
 
     selectAppropriateImages(rover){
-        const images = [];
+        const imageFiles = [];
 
-        curiosityCameras.map(imgFile=> images.push(route(imgFile)));
+        this.state.curiosityCameras.map(imgPath=> this.dynamicImport(imgPath).then(path=>imageFiles.push(path)));
 
-        console.log(images);
+        // const imageFiles = imageFiles.slice
+
+        this.setState({
+            cameraImages: imageFiles
+        })
+
+        console.log(this.state.cameraImages);
+
 
         // switch(rover){
         //     case "Curiosity":
@@ -87,7 +97,7 @@ class PicsNavigation extends React.Component {
                 <Flex>
                     {this.props.cameras.map((camera, i) =>
                         <Box
-
+                            style={{backgroundImage:"url(" + this.state.cameraImages[i] + ")"}}
                             data-camera={camera.name}
                             key={i}
                             onClick={() => this.props.fetchPictures(i)}>
