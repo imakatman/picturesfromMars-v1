@@ -8,8 +8,9 @@ import React, {PropTypes} from 'react'
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 import ReactDOM from 'react-dom';
+import test from 'assets/test.jpg'
+import CuriosityPanorama from 'assets/panorama/curiosity_false_colors.jpg';
 import OpportunityPanorama from 'assets/panorama/opportunity.jpg';
-import SpiritPanorama from 'assets/panorama/spirit.jpg';
 
 class InsideRoverContainer extends React.Component {
     constructor(props, context) {
@@ -17,6 +18,7 @@ class InsideRoverContainer extends React.Component {
 
         this.state = {
             name: "",
+            texture: {},
             lon: 90,
             lat: 0,
             phi: 0,
@@ -25,6 +27,7 @@ class InsideRoverContainer extends React.Component {
             cameraLookAt: new THREE.Vector3(0, 0, 0),
         }
 
+        this.chooseAppropriatePanorama= this.chooseAppropriatePanorama.bind(this);
         this.onDocumentMouseDown = this.onDocumentMouseDown.bind(this);
         this.onDocumentMouseMove = this.onDocumentMouseMove.bind(this);
         this.onDocumentMouseUp   = this.onDocumentMouseUp.bind(this);
@@ -32,11 +35,34 @@ class InsideRoverContainer extends React.Component {
     }
 
     componentDidMount() {
+        this.chooseAppropriatePanorama(this.props.name);
+
         this.setState({
             name: this.props.name
         });
 
         document.querySelector("canvas").addEventListener("mousedown", this.onDocumentMouseDown, false);
+    }
+
+    chooseAppropriatePanorama(rover){
+        switch(rover){
+            case "Curiosity":
+                const Panorama = {CuriosityPanorama};ch
+                const key = Object.keys({CuriosityPanorama})[0];ch
+                this.setState({
+                    texture: Panorama[key]
+                })
+                break;
+            case "Opportunity":
+                const Panorama = {OpportunityPanorama};ch
+                const key = Object.keys({OpportunityPanorama})[0];ch
+                this.setState({
+                    texture: Panorama[key]
+                })
+                break;
+            default:
+                return;
+        }
     }
 
     onDocumentMouseDown(event) {
@@ -48,8 +74,6 @@ class InsideRoverContainer extends React.Component {
     onDocumentMouseMove(event) {
         const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
         const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-
-        console.log(movementX);
 
         this.setState(function(prevState){
             return{
@@ -89,8 +113,6 @@ class InsideRoverContainer extends React.Component {
         const width  = window.innerWidth; // canvas width
         const height = window.innerHeight; // canvas height
 
-
-
         return (
             <React3 mainCamera="camera" width={width} height={height} ref={(three) => this.threeObj = three} onAnimate={this.onAnimate}>
                 <scene>
@@ -106,12 +128,12 @@ class InsideRoverContainer extends React.Component {
                     <object3D scale={new THREE.Vector3(-1, 1, 1)}>
                         <mesh>
                             <sphereGeometry
-                                radius={5000}
+                                radius={500}
                                 widthSegments={60}
                                 heightSegments={40}
                             />
                             <meshBasicMaterial>
-                                <texture url={SpiritPanorama} anisotropy={10} ref={(texture) => this.texture = texture}/>
+                                <texture url={this.state.texture} anisotropy={10} ref={(texture) => this.texture = texture}/>
                             </meshBasicMaterial>
                         </mesh>
                     </object3D>
