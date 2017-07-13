@@ -25,8 +25,10 @@ const Ul = styled.ul`
   padding: 0;
 `;
 
-const Li = styled.li`
-  list-style:none;
+const CameraImage = styled.div`
+      background-position: 50%;
+    background-size: cover;
+    height: 250px;
 `;
 
 class PicsNavigation extends React.Component {
@@ -61,9 +63,11 @@ class PicsNavigation extends React.Component {
     selectAppropriateImages(rover){
         const imageFiles = [];
 
-        this.state.curiosityCameras.map(imgPath=> this.dynamicImport(imgPath).then(path=>imageFiles.push(path)));
-
-        // const imageFiles = imageFiles.slice
+        this.state.curiosityCameras.map(imgPath=>
+            this.dynamicImport(imgPath)
+            .then(path=>imageFiles.push(path))
+            .catch(error=>console.log(error))
+        );
 
         this.setState({
             cameraImages: imageFiles
@@ -96,12 +100,14 @@ class PicsNavigation extends React.Component {
                 <H4>{this.state.latestEarthDate}</H4>
                 <Flex>
                     {this.props.cameras.map((camera, i) =>
-                        <Box
-                            style={{backgroundImage:"url(" + this.state.cameraImages[i] + ")"}}
-                            data-camera={camera.name}
-                            key={i}
-                            onClick={() => this.props.fetchPictures(i)}>
-                            {camera.full_name}
+                        <Box flex='1' m="16px">
+                            <CameraImage
+                                style={{backgroundImage:"url(" + this.state.cameraImages[i] + ")"}}
+                                data-camera={camera.name}
+                                key={i}
+                                onClick={() => this.props.fetchPictures(i)}>
+                                {camera.full_name}
+                            </CameraImage>
                         </Box>
                     )}
                 </Flex>
