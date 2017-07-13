@@ -18,7 +18,7 @@ const H4 = styled.h4`
 
 `;
 
-const CameraImage = styled.div`
+const CameraNavItem = styled.div`
       background-position: 50%;
     background-size: cover;
     height: 250px;
@@ -72,12 +72,12 @@ class PicsNavigation extends React.Component {
                 <Flex>
                     {this.props.cameras.map((camera, i) =>
                         <Box flex='1' m="16px" key={i}>
-                            <CameraImage
+                            <CameraNavItem
                                 style={{backgroundImage: "url(" + this.state.cameraImages[i] + ")"}}
                                 data-camera={camera.name}
                                 onClick={() => this.props.fetchPictures(i)}>
                                 {camera.full_name}
-                            </CameraImage>
+                            </CameraNavItem>
                         </Box>
                     )}
                 </Flex>

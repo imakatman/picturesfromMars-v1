@@ -47,15 +47,15 @@ class InsideRoverContainer extends React.Component {
     chooseAppropriatePanorama(rover){
         switch(rover){
             case "Curiosity":
-                const Panorama = {CuriosityPanorama};
-                const key = Object.keys({CuriosityPanorama})[0];
+                const Panorama = {CuriosityPanorama};ch
+                const key = Object.keys({CuriosityPanorama})[0];ch
                 this.setState({
                     texture: Panorama[key]
                 })
                 break;
             case "Opportunity":
-                const Panorama = {OpportunityPanorama};
-                const key = Object.keys({OpportunityPanorama})[0];
+                const Panorama = {OpportunityPanorama};ch
+                const key = Object.keys({OpportunityPanorama})[0];ch
                 this.setState({
                     texture: Panorama[key]
                 })
