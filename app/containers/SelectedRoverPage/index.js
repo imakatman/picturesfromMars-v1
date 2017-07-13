@@ -58,7 +58,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
 
     }
 
-    componentDidMount() {
+    componentWillMount() {
         const {dispatch, getDataByRover} = this.props;
         const rover                      = this.state.selectedRover;
 

@@ -34,13 +34,15 @@ class InsideRoverContainer extends React.Component {
         this.onAnimate = this.onAnimate.bind(this);
     }
 
-    componentDidMount() {
+    componentWillMount(){
         this.chooseAppropriatePanorama(this.props.name);
 
         this.setState({
             name: this.props.name
         });
+    }
 
+    componentDidMount() {
         document.querySelector("canvas").addEventListener("mousedown", this.onDocumentMouseDown, false);
     }
 
