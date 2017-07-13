@@ -8,9 +8,6 @@ import React from 'react';
 import styled from 'styled-components';
 import {Flex, Box} from 'grid-styled';
 
-const pathToCuriosityCameraImages = require.context('assets/cameras/Curiosity');
-const curiosityCameras            = ['FHAZ.jpg', 'NAVCAM.jpg', 'MAST.jpg'];
-
 const Wrapper = styled.div`
     position: absolute;
     bottom: 0;
@@ -35,7 +32,7 @@ class PicsNavigation extends React.Component {
             readyToRenderImages: false,
             noOfCameras: "",
             latestEarthDate: "",
-            curiosityCameras: ['FHAZ.jpg', 'NAVCAM.jpg', 'MAST.jpg'],
+            curiosityCameras: ['FHAZ', 'NAVCAM', 'MAST'],
             cameraImages: [],
         }
 
@@ -44,7 +41,7 @@ class PicsNavigation extends React.Component {
     }
 
     dynamicImport(path) {
-        return import(`assets/cameras/Curiosity/${path}`);
+        return import(`assets/cameras/Curiosity/${path}.jpg`);
     }
 
     selectAppropriateImages(rover) {
@@ -54,7 +51,7 @@ class PicsNavigation extends React.Component {
                 this.setState({cameraImages: imageArray});
             }).catch(error => console.log(error))
         );
-    }
+    }i
 
     componentWillMount() {
         console.log(this.props);
