@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import SelectARover from 'components/SelectARover';
 import {Flex, Box} from 'grid-styled';
 import Curiosity from 'assets/rovers/Curiosity.jpg';
@@ -20,19 +21,7 @@ class Picker extends React.Component{
         }
     }
 
-    // componentWillMount(){
-    //     var portraitArray = [];
-    //     this.state.portraitObjects.map(portraitObj=>{
-    //          const key = Object.keys(portraitObj)[0];
-    //          portraitArray = this.state.portrait.concat(portraitObj[key]);
-    //         console.log(portraitArray);
-    //     });
-    //
-    //     this.setState({ portrait: portraitArray });
-    // }
-
     render(){
-        console.log(this.state.portrait);
         return (
             <Flex>
                 {this.props.values.map((value, i) =>
@@ -50,6 +39,13 @@ class Picker extends React.Component{
     }
 }
 
-Picker.propTypes = {};
+Picker.propTypes = {
+    values: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        total_photos: PropTypes.number,
+    })).isRequired,
+    activeState: PropTypes.arrayOf(PropTypes.bool).isRequired,
+};
 
 export default Picker;

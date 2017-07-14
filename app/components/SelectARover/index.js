@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {Link} from 'react-router';
 import {Overlay} from '../Overlay';
@@ -18,18 +19,24 @@ const RoverColumn = styled.div`
 
 function SelectARover(props) {
     return (
-        <RoverColumn name={props.name} style={{backgroundImage: "url(" + props.portrait + ")"}}>
+        <RoverColumn active={props.activeState} name={props.name}
+            style={{backgroundImage: "url(" + props.portrait + ")"}}>
             <h3>
                 <Link to={"/r/" + props.name}>
                     {props.name}
                 </Link>
             </h3>
             <p>{props.totalPhotos}</p>
-            <Overlay/>
+            <Overlay />
         </RoverColumn>
     );
 }
 
-SelectARover.propTypes = {};
+SelectARover.propTypes = {
+    activeState: PropTypes.bool.isRequired,
+    name: PropTypes.string.isRequired,
+    portrait: PropTypes.string.isRequired,
+    totalPhotos: PropTypes.number.isRequired,
+};
 
 export default SelectARover;
