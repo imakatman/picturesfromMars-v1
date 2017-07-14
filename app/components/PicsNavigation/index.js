@@ -41,7 +41,9 @@ class PicsNavigation extends React.Component {
     }
 
     dynamicImport(path) {
-        return import(`assets/cameras/Curiosity/${path}.jpg`);
+        return
+        import
+        (`assets/cameras/Curiosity/${path}.jpg`);
     }
 
     selectAppropriateImages(rover) {
@@ -51,7 +53,9 @@ class PicsNavigation extends React.Component {
                 this.setState({cameraImages: imageArray});
             }).catch(error => console.log(error))
         );
-    }i
+    }
+
+    i
 
     componentWillMount() {
         console.log(this.props);
