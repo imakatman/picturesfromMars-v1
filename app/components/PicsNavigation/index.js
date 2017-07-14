@@ -55,8 +55,6 @@ class PicsNavigation extends React.Component {
         );
     }
 
-    i
-
     componentWillMount() {
         console.log(this.props);
         this.setState({

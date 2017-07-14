@@ -16,27 +16,29 @@ class Picker extends React.Component{
         super(props);
 
         this.state = {
-            portraitObjects: [{Curiosity}, {Opportunity}, {Spirit}],
-            portrait: []
+            portrait: [{Curiosity}, {Opportunity}, {Spirit}]
         }
     }
 
-    componentDidMount(){
-        this.state.portraitObjects.map(portrait=>{
-             const key = Object.keys(portrait)[0];
-             const portraitValue = portrait[key];
-             const portraitArray = this.state.portrait.concat(portraitValue);
-             this.setState({ portrait: portraitArray });
-        });
-    }
+    // componentWillMount(){
+    //     var portraitArray = [];
+    //     this.state.portraitObjects.map(portraitObj=>{
+    //          const key = Object.keys(portraitObj)[0];
+    //          portraitArray = this.state.portrait.concat(portraitObj[key]);
+    //         console.log(portraitArray);
+    //     });
+    //
+    //     this.setState({ portrait: portraitArray });
+    // }
 
     render(){
+        console.log(this.state.portrait);
         return (
             <Flex>
                 {this.props.values.map((value, i) =>
                     <Box flex={1} key={value.id}>
                         <SelectARover
-                            portrait={this.state.portrait[i]}
+                            portrait={this.state.portrait[i][value.name]}
                             name={value.name}
                             totalPhotos={value.total_photos}
                             activeState={this.props.activeState[i]}
