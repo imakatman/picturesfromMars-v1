@@ -19,7 +19,7 @@ import {
 import Helmet from 'react-helmet';
 import Gallery from 'components/Gallery';
 import InsideRoverContainer from 'components/InsideRoverContainer';
-import PicsNavigation from 'components/PicsNavigation';
+import CameraNavigation from 'components/CameraNavigation';
 
 const RoverName = styled.h1`
     position: absolute;
@@ -115,7 +115,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                 }
                 {GalleryComponent}
                 {getDataByRover[selectedRover].data ? (
-                        <PicsNavigation
+                        <CameraNavigation
                             rover={this.state.selectedRover}
                             latestEarthDate={this.state.data.max_date}
                             cameras={this.state.data.cameras}
