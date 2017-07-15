@@ -33,7 +33,6 @@ class PicsNavigation extends React.Component {
             readyToRenderImages: false,
             noOfCameras: "",
             latestEarthDate: "",
-            curiosityCameras: ['FHAZ', 'NAVCAM', 'MAST'],
             cameraImages: [],
         }
 
@@ -45,8 +44,8 @@ class PicsNavigation extends React.Component {
         return import(`assets/cameras/Curiosity/${path}.jpg`);
     }
 
-    selectAppropriateImages(rover) {
-        this.state.curiosityCameras.map(imgPath =>
+    selectAppropriateImages() {
+        this.state.cameras.map(imgPath =>
             this.dynamicImport(imgPath).then(path => {
                 const imageArray = this.state.cameraImages.concat(path);
                 this.setState({cameraImages: imageArray});
@@ -56,11 +55,15 @@ class PicsNavigation extends React.Component {
 
     componentWillMount() {
         this.setState({
-            rover: this.props.selectedRover,
+            rover: this.props.rover,
+            cameras: this.props.cameras.map(camera=> camera.name),
             noOfCameras: this.props.cameras.length,
             latestEarthDate: this.props.latestEarthDate,
         });
-        this.selectAppropriateImages(this.state.rover);
+    }
+
+    componentDidMount(){
+        this.selectAppropriateImages();
     }
 
     render() {
@@ -75,7 +78,7 @@ class PicsNavigation extends React.Component {
                             <CameraNavItem
                                 style={{backgroundImage: "url(" + this.state.cameraImages[i] + ")"}}
                                 data-camera={camera.name}
-                                onClick={() => this.props.fetchPictures(i)}>
+                                onClick={() => this.props.mountGallery(i)}>
                                 {camera.full_name}
                             </CameraNavItem>
                         </Box>
