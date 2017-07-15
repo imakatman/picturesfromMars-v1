@@ -1,9 +1,9 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import PicsNavigation from '../index';
+// import CameraNavigation from '../index';
 
-describe('<PicsNavigation />', () => {
+describe('<CameraNavigation />', () => {
   it('Expect to have unit tests specified', () => {
     expect(true).toEqual(false);
   });

@@ -1,9 +1,9 @@
 // import React from 'react';
 // import { shallow } from 'enzyme';
 
-// import { RoversApp } from '../index';
+// import Gallery from '../index';
 
-describe('<RoversApp />', () => {
+describe('<Gallery />', () => {
   it('Expect to have unit tests specified', () => {
     expect(true).toEqual(false);
   });

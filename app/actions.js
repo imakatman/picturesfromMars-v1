@@ -23,13 +23,14 @@ function refreshRover(rovers){
     }
 };
 
-// export const REQUEST_ALL_ROVERS_DATA = "requestAllRoversData";
-//
-// function requestAllRoversData(){
-//     return{
-//         type: REQUEST_ALL_ROVERS_DATA,
-//     }
-// }
+export const REQUEST_ALL_ROVERS_DATA = "requestAllRoversData";
+
+function requestAllRoversData(rovers){
+    return{
+        type: REQUEST_ALL_ROVERS_DATA,
+        rovers
+    }
+};
 
 export const RECEIVE_ALL_ROVERS_DATA = "receiveAllRoversData";
 
@@ -199,13 +200,14 @@ function refreshRoverImages(rover){
     }
 };
 
-// export const REQUEST_ALL_ROVERS_DATA = "requestAllRoversData";
-//
-// function requestAllRoversData(){
-//     return{
-//         type: REQUEST_ALL_ROVERS_DATA,
-//     }
-// }
+export const REQUEST_ROVERS_IMAGES = "requestRoversImages";
+
+function requestRoversImages(rover){
+    return{
+        type: REQUEST_ROVERS_IMAGES,
+        rover
+    }
+}
 
 export const RECEIVE_ROVER_IMAGES = "receiveRoverImages"
 
@@ -230,8 +232,8 @@ export function fetchRoverImages(rover, sol, page, camera){
     }
 }
 
-function shouldFetchRoverImages(state, rover) {
-    const data = state.getDataByRover[rover].photos;
+function shouldFetchRoverImages(state, rover, camera) {
+    const data = state.getDataByRover[rover][camera];
     if (!data) {
         return true
     } else if (data.isFetching) {
@@ -248,7 +250,7 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera) {
     // This is useful for avoiding a network request if
     // a cached value is already available.
     return (dispatch, getState) => {
-        if (shouldFetchRoverImages(getState(), rover)) {
+        if (shouldFetchRoverImages(getState(), rover, camera)) {
             // Dispatch a thunk from thunk!
             return dispatch(fetchRoverImages(rover, sol, page, camera))
         } else {
@@ -259,3 +261,29 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera) {
 }
 
 // LOOK AT http://redux.js.org/docs/introduction/Examples.html#real-world for ERROR MESSAGE HANDLING
+
+// *****
+// ** ACTIONS FOR APP
+//
+
+export const CAMERA_SELECTED = "cameraSelected";
+
+export function cameraSelected(rover, camera, sol){
+    return{
+        type: CAMERA_SELECTED,
+        rover,
+        camera,
+        sol
+    }
+}
+
+export const CAMERA_UNSELECTED = "cameraUnselected";
+
+export function cameraUnselected(rover, camera, sol){
+    return{
+        type: CAMERA_UNSELECTED,
+        rover,
+        camera,
+        sol
+    }
+}

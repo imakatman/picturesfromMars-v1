@@ -23,7 +23,7 @@ export default function createRoutes(store) {
       getComponent(nextState, cb) {
 
         const importModules = Promise.all([
-            System.import('containers/RoversApp'),
+            System.import('containers/HomePage'),
         ]);
 
         const renderRoute = loadModule(cb);
