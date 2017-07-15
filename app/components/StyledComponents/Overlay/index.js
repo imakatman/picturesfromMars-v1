@@ -8,3 +8,8 @@ export const Overlay = styled.div`
     top: 0;
     left: 0;
 `;
+
+export const TopLayer = styled.div`
+    position: relative;
+    z-index: 1;
+`
