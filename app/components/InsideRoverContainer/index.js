@@ -4,11 +4,10 @@
  *
  */
 
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types';
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
-import ReactDOM from 'react-dom';
-import test from 'assets/test.jpg'
 import CuriosityPanorama from 'assets/panorama/curiosity_false_colors.jpg';
 import OpportunityPanorama from 'assets/panorama/opportunity.jpg';
 
@@ -17,7 +16,6 @@ class InsideRoverContainer extends React.Component {
         super(props, context);
 
         this.state = {
-            name: "",
             texture: {},
             lon: 90,
             lat: 0,
@@ -36,10 +34,6 @@ class InsideRoverContainer extends React.Component {
 
     componentWillMount(){
         this.chooseAppropriatePanorama(this.props.name);
-
-        this.setState({
-            name: this.props.name
-        });
     }
 
     componentDidMount() {
@@ -145,7 +139,8 @@ class InsideRoverContainer extends React.Component {
     }
 }
 
-InsideRoverContainer.propTypes = {};
+InsideRoverContainer.propTypes = {
+    name: PropTypes.string.isRequired
+};
 
-// ReactDOM.render(<InsideRoverContainer/>, document.body);
 export default InsideRoverContainer;

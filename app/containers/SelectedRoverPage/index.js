@@ -4,7 +4,8 @@
  *
  */
 
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {connect} from 'react-redux';
 import {
@@ -33,6 +34,23 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         this.fetchPictures = this.fetchPictures.bind(this);
     }
 
+    componentWillMount() {
+        const {dispatch, getDataByRover} = this.props;
+        const rover                      = this.state.selectedRover;
+
+        const data = {};
+
+        dispatch(selectRover(rover));
+        dispatch(fetchRoverDataIfNeeded(rover));
+
+        for (var [key, value] of Object.entries(getDataByRover[rover].data)) {
+            data[key] = value;
+            this.setState({
+                data
+            });
+        }
+    }
+
     fetchPictures(i) {
         const {dispatch, getDataByRover} = this.props;
 
@@ -56,23 +74,6 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
             page: prevState + 1
         });
 
-    }
-
-    componentWillMount() {
-        const {dispatch, getDataByRover} = this.props;
-        const rover                      = this.state.selectedRover;
-
-        const data = {};
-
-        dispatch(selectRover(rover));
-        dispatch(fetchRoverDataIfNeeded(rover));
-
-        for (var [key, value] of Object.entries(getDataByRover[rover].data)) {
-            data[key] = value;
-            this.setState({
-                data
-            });
-        }
     }
 
     render() {
@@ -131,6 +132,26 @@ function mapStateToProps(state) {
 }
 
 SelectedRoverPage.propTypes = {
+    routeParams: PropTypes.objectOf(PropTypes.string).isRequired,
+    selectedRover: PropTypes.string.isRequired,
+    getDataByRover: PropTypes.objectOf(PropTypes.shape({
+            didInvalidate: PropTypes.bool,
+            isFetching: PropTypes.bool,
+            lastUpdated: PropTypes.number,
+            name: PropTypes.string,
+            data: PropTypes.shape({
+                cameras: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
+                id: PropTypes.number,
+                landing_date: PropTypes.string,
+                launch_date: PropTypes.string,
+                max_date: PropTypes.string,
+                max_sol: PropTypes.number,
+                name: PropTypes.string,
+                status: PropTypes.string,
+                total_photos: PropTypes.number,
+            })
+        })
+    ).isRequired,
     dispatch: PropTypes.func.isRequired,
 };
 

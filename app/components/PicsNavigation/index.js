@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {Flex, Box} from 'grid-styled';
 
@@ -41,9 +42,7 @@ class PicsNavigation extends React.Component {
     }
 
     dynamicImport(path) {
-        return
-        import
-        (`assets/cameras/Curiosity/${path}.jpg`);
+        return import(`assets/cameras/Curiosity/${path}.jpg`);
     }
 
     selectAppropriateImages(rover) {
@@ -56,7 +55,6 @@ class PicsNavigation extends React.Component {
     }
 
     componentWillMount() {
-        console.log(this.props);
         this.setState({
             rover: this.props.selectedRover,
             noOfCameras: this.props.cameras.length,
@@ -88,6 +86,11 @@ class PicsNavigation extends React.Component {
     }
 }
 
-PicsNavigation.propTypes = {};
+PicsNavigation.propTypes = {
+    rover: PropTypes.string.isRequired,
+    cameras: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
+    latestEarthDate: PropTypes.string.isRequired,
+    fetchPictures: PropTypes.func.isRequired,
+};
 
 export default PicsNavigation;
