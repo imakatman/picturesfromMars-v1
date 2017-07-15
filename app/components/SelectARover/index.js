@@ -25,21 +25,22 @@ const RoverColumn = styled.div`
 
 function SelectARover(props) {
     return (
-        <RoverColumn active={props.activeState} name={props.name}
-            style={{backgroundImage: "url(" + props.portrait + ")"}}>
-            <TopLayer>
-                <Heading>
-                    <Link style={{color: "#fff"}} to={"/r/" + props.name}>
+        <Link to={"/r/" + props.name} style={{textDecoration: "none",cursor:"pointer"}}>
+            <RoverColumn active={props.activeState} name={props.name}
+                style={{backgroundImage: "url(" + props.portrait + ")"}}>
+                <TopLayer>
+                    <Heading color={"white"}>
+
                         {props.name}
-                    </Link>
-                </Heading>
-                <SubHeading color={"white"}>
-                    <SmallLabel>Total Photos</SmallLabel>
-                    {props.totalPhotos}
-                </SubHeading>
-            </TopLayer>
-            <Overlay />
-        </RoverColumn>
+                    </Heading>
+                    <SubHeading color={"white"}>
+                        <SmallLabel>Total Photos</SmallLabel>
+                        {props.totalPhotos}
+                    </SubHeading>
+                </TopLayer>
+                <Overlay />
+            </RoverColumn>
+        </Link>
     );
 }
 
