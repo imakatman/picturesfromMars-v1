@@ -12,7 +12,9 @@ import {
     selectRover,
     fetchRoverDataIfNeeded,
     invalidateRover,
-    fetchRoverImagesIfNeeded
+    fetchRoverImagesIfNeeded,
+    cameraSelected,
+    cameraUnselected
 } from '../../actions'
 import Helmet from 'react-helmet';
 import Gallery from 'components/Gallery';
@@ -62,7 +64,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         const {dispatch, getDataByRover} = this.props;
 
         const rover  = this.state.selectedRover,
-              maxSol = this.state.data.max_sol,
+              sol = this.state.data.max_sol,
               camera = this.state.data.cameras[i].name,
               page   = this.state.page;
 
@@ -72,7 +74,8 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
             Gallery: <Gallery camera={camera} />
         });
 
-        dispatch(fetchRoverImagesIfNeeded(rover, maxSol, page, camera));
+        dispatch(cameraSelected(rover, camera, sol));
+        dispatch(fetchRoverImagesIfNeeded(rover, sol, page, camera));
 
         for (var [key, value] of Object.entries(getDataByRover[rover][camera].photoData)) {
             const photo = {};
@@ -88,7 +91,6 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         this.setState({
             Gallery: <Gallery camera={camera} photos={photos}/>
         });
-
 
         this.setState((prevState) => {
             page: prevState + 1
@@ -130,7 +132,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
 }
 
 function mapStateToProps(state) {
-    const {selectedRover, getDataByRover} = state;
+    const {selectedRover, getDataByRover, selectCamera} = state;
 
     const {
               isFetching,
@@ -143,6 +145,16 @@ function mapStateToProps(state) {
         photos: []
     }
 
+    const {
+        rover,
+        camera,
+        sol,
+    } = selectCamera || {
+        rover: undefined,
+        camera: undefined,
+        sol: undefined
+    }
+
     return {
         selectedRover,
         roverData,
@@ -150,6 +162,7 @@ function mapStateToProps(state) {
         getDataByRover,
         isFetching,
         lastUpdated,
+        selectCamera
     };
 }
 
