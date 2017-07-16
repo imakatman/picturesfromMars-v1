@@ -216,8 +216,6 @@ function requestRoversImages(rover, camera){
 export const RECEIVE_ROVER_IMAGES = "receiveRoverImages"
 
 function receiveRoverImages(rover, json){
-    console.log(json);
-    console.log(json.photos[0].earth_date);
     // For earthDate, camera, cameraFullName, and sol we just need to get the data from the first returned object because this data will stay the same for each photo object from a Request
     return{
         type: RECEIVE_ROVER_IMAGES,
