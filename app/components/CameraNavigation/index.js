@@ -26,7 +26,7 @@ const CameraNavItem = styled.div`
         border-radius: 5px;
 `;
 
-class PicsNavigation extends React.Component {
+class CameraNavigation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -89,11 +89,11 @@ class PicsNavigation extends React.Component {
     }
 }
 
-PicsNavigation.propTypes = {
+CameraNavigation.propTypes = {
     rover: PropTypes.string.isRequired,
     cameras: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
     latestEarthDate: PropTypes.string.isRequired,
     fetchPictures: PropTypes.func.isRequired,
 };
 
-export default PicsNavigation;
+export default CameraNavigation;

@@ -35,6 +35,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         }
 
         this.mountGallery  = this.mountGallery.bind(this);
+        this.unmountGallery = this.unmountGallery.bind(this);
     }
 
     componentWillMount() {
@@ -54,28 +55,43 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         }
     }
 
-    // mountGallery(i) {
-    //     const thisCamera = this.state.data.cameras[i].name;
-    //     this.fetchPictures(i);
-    //     console.log(thisCamera);
-    // }
+    componentDidMount(){
+        const {selectCamera} = this.props;
 
-    mountGallery(i) {
+        const rover = selectCamera.rover,
+              cameraIndex = selectCamera.cameraIndex,
+              camera = selectCamera.camera,
+              sol = selectCamera.sol;
+
+        if(selectCamera["camera"] !== 'undefined'){
+            this.mountGallery(rover, cameraIndex, camera, sol);
+        }
+    }
+
+    unmountGallery(){
+        const {dispatch} = this.props;
+        dispatch(cameraUnselected());
+        this.setState({
+            galleryMounted: false,
+        })
+    }
+
+    mountGallery(selectedRover, cameraIndex, selectedCamera, currentSol) {
         const {dispatch, getDataByRover} = this.props;
 
-        const rover  = this.state.selectedRover,
-              sol = this.state.data.max_sol,
-              camera = this.state.data.cameras[i].name,
+        const rover  = selectedRover || this.state.selectedRover,
+              sol = currentSol || this.state.data.max_sol,
+              camera = selectedCamera || this.state.data.cameras[cameraIndex].name,
               page   = this.state.page;
 
         const photos = [];
 
+        dispatch(cameraSelected(rover, cameraIndex, camera, sol));
+        dispatch(fetchRoverImagesIfNeeded(rover, sol, page, camera));
+
         this.setState({
             Gallery: <Gallery camera={camera} />
         });
-
-        dispatch(cameraSelected(rover, camera, sol));
-        dispatch(fetchRoverImagesIfNeeded(rover, sol, page, camera));
 
         for (var [key, value] of Object.entries(getDataByRover[rover][camera].photoData)) {
             const photo = {};
@@ -89,7 +105,8 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         console.log(photos);
 
         this.setState({
-            Gallery: <Gallery camera={camera} photos={photos}/>
+            galleryMounted: true,
+            Gallery: <Gallery camera={camera} photos={photos} unmountGallery={()=>this.unmountGallery()}/>
         });
 
         this.setState((prevState) => {
@@ -99,7 +116,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     }
 
     render() {
-        const {selectedRover, getDataByRover} = this.props;
+        const {selectedRover, getDataByRover, selectCamera} = this.props;
         const GalleryComponent = this.state.Gallery;
 
         return (
@@ -113,13 +130,13 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                 {selectedRover &&
                 <RoverName>{selectedRover}</RoverName>
                 }
-                {GalleryComponent}
+                {selectCamera["camera"] !== 'undefined' && this.state.galleryMounted && GalleryComponent}
                 {getDataByRover[selectedRover].data ? (
                         <CameraNavigation
                             rover={this.state.selectedRover}
                             latestEarthDate={this.state.data.max_date}
                             cameras={this.state.data.cameras}
-                            mountGallery={(i) => this.mountGallery(i)} />
+                            mountGallery={(i) => this.mountGallery(...[ , i, , ,])} />
                     ) : (
                         <p>Loading...</p>
                     )
@@ -147,13 +164,10 @@ function mapStateToProps(state) {
 
     const {
         rover,
+        cameraIndex,
         camera,
         sol,
-    } = selectCamera || {
-        rover: undefined,
-        camera: undefined,
-        sol: undefined
-    }
+    } = selectCamera || {}
 
     return {
         selectedRover,

@@ -146,17 +146,19 @@ function getAllRoversData(state = {AllRovers: {}}, action) {
     }
 }
 
-function selectCamera(state = {rover: undefined, camera: undefined, sol: undefined}, action) {
+function selectCamera(state = {}, action) {
     switch (action.type) {
         case CAMERA_SELECTED:
             return Object.assign({}, state, {
                 rover: action.rover,
+                cameraIndex: action.cameraIndex,
                 camera: action.camera,
                 sol: action.sol
             });
         case CAMERA_UNSELECTED:
             return Object.assign({}, state, {
                 rover: undefined,
+                cameraIndex: undefined,
                 camera: undefined,
                 sol: undefined,
             })

@@ -268,10 +268,11 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera) {
 
 export const CAMERA_SELECTED = "cameraSelected";
 
-export function cameraSelected(rover, camera, sol){
+export function cameraSelected(rover, cameraIndex, camera, sol){
     return{
         type: CAMERA_SELECTED,
         rover,
+        cameraIndex,
         camera,
         sol
     }
@@ -279,11 +280,8 @@ export function cameraSelected(rover, camera, sol){
 
 export const CAMERA_UNSELECTED = "cameraUnselected";
 
-export function cameraUnselected(rover, camera, sol){
+export function cameraUnselected(){
     return{
-        type: CAMERA_UNSELECTED,
-        rover,
-        camera,
-        sol
+        type: CAMERA_UNSELECTED
     }
 }
