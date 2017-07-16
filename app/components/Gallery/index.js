@@ -37,7 +37,6 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
     }
 
     render() {
-        console.log(this.props.photos);
         return (
             <GalleryContainer>
                 {this.props.camera}
