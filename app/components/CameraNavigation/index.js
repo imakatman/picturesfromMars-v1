@@ -40,6 +40,19 @@ class CameraNavigation extends React.Component {
         this.selectAppropriateImages = this.selectAppropriateImages.bind(this);
     }
 
+    componentWillMount() {
+        this.setState({
+            rover: this.props.rover,
+            cameras: this.props.cameras.map(camera => camera.name),
+            noOfCameras: this.props.cameras.length,
+            latestEarthDate: this.props.latestEarthDate,
+        });
+    }
+
+    componentDidMount() {
+        this.selectAppropriateImages();
+    }
+
     dynamicImport(path) {
         return import(`assets/cameras/Curiosity/${path}.jpg`);
     }
@@ -51,19 +64,6 @@ class CameraNavigation extends React.Component {
                 this.setState({cameraImages: imageArray});
             }).catch(error => console.log(error))
         );
-    }
-
-    componentWillMount() {
-        this.setState({
-            rover: this.props.rover,
-            cameras: this.props.cameras.map(camera=> camera.name),
-            noOfCameras: this.props.cameras.length,
-            latestEarthDate: this.props.latestEarthDate,
-        });
-    }
-
-    componentDidMount(){
-        this.selectAppropriateImages();
     }
 
     render() {
@@ -93,7 +93,7 @@ CameraNavigation.propTypes = {
     rover: PropTypes.string.isRequired,
     cameras: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
     latestEarthDate: PropTypes.string.isRequired,
-    fetchPictures: PropTypes.func.isRequired,
+    mountGallery: PropTypes.func.isRequired,
 };
 
 export default CameraNavigation;

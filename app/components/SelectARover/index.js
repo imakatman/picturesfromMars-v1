@@ -38,7 +38,7 @@ function SelectARover(props) {
                         {props.totalPhotos}
                     </SubHeading>
                 </TopLayer>
-                <Overlay />
+                <Overlay opacity="0.3"/>
             </RoverColumn>
         </Link>
     );

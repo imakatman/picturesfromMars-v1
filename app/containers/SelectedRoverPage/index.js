@@ -34,41 +34,46 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
             page: 1,
         }
 
-        this.mountGallery  = this.mountGallery.bind(this);
+        this.mountGallery   = this.mountGallery.bind(this);
         this.unmountGallery = this.unmountGallery.bind(this);
     }
 
     componentWillMount() {
-        const {dispatch, getDataByRover} = this.props;
-        const rover                      = this.state.selectedRover;
+        const {dispatch, selectedRover, getDataByRover} = this.props;
 
-        const data = {};
-
-        dispatch(selectRover(rover));
-        dispatch(fetchRoverDataIfNeeded(rover));
-
-        for (var [key, value] of Object.entries(getDataByRover[rover].data)) {
-            data[key] = value;
-            this.setState({
-                data
-            });
-        }
+        dispatch(selectRover(this.state.selectedRover));
+        dispatch(fetchRoverDataIfNeeded(this.state.selectedRover));
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const {selectCamera} = this.props;
 
-        const rover = selectCamera.rover,
-              cameraIndex = selectCamera.cameraIndex,
-              camera = selectCamera.camera,
-              sol = selectCamera.sol;
-
-        if(selectCamera["camera"] !== 'undefined'){
-            this.mountGallery(rover, cameraIndex, camera, sol);
+        if (selectCamera["camera"] !== 'undefined') {
+            this.mountGallery(selectCamera.rover, selectCamera.cameraIndex, selectCamera.camera, selectCamera.sol);
         }
     }
 
-    unmountGallery(){
+    mountGallery(rover, cameraIndex, selectedCamera, currentSol) {
+        const {dispatch, selectedRover, getDataByRover, isFetching} = this.props;
+
+        if (!isFetching) {
+            const _rover  = rover || selectedRover,
+                  _sol    = currentSol || getDataByRover[selectedRover].data.max_sol,
+                  _camera = selectedCamera || getDataByRover[selectedRover].data.cameras[cameraIndex].name,
+                  _page   = this.state.page;
+
+            dispatch(cameraSelected(_rover, cameraIndex, _camera, _sol));
+            dispatch(fetchRoverImagesIfNeeded(_rover, _sol, _page, _camera));
+
+            this.setState((prevState) => {
+                page: prevState + 1
+            });
+
+        }
+
+    }
+
+    unmountGallery() {
         const {dispatch} = this.props;
         dispatch(cameraUnselected());
         this.setState({
@@ -76,49 +81,8 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         })
     }
 
-    mountGallery(selectedRover, cameraIndex, selectedCamera, currentSol) {
-        const {dispatch, getDataByRover} = this.props;
-
-        const rover  = selectedRover || this.state.selectedRover,
-              sol = currentSol || this.state.data.max_sol,
-              camera = selectedCamera || this.state.data.cameras[cameraIndex].name,
-              page   = this.state.page;
-
-        const photos = [];
-
-        dispatch(cameraSelected(rover, cameraIndex, camera, sol));
-        dispatch(fetchRoverImagesIfNeeded(rover, sol, page, camera));
-
-        this.setState({
-            Gallery: <Gallery camera={camera} />
-        });
-
-        for (var [key, value] of Object.entries(getDataByRover[rover][camera].photoData)) {
-            const photo = {};
-            if (value["id"]) photo["id"] = value["id"];
-            if (value["img_src"]) photo["img_src"] = value["img_src"];
-            if (value["rover"]["name"]) photo["roverName"] = value["rover"]["name"];
-            if (value["camera"]["full_name"]) photo["camera"] = value["camera"]["full_name"];
-            photos.push(photo);
-        }
-
-        console.log(photos);
-
-        this.setState({
-            galleryMounted: true,
-            Gallery: <Gallery camera={camera} photos={photos} unmountGallery={()=>this.unmountGallery()}/>
-        });
-
-        this.setState((prevState) => {
-            page: prevState + 1
-        });
-
-    }
-
     render() {
-        const {selectedRover, getDataByRover, selectCamera} = this.props;
-        const GalleryComponent = this.state.Gallery;
-
+        const {selectedRover, getDataByRover, isFetching, selectCamera} = this.props;
         return (
             <div>
                 <Helmet
@@ -130,18 +94,24 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                 {selectedRover &&
                 <RoverName>{selectedRover}</RoverName>
                 }
-                {selectCamera["camera"] !== 'undefined' && this.state.galleryMounted && GalleryComponent}
-                {getDataByRover[selectedRover].data ? (
-                        <CameraNavigation
-                            rover={this.state.selectedRover}
-                            latestEarthDate={this.state.data.max_date}
-                            cameras={this.state.data.cameras}
-                            mountGallery={(i) => this.mountGallery(...[ , i, , ,])} />
+                {typeof selectCamera['camera'] !== 'undefined' &&
+                    !getDataByRover[selectedRover][selectCamera['camera']]["isFetching"] &&
+                <Gallery camera={selectCamera["camera"]} photos={getDataByRover[selectedRover][selectCamera["camera"]]["photoData"]}
+                    unmountGallery={() => this.unmountGallery()} />
+                }
+                {!isFetching && getDataByRover[selectedRover]["data"] ? (
+                        <div>
+                            <CameraNavigation
+                                rover={selectedRover}
+                                latestEarthDate={getDataByRover[selectedRover]["data"]["max_date"]}
+                                cameras={getDataByRover[selectedRover]["data"]["cameras"]}
+                                mountGallery={(i) => this.mountGallery(...[, i, , ,])} />
+                            <InsideRoverContainer name={selectedRover} />
+                        </div>
                     ) : (
                         <p>Loading...</p>
                     )
                 }
-                <InsideRoverContainer name={this.state.selectedRover} />
 
             </div>
         );
@@ -154,25 +124,22 @@ function mapStateToProps(state) {
     const {
               isFetching,
               lastUpdated,
-              data: roverData,
-              photos: roverPhotos,
+              data: roverData
           } = getDataByRover[selectedRover] || {
         isFetching: true,
-        data: [],
-        photos: []
+        data: []
     }
 
     const {
-        rover,
-        cameraIndex,
-        camera,
-        sol,
-    } = selectCamera || {}
+              rover,
+              cameraIndex,
+              camera,
+              sol,
+          } = selectCamera || {}
 
     return {
         selectedRover,
         roverData,
-        roverPhotos,
         getDataByRover,
         isFetching,
         lastUpdated,

@@ -127,6 +127,7 @@ function requestRoversData(rover){
 export const RECEIVE_ROVERS_DATA = "receiveRoversData"
 
 function receiveRoversData(rover, json){
+    console.log(json.rover);
     return{
         type: RECEIVE_ROVERS_DATA,
         rover,
@@ -150,7 +151,7 @@ export function fetchRoversData(rover){
 
 function shouldFetchRoverData(state, rover) {
     // const data = state.getDataByRover;
-    const data = state.getDataByRover[rover]
+    const data = state.getDataByRover[rover];
     if (!data) {
         return true
     } else if (data.isFetching) {
@@ -184,34 +185,40 @@ export function fetchRoverDataIfNeeded(rover) {
 
 export const INVALIDATE_ROVER_IMAGES = "invalidateAllRoverImages";
 
-export function invalidateRoverImages(rover){
+export function invalidateRoverImages(rover, camera){
     return{
         type: INVALIDATE_ROVER_IMAGES,
-        rover
+        rover,
+        camera,
     }
 };
 
 export const REFRESH_ROVER_IMAGES = "refreshRoverImages";
 
-function refreshRoverImages(rover){
+function refreshRoverImages(rover, camera){
     return{
         type: REFRESH_ROVER_IMAGES,
-        rover
+        rover,
+        camera,
     }
 };
 
 export const REQUEST_ROVERS_IMAGES = "requestRoversImages";
 
-function requestRoversImages(rover){
+function requestRoversImages(rover, camera){
     return{
         type: REQUEST_ROVERS_IMAGES,
-        rover
+        rover,
+        camera,
     }
 }
 
 export const RECEIVE_ROVER_IMAGES = "receiveRoverImages"
 
 function receiveRoverImages(rover, json){
+    console.log(json);
+    console.log(json.photos[0].earth_date);
+    // For earthDate, camera, cameraFullName, and sol we just need to get the data from the first returned object because this data will stay the same for each photo object from a Request
     return{
         type: RECEIVE_ROVER_IMAGES,
         rover,
@@ -226,6 +233,7 @@ function receiveRoverImages(rover, json){
 
 export function fetchRoverImages(rover, sol, page, camera){
     return function(dispatch){
+        dispatch(requestRoversImages(rover, camera))
         return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/`+ rover +`/photos?sol=`+ sol +`&camera=`+ camera + `&page=`+ page + `&api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`)
         .then(response => response.json())
         .then(json=> dispatch(receiveRoverImages(rover, json)))

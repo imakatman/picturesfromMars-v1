@@ -8,7 +8,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {Flex, Box} from 'grid-styled';
 import FaTimesCircle from 'react-icons/lib/fa/times-circle/';
-import {Overlay} from '../StyledComponents/Overlay';
+import {Overlay, TopLayer} from '../StyledComponents/Overlay';
 
 const GalleryContainer = styled.div`
     position:fixed;
@@ -25,7 +25,6 @@ const Close = styled.div`
     right: 1%;
     color: #fff;
     font-size: 36px;
-    z-index: 4;
 `
 
 const Img = styled.img`
@@ -38,20 +37,23 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
     }
 
     render() {
+        console.log(this.props.photos);
         return (
             <GalleryContainer>
                 {this.props.camera}
-                <Close onClick={() => this.props.unmountGallery()}>
-                    <FaTimesCircle/>
-                </Close>
-                <Flex>
-                    {this.props.photos.map(photo =>
-                        <Box flex='1' m="20px" key={photo.id}>
-                            <Img src={photo.img_src} alt={photo.roverName + ":" + photo.camera + "-" + photo.id} />
-                        </Box>
-                    )}
-                </Flex>
-                <Overlay/>
+                <TopLayer>
+                    <Close onClick={() => this.props.unmountGallery()}>
+                        <FaTimesCircle />
+                    </Close>
+                    <Flex wrap={true}>
+                        {this.props.photos.map(photo =>
+                            <Box w={1/6} m="20px" key={photo.id}>
+                                <Img src={photo.img_src} alt={photo.roverName + ":" + photo.camera + "-" + photo.id} />
+                            </Box>
+                        )}
+                    </Flex>
+                </TopLayer>
+                <Overlay opacity="0.8"/>
             </GalleryContainer>
         );
     }
