@@ -53,6 +53,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         }
     }
 
+
     mountGallery(rover, cameraIndex, selectedCamera, currentSol) {
         const {dispatch, selectedRover, getDataByRover, isFetching} = this.props;
 

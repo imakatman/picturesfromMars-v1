@@ -23,8 +23,10 @@ class InsideRoverContainer extends React.Component {
             theta: 0,
             cameraPosition: new THREE.Vector3(0, 0, 0),
             cameraLookAt: new THREE.Vector3(0, 0, 0),
+            cameraImages: [],
         }
 
+        this.dynamicImport= this.dynamicImport.bind(this);
         this.chooseAppropriatePanorama= this.chooseAppropriatePanorama.bind(this);
         this.onDocumentMouseDown = this.onDocumentMouseDown.bind(this);
         this.onDocumentMouseMove = this.onDocumentMouseMove.bind(this);
@@ -33,11 +35,49 @@ class InsideRoverContainer extends React.Component {
     }
 
     componentWillMount(){
-        this.chooseAppropriatePanorama(this.props.name);
+        // this.chooseAppropriatePanorama(this.props.name);
     }
 
     componentDidMount() {
         document.querySelector("canvas").addEventListener("mousedown", this.onDocumentMouseDown, false);
+
+        const imgFiles = [
+            "opp_b_1_1.jpg",
+            "opp_b_1_2.jpg",
+            "opp_b_2_1.jpg",
+            "opp_b_2_2.jpg",
+            "opp_d_1_1.jpg",
+            "opp_d_1_2.jpg",
+            "opp_d_2_1.jpg",
+            "opp_d_2_2.jpg",
+            "opp_f_1_1.jpg",
+            "opp_f_1_2.jpg",
+            "opp_f_2_1.jpg",
+            "opp_f_2_2.jpg",
+            "opp_l_1_1.jpg",
+            "opp_l_1_2.jpg",
+            "opp_l_2_1.jpg",
+            "opp_l_2_2.jpg",
+            "opp_r_1_1.jpg",
+            "opp_r_1_2.jpg",
+            "opp_r_2_1.jpg",
+            "opp_r_2_2.jpg",
+            "opp_u_1_1.jpg",
+            "opp_u_1_2.jpg",
+            "opp_u_2_1.jpg",
+            "opp_u_2_2.jpg",
+        ]
+
+        imgFiles.map(file => {
+            this.dynamicImport(file).then(path => {
+                const imageArray = this.state.cameraImages.concat(path);
+                this.setState({cameraImages: imageArray});
+            }).catch(error => console.log(error))
+        });
+    }
+
+    dynamicImport(path) {
+        return import(`assets/panorama/Opportunity/${path}`);
     }
 
     chooseAppropriatePanorama(rover){
@@ -106,30 +146,43 @@ class InsideRoverContainer extends React.Component {
     }
 
     render() {
-        const width  = window.innerWidth; // canvas width
-        const height = window.innerHeight; // canvas height
+        const vertices = new Float32Array( [
+            -1.0, -1.0,  1.0,
+            1.0, -1.0,  1.0,
+            1.0,  1.0,  1.0,
+
+            1.0,  1.0,  1.0,
+            -1.0,  1.0,  1.0,
+            -1.0, -1.0,  1.0
+        ] );
 
         return (
-            <React3 mainCamera="camera" width={width} height={height} ref={(three) => this.threeObj = three} onAnimate={this.onAnimate}>
+            <React3 mainCamera="camera" width={window.innerWidth} height={window.innerHeight} ref={(three) => this.threeObj = three} onAnimate={this.onAnimate}>
                 <scene>
                     <perspectiveCamera
                         name="camera"
-                        fov={75}
-                        aspect={width / height}
-                        near={0.1}
-                        far={10000}
+                        fov={27}
+                        aspect={window.innerWidthh / window.innerHeight}
+                        near={1}
+                        far={3500}
                         position={this.state.cameraPosition}
                         lookAt={this.state.cameraLookAt}
                     />
-                    <object3D scale={new THREE.Vector3(-1, 1, 1)}>
+                    <object3D>
                         <mesh>
-                            <sphereGeometry
-                                radius={500}
-                                widthSegments={60}
-                                heightSegments={40}
+                            <bufferGeometry
+                                position={new THREE.InterleavedBufferAttribute( vertices, 3 )}
                             />
-                            <meshBasicMaterial>
-                                <texture url={this.state.texture} anisotropy={10} ref={(texture) => this.texture = texture}/>
+                            <meshBasicMaterial overdraw={5}>
+                                <texture url={this.state.cameraImages[0]}/>
+                            </meshBasicMaterial>
+                        </mesh>
+                        <mesh>
+                            <bufferGeometry
+                                position={new THREE.InterleavedBufferAttribute( vertices, 3 )}
+                            />
+                            <meshBasicMaterial overdraw={5}>
+                                <texture url={this.state.cameraImages[1]}/>
                             </meshBasicMaterial>
                         </mesh>
                     </object3D>
