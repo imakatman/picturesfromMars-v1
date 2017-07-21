@@ -145,6 +145,7 @@ function selectCamera(state = {}, action) {
     switch (action.type) {
         case CAMERA_SELECTED:
             return Object.assign({}, state, {
+                selected: true,
                 rover: action.rover,
                 cameraIndex: action.cameraIndex,
                 camera: action.camera,
@@ -152,6 +153,7 @@ function selectCamera(state = {}, action) {
             });
         case CAMERA_UNSELECTED:
             return Object.assign({}, state, {
+                selected: false,
                 rover: undefined,
                 cameraIndex: undefined,
                 camera: undefined,
