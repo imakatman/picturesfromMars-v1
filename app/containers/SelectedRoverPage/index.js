@@ -48,7 +48,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     componentDidMount() {
         const {selectCamera} = this.props;
 
-        if (selectCamera["camera"] !== 'undefined') {
+        if (typeof selectCamera["camera"] !== 'undefined' || Object.keys(selectCamera).length !== 0 && selectCamera.constructor === Object) {
             this.mountGallery(selectCamera.rover, selectCamera.cameraIndex, selectCamera.camera, selectCamera.sol);
         }
     }
@@ -57,7 +57,11 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     mountGallery(rover, cameraIndex, selectedCamera, currentSol) {
         const {dispatch, selectedRover, getDataByRover, isFetching} = this.props;
 
+        console.log("on click");
+
         if (!isFetching) {
+            console.log(getDataByRover[selectedRover].data);
+
             const _rover  = rover || selectedRover,
                   _sol    = currentSol || getDataByRover[selectedRover].data.max_sol,
                   _camera = selectedCamera || getDataByRover[selectedRover].data.cameras[cameraIndex].name,
@@ -107,7 +111,6 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                                 latestEarthDate={getDataByRover[selectedRover]["data"]["max_date"]}
                                 cameras={getDataByRover[selectedRover]["data"]["cameras"]}
                                 mountGallery={(i) => this.mountGallery(...[, i, , ,])} />
-                            <InsideRoverContainer name={selectedRover} />
                         </div>
                     ) : (
                         <p>Loading...</p>

@@ -50,28 +50,24 @@ class CameraNavigation extends React.Component {
     }
 
     componentDidMount() {
-        this.selectAppropriateImages();
-    }
-
-    dynamicImport(path) {
-        return import(`assets/cameras/Curiosity/${path}.jpg`);
-    }
-
-    selectAppropriateImages() {
         this.state.cameras.map(imgPath =>
-            this.dynamicImport(imgPath).then(path => {
+            this.dynamicImport(this.props.rover, imgPath).then(path => {
                 const imageArray = this.state.cameraImages.concat(path);
                 this.setState({cameraImages: imageArray});
             }).catch(error => console.log(error))
         );
     }
 
+    dynamicImport(rover, path) {
+        return import(`assets/cameras/${rover}/${path}.jpg`);
+    }
+
     render() {
-        const widthOfWrapper = {width: 25 * this.state.noOfCameras + "%"};
+        const widthOfWrapper = {width: 25 * this.props.cameras.length + "%"};
 
         return (
             <Wrapper style={widthOfWrapper}>
-                <H4>{this.state.latestEarthDate}</H4>
+                <H4>{this.props.latestEarthDate}</H4>
                 <Flex>
                     {this.props.cameras.map((camera, i) =>
                         <Box flex='1' m="16px" key={i}>

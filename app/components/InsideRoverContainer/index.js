@@ -146,43 +146,32 @@ class InsideRoverContainer extends React.Component {
     }
 
     render() {
-        const vertices = new Float32Array( [
-            -1.0, -1.0,  1.0,
-            1.0, -1.0,  1.0,
-            1.0,  1.0,  1.0,
-
-            1.0,  1.0,  1.0,
-            -1.0,  1.0,  1.0,
-            -1.0, -1.0,  1.0
-        ] );
-
+        console.log(this.box);
         return (
             <React3 mainCamera="camera" width={window.innerWidth} height={window.innerHeight} ref={(three) => this.threeObj = three} onAnimate={this.onAnimate}>
                 <scene>
                     <perspectiveCamera
                         name="camera"
-                        fov={27}
-                        aspect={window.innerWidthh / window.innerHeight}
-                        near={1}
-                        far={3500}
+                        fov={75}
+                        aspect={window.innerWidth / window.innerHeight}
+                        near={0.1}
+                        far={10000}
                         position={this.state.cameraPosition}
                         lookAt={this.state.cameraLookAt}
                     />
-                    <object3D>
+                    <object3D scale={new THREE.Vector3(-1, 1, 1)}>
                         <mesh>
-                            <bufferGeometry
-                                position={new THREE.InterleavedBufferAttribute( vertices, 3 )}
+                            <boxGeometry
+                                width={300}
+                                height={300}
+                                depth={300}
+                                widthSegments={24}
+                                heightSegments={24}
+                                depthSegments={24}
+                                ref={(box) => this.box = box}
                             />
-                            <meshBasicMaterial overdraw={5}>
-                                <texture url={this.state.cameraImages[0]}/>
-                            </meshBasicMaterial>
-                        </mesh>
-                        <mesh>
-                            <bufferGeometry
-                                position={new THREE.InterleavedBufferAttribute( vertices, 3 )}
-                            />
-                            <meshBasicMaterial overdraw={5}>
-                                <texture url={this.state.cameraImages[1]}/>
+                            <meshBasicMaterial>
+                                <texture url={OpportunityPanorama} anisotropy={10} />
                             </meshBasicMaterial>
                         </mesh>
                     </object3D>
