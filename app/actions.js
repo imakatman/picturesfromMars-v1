@@ -127,7 +127,6 @@ function requestRoversData(rover){
 export const RECEIVE_ROVERS_DATA = "receiveRoversData"
 
 function receiveRoversData(rover, json){
-    console.log(json.rover);
     return{
         type: RECEIVE_ROVERS_DATA,
         rover,
