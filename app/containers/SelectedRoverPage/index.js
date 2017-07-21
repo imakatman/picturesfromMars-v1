@@ -26,6 +26,7 @@ const Loading = styled.div`
 `;
 
 const ActiveCameraLayer = styled(Flex)`
+    background-color: #000;
     position: absolute;
     width: 100%;
     height: 100%;
