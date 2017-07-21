@@ -21,6 +21,9 @@ import Gallery from 'components/Gallery';
 import RoverDiagram from 'components/RoverDiagram';
 import CameraNavigation from 'components/CameraNavigation';
 
+const Loading = styled.div`
+`;
+
 const RoverName = styled.h1`
     position: absolute;
 `;
@@ -60,6 +63,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         console.log("on click");
 
         if (!isFetching) {
+
             console.log(getDataByRover[selectedRover].data);
 
             const _rover  = rover || selectedRover,
@@ -88,7 +92,6 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
 
     render() {
         const {selectedRover, getDataByRover, isFetching, selectCamera} = this.props;
-        console.log(selectCamera["camera"]);
         return (
             <div>
                 <Helmet
@@ -98,26 +101,27 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                     ]}
                 />
                 {selectedRover && <RoverName>{selectedRover}</RoverName>}
-                {typeof selectCamera['selected'] === false ||
-                Object.keys(selectCamera).length === 0 &&
+                {!isFetching && getDataByRover[selectedRover]["data"] &&
+                Object.keys(selectCamera).length === 0 ||
+                    typeof selectCamera['selected'] !== 'undefined' ? (
                     <RoverDiagram
                         cameras={getDataByRover[selectedRover]["data"]["cameras"]}
                         mountGallery={(i) => this.mountGallery(...[, i, , ,])}
-                    />
+                    /> ) : (
+                        <Loading>Loading...</Loading>
+                    )
                 }
-                {typeof selectCamera['selected'] === true &&
-                    !getDataByRover[selectedRover][selectCamera['camera']]["isFetching"] &&
+                {typeof selectCamera['selected'] &&
+                typeof selectCamera['camera'] === 'undefined' &&
+                typeof getDataByRover[selectedRover][selectCamera['camera']]['isFetching'] == false &&
                     <Gallery camera={selectCamera["camera"]} photos={getDataByRover[selectedRover][selectCamera["camera"]]["photoData"]}
                         unmountGallery={() => this.unmountGallery()} />
                 }
-                {!isFetching && getDataByRover[selectedRover]["data"] ? (
+                {typeof selectCamera['selected'] &&
                     <CameraNavigation
                         rover={selectedRover}
                         cameras={getDataByRover[selectedRover]["data"]["cameras"]}
                         mountGallery={(i) => this.mountGallery(...[, i, , ,])} />
-                    ) : (
-                        <p>Loading...</p>
-                    )
                 }
 
             </div>
