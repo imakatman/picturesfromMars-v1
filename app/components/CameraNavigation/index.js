@@ -36,25 +36,29 @@ class CameraNavigation extends React.Component {
 
     componentDidMount() {
         this.state.cameras.map(imgPath =>
-        import(`assets/cameras/${this.props.rover}/${imgPath}.jpg`).then(path => {
+        import
+        (`assets/cameras/${this.props.rover}/${imgPath}.jpg`).then(path => {
             const imageArray = this.state.cameraImages.concat(path);
             this.setState({cameraImages: imageArray});
-        }).catch(error => console.log(error)));
+        }).catch(error => console.log(error))
+    )
+        ;
     }
 
     render() {
         return (
             <Flex direction={"column"}>
-                {this.props.cameras.map((camera, i) =>
-                    <ul key={i}>
+                <ul>
+                    {this.props.cameras.map((camera, i) =>
                         <CameraNavItem
+                            key={i}
                             style={{backgroundImage: "url(" + this.state.cameraImages[i] + ")"}}
                             data-camera={camera.name}
                             onClick={() => this.props.mountGallery(i)}>
                             {camera.full_name}
                         </CameraNavItem>
-                    </ul>
-                )}
+                    )}
+                </ul>
             </Flex>
         );
     }

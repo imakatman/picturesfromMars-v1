@@ -39,22 +39,19 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
     render() {
         console.log("hey im gallery");
         return (
-            <GalleryContainer>
+            <div>
                 {this.props.camera}
-                <TopLayer>
-                    <Close onClick={() => this.props.unmountGallery()}>
-                        <FaTimesCircle />
-                    </Close>
-                    <Flex wrap={true}>
-                        {this.props.photos.map(photo =>
-                            <Box w={1/6} m="20px" key={photo.id}>
-                                <Img src={photo.img_src} alt={photo.roverName + ":" + photo.camera + "-" + photo.id} />
-                            </Box>
-                        )}
-                    </Flex>
-                </TopLayer>
-                <Overlay opacity="0.8"/>
-            </GalleryContainer>
+                <Close onClick={() => this.props.unmountGallery()}>
+                    <FaTimesCircle />
+                </Close>
+                <Flex wrap={true}>
+                    {this.props.photos.map(photo =>
+                        <Box w={1 / 4} m="20px" key={photo.id}>
+                            <Img src={photo.img_src} alt={photo.roverName + ":" + photo.camera + "-" + photo.id} />
+                        </Box>
+                    )}
+                </Flex>
+            </div>
         );
     }
 }
