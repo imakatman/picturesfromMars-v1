@@ -1,14 +1,13 @@
 import fetch from 'isomorphic-fetch';
 
-
 // *****
 // ** ACTIONS FOR INFORMATION OF ALL ROVERS
 //
 
 export const INVALIDATE_ALL_ROVERS = "invalidateAllRovers";
 
-export function invalidateAllRovers(rovers){
-    return{
+export function invalidateAllRovers(rovers) {
+    return {
         type: INVALIDATE_ALL_ROVERS,
         rovers
     }
@@ -16,8 +15,8 @@ export function invalidateAllRovers(rovers){
 
 export const REFRESH_ROVERS = "refreshRovers";
 
-function refreshRover(rovers){
-    return{
+function refreshRover(rovers) {
+    return {
         type: REFRESH_ROVERS,
         rovers
     }
@@ -25,8 +24,8 @@ function refreshRover(rovers){
 
 export const REQUEST_ALL_ROVERS_DATA = "requestAllRoversData";
 
-function requestAllRoversData(rovers){
-    return{
+function requestAllRoversData(rovers) {
+    return {
         type: REQUEST_ALL_ROVERS_DATA,
         rovers
     }
@@ -34,19 +33,17 @@ function requestAllRoversData(rovers){
 
 export const RECEIVE_ALL_ROVERS_DATA = "receiveAllRoversData";
 
-function receiveAllRoversData(json){
-    return{
+function receiveAllRoversData(json) {
+    return {
         type: RECEIVE_ALL_ROVERS_DATA,
         simpleDataAboutAllRovers: json.rovers
     }
 }
 
-export function fetchAllRoversData(){
-    return function(dispatch){
+export function fetchAllRoversData() {
+    return function (dispatch) {
         // dispatch(requestAllRoversData())
-        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`)
-        .then(response => response.json())
-        .then(json=>
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json =>
             dispatch(receiveAllRoversData(json))
         )
     }
@@ -90,8 +87,8 @@ export function fetchAllRoverDataIfNeeded() {
 
 export const SELECT_ROVER = "selectRover";
 
-export function selectRover(rover){
-    return{
+export function selectRover(rover) {
+    return {
         type: SELECT_ROVER,
         rover
     }
@@ -99,8 +96,8 @@ export function selectRover(rover){
 
 export const INVALIDATE_ROVER = "invalidateRover";
 
-export function invalidateRover(rover){
-    return{
+export function invalidateRover(rover) {
+    return {
         type: INVALIDATE_ROVER,
         rover
     }
@@ -108,8 +105,8 @@ export function invalidateRover(rover){
 
 export const REFRESH_ROVER = "refreshRover";
 
-function refreshRover(rover){
-    return{
+function refreshRover(rover) {
+    return {
         type: REFRESH_ROVER,
         rover
     }
@@ -117,8 +114,8 @@ function refreshRover(rover){
 
 export const REQUEST_ROVERS_DATA = "requestRoversData";
 
-function requestRoversData(rover){
-    return{
+function requestRoversData(rover) {
+    return {
         type: REQUEST_ROVERS_DATA,
         rover
     }
@@ -126,8 +123,8 @@ function requestRoversData(rover){
 
 export const RECEIVE_ROVERS_DATA = "receiveRoversData"
 
-function receiveRoversData(rover, json){
-    return{
+function receiveRoversData(rover, json) {
+    return {
         type: RECEIVE_ROVERS_DATA,
         rover,
         name: json.rover.name,
@@ -137,12 +134,10 @@ function receiveRoversData(rover, json){
     }
 }
 
-export function fetchRoversData(rover){
-    return function(dispatch){
+export function fetchRoversData(rover) {
+    return function (dispatch) {
         dispatch(requestRoversData(rover))
-        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}?api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`)
-        .then(response => response.json())
-        .then(json=>
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}?api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`).then(response => response.json()).then(json =>
             dispatch(receiveRoversData(rover, json))
         )
     }
@@ -177,15 +172,14 @@ export function fetchRoverDataIfNeeded(rover) {
     }
 }
 
-
 // *****
 // ** ACTIONS FOR ROVER PICTURES
 //
 
 export const INVALIDATE_ROVER_IMAGES = "invalidateAllRoverImages";
 
-export function invalidateRoverImages(rover, camera){
-    return{
+export function invalidateRoverImages(rover, camera) {
+    return {
         type: INVALIDATE_ROVER_IMAGES,
         rover,
         camera,
@@ -194,8 +188,8 @@ export function invalidateRoverImages(rover, camera){
 
 export const REFRESH_ROVER_IMAGES = "refreshRoverImages";
 
-function refreshRoverImages(rover, camera){
-    return{
+function refreshRoverImages(rover, camera) {
+    return {
         type: REFRESH_ROVER_IMAGES,
         rover,
         camera,
@@ -204,19 +198,21 @@ function refreshRoverImages(rover, camera){
 
 export const REQUEST_ROVERS_IMAGES = "requestRoversImages";
 
-function requestRoversImages(rover, camera){
-    return{
+function requestRoversImages(rover, camera, sol) {
+    return {
         type: REQUEST_ROVERS_IMAGES,
         rover,
         camera,
+        sol
     }
 }
 
 export const RECEIVE_ROVER_IMAGES = "receiveRoverImages"
 
-function receiveRoverImages(rover, json){
-    // For earthDate, camera, cameraFullName, and sol we just need to get the data from the first returned object because this data will stay the same for each photo object from a Request
-    return{
+function receiveRoverImages(rover, json) {
+    // For earthDate, camera, cameraFullName, and sol we just need to get the data from the first returned object
+    // because this data will stay the same for each photo object from a Request
+    return {
         type: RECEIVE_ROVER_IMAGES,
         rover,
         name: rover,
@@ -228,12 +224,20 @@ function receiveRoverImages(rover, json){
     }
 }
 
-export function fetchRoverImages(rover, sol, page, camera){
-    return function(dispatch){
-        dispatch(requestRoversImages(rover, camera))
-        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/`+ rover +`/photos?sol=`+ sol +`&camera=`+ camera + `&page=`+ page + `&api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`)
-        .then(response => response.json())
-        .then(json=> dispatch(receiveRoverImages(rover, json)))
+export function fetchRoverImages(rover, sol, page, camera) {
+    return function (dispatch) {
+        dispatch(requestRoversImages(rover, camera, sol))
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`).then(response => response.json()).then(json => {
+            if (json.photos.length > 0) {
+                console.log("there are images!");
+                return dispatch(receiveRoverImages(rover, json));
+            } else {
+                console.log("there arent images lets try again!");
+                console.log(sol - 1);
+                console.log(fetchRoverImages);
+                return fetchRoverImages(rover, sol - 1, page, camera);
+            }
+        })
     }
 }
 
@@ -273,20 +277,21 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera) {
 
 export const CAMERA_SELECTED = "cameraSelected";
 
-export function cameraSelected(rover, cameraIndex, camera, sol){
-    return{
+export function cameraSelected(rover, cameraIndex, camera, cameraFullName, sol) {
+    return {
         type: CAMERA_SELECTED,
         rover,
         cameraIndex,
         camera,
-        sol
+        cameraFullName,
+        sol,
     }
 }
 
 export const CAMERA_UNSELECTED = "cameraUnselected";
 
-export function cameraUnselected(){
-    return{
+export function cameraUnselected() {
+    return {
         type: CAMERA_UNSELECTED
     }
 }

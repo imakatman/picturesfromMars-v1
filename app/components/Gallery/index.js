@@ -7,24 +7,25 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Flex, Box} from 'grid-styled';
-import FaTimesCircle from 'react-icons/lib/fa/times-circle/';
+import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left';
 import {Overlay, TopLayer} from '../StyledComponents/Overlay';
 
 const GalleryContainer = styled.div`
-    position:fixed;
-    width:100%;
-    height: 100%;
-    top:0;
-    left:0;
+    position:relative;
     z-index: 3;
+    height: 100%;
 `;
 
-const Close = styled.div`
+const Back = styled.div`
     position: absolute;
-    top: 1%;
-    right: 1%;
+    bottom: 1%;
+    left: 1%;
     color: #fff;
     font-size: 36px;
+`;
+
+const CameraName = styled.h2`
+    color: #fff;
 `
 
 const Img = styled.img`
@@ -37,13 +38,14 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
     }
 
     render() {
-        console.log("hey im gallery");
         return (
-            <div>
-                {this.props.camera}
-                <Close onClick={() => this.props.unmountGallery()}>
-                    <FaTimesCircle />
-                </Close>
+            <GalleryContainer>
+                <CameraName>
+                    {this.props.cameraFullName} {this.props.cameraAbbrev}
+                </CameraName>
+                <Back onClick={() => this.props.unmountGallery()}>
+                    <FaLongArrowLeft />
+                </Back>
                 <Flex wrap={true}>
                     {this.props.photos.map(photo =>
                         <Box w={1 / 4} m="20px" key={photo.id}>
@@ -51,7 +53,7 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
                         </Box>
                     )}
                 </Flex>
-            </div>
+            </GalleryContainer>
         );
     }
 }

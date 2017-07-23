@@ -149,7 +149,8 @@ function selectCamera(state = {}, action) {
                 rover: action.rover,
                 cameraIndex: action.cameraIndex,
                 camera: action.camera,
-                sol: action.sol
+                cameraFullName: action.cameraFullName,
+                sol: action.sol,
             });
         case CAMERA_UNSELECTED:
             return Object.assign({}, state, {
@@ -157,6 +158,7 @@ function selectCamera(state = {}, action) {
                 rover: undefined,
                 cameraIndex: undefined,
                 camera: undefined,
+                cameraFullName: undefined,
                 sol: undefined,
             })
         default:
