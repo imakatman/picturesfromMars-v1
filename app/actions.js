@@ -224,6 +224,12 @@ function receiveRoverImages(rover, json) {
     }
 }
 
+function fetchAgain(rover, sol, page, camera){
+    return function(dispatch){
+        dispatch(fetchRoverImages(rover, sol, page, camera));
+    }
+}
+
 export function fetchRoverImages(rover, sol, page, camera) {
     return function (dispatch) {
         dispatch(requestRoversImages(rover, camera, sol))
@@ -233,9 +239,7 @@ export function fetchRoverImages(rover, sol, page, camera) {
                 return dispatch(receiveRoverImages(rover, json));
             } else {
                 console.log("there arent images lets try again!");
-                console.log(sol - 1);
-                console.log(fetchRoverImages);
-                return fetchRoverImages(rover, sol - 1, page, camera);
+                return dispatch(fetchRoverImages(rover, sol - 1, page, camera));
             }
         })
     }
