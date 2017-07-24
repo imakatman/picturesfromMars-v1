@@ -9,6 +9,7 @@ import {SELECT_ROVER, INVALIDATE_ROVER, REFRESH_ROVER, REQUEST_ROVERS_DATA, RECE
 import {INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA, REQUEST_ALL_ROVERS_DATA} from './actions.js';
 import {INVALIDATE_ROVER_IMAGES, RECEIVE_ROVER_IMAGES, REQUEST_ROVERS_IMAGES} from './actions.js';
 import {CAMERA_SELECTED, CAMERA_UNSELECTED} from './actions';
+import {ADD_EMPTY_SOL} from './actions';
 
 // *** Rover reducers
 function selectedRover(state = "", action) {
@@ -20,33 +21,35 @@ function selectedRover(state = "", action) {
     }
 }
 
-function roversImages(state = {
-    isFetching: false,
-    didInvalidate: false,
-    sol: "",
-    earthDate: "",
-    camera: "",
-    cameraFullName: "",
-    photoData: {},
-    status: "",
-}, action) {
+function addEmptySol(state = {emptySols: []}, action){
+    if(action.type === ADD_EMPTY_SOL){
+        console.log(action.type);
+        return Object.assign({}, state, {
+            emptySols: action.sols
+        });
+    } else{
+        return state;
+    }
+}
+
+function receiveRoversImages(state = {}, action) {
     switch (action.type) {
         case INVALIDATE_ROVER_IMAGES:
             return Object.assign({}, state, {
-                [action.camera]: {
+                [action.sol]: {
                     didInvalidate: true,
                 }
             })
         case REQUEST_ROVERS_IMAGES:
             return Object.assign({}, state, {
-                [action.camera]: {
+                [action.sol]: {
                     isFetching: true,
                     didInvalidate: false
                 }
             })
         case RECEIVE_ROVER_IMAGES:
             return Object.assign({}, state, {
-                [action.camera]: {
+                [action.sol]: {
                     isFetching: false,
                     didInvalidate: false,
                     sol: action.sol,
@@ -54,8 +57,30 @@ function roversImages(state = {
                     camera: action.camera,
                     cameraFullName: action.cameraFullName,
                     photoData: action.photos,
-                    lastUpdated: action.receivedAt
                 }
+            })
+        default:
+            return state
+    }
+}
+
+function roversImages(state = {}, action) {
+    switch (action.type) {
+        case INVALIDATE_ROVER_IMAGES:
+            return Object.assign({}, state, {
+                [action.camera]: receiveRoversImages(state[action.camera], action)
+            })
+        case REQUEST_ROVERS_IMAGES:
+            return Object.assign({}, state, {
+                [action.camera]: receiveRoversImages(state[action.camera], action)
+            })
+        case ADD_EMPTY_SOL:
+            return Object.assign({}, state, {
+                [action.camera]: addEmptySol(state[action.camera], action)
+            })
+        case RECEIVE_ROVER_IMAGES:
+            return Object.assign({}, state, {
+                [action.camera]: receiveRoversImages(state[action.camera], action)
             })
         default:
             return state

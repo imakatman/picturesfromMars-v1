@@ -207,6 +207,20 @@ function requestRoversImages(rover, camera, sol) {
     }
 }
 
+export const ADD_EMPTY_SOL = "addEmptySol";
+
+const emptySols = [];
+
+function addEmptySol(rover, camera, sol){
+    emptySols.push(sol);
+    return{
+        type: ADD_EMPTY_SOL,
+        rover,
+        camera,
+        emptySols
+    }
+}
+
 export const RECEIVE_ROVER_IMAGES = "receiveRoverImages"
 
 function receiveRoverImages(rover, json) {
@@ -224,22 +238,18 @@ function receiveRoverImages(rover, json) {
     }
 }
 
-function fetchAgain(rover, sol, page, camera){
-    return function(dispatch){
-        dispatch(fetchRoverImages(rover, sol, page, camera));
-    }
-}
-
-export function fetchRoverImages(rover, sol, page, camera) {
+export function fetchRoverImages(rover, sol, page, camera, cameraIndex) {
     return function (dispatch) {
         dispatch(requestRoversImages(rover, camera, sol))
         return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`).then(response => response.json()).then(json => {
             if (json.photos.length > 0) {
                 console.log("there are images!");
+                dispatch(cameraSelected(rover, cameraIndex, camera, json.photos[0].camera.full_name, sol));
                 return dispatch(receiveRoverImages(rover, json));
             } else {
                 console.log("there arent images lets try again!");
-                return dispatch(fetchRoverImages(rover, sol - 1, page, camera));
+                dispatch(addEmptySol(rover, camera, sol));
+                return dispatch(fetchRoverImages(rover, sol - 1, page, camera, cameraIndex));
             }
         })
     }
@@ -256,7 +266,7 @@ function shouldFetchRoverImages(state, rover, camera) {
     }
 }
 
-export function fetchRoverImagesIfNeeded(rover, sol, page, camera) {
+export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraIndex) {
     // Note that the function also receives getState()
     // which lets you choose what to dispatch next.
 
@@ -265,7 +275,7 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera) {
     return (dispatch, getState) => {
         if (shouldFetchRoverImages(getState(), rover, camera)) {
             // Dispatch a thunk from thunk!
-            return dispatch(fetchRoverImages(rover, sol, page, camera))
+            return dispatch(fetchRoverImages(rover, sol, page, camera, cameraIndex))
         } else {
             // Let the calling code know there's nothing to wait for.
             return Promise.resolve()
