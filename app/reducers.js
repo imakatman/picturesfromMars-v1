@@ -21,14 +21,18 @@ function selectedRover(state = "", action) {
     }
 }
 
+const emptySolsArrays = [];
+
 function addEmptySol(state = {emptySols: []}, action){
-    if(action.type === ADD_EMPTY_SOL){
-        console.log(action.type);
-        return Object.assign({}, state, {
-            emptySols: action.sols
-        });
-    } else{
-        return state;
+    console.log("add empty sol reducer");
+    emptySolsArrays.push(action.sol);
+    switch (action.type) {
+        case ADD_EMPTY_SOL:
+            return Object.assign({}, state, {
+                emptySols: emptySolsArrays
+            });
+        default:
+            return state
     }
 }
 
@@ -65,6 +69,7 @@ function receiveRoversImages(state = {}, action) {
 }
 
 function roversImages(state = {}, action) {
+    console.log("rovers images reducer");
     switch (action.type) {
         case INVALIDATE_ROVER_IMAGES:
             return Object.assign({}, state, {
@@ -127,6 +132,10 @@ function getDataByRover(state = {}, action) {
             })
         case INVALIDATE_ROVER_IMAGES:
         case RECEIVE_ROVER_IMAGES:
+        case ADD_EMPTY_SOL:
+            return Object.assign({}, state, {
+                [action.rover]: roversImages(state[action.rover], action)
+            })
         case REQUEST_ROVERS_IMAGES:
             return Object.assign({}, state, {
                 [action.rover]: roversImages(state[action.rover], action)

@@ -33,6 +33,10 @@ const ActiveCameraLayer = styled(Flex)`
     z-index: 1;    
 `;
 
+const GalleryContain = styled(Box)`
+    overflow-y: scroll;
+`
+
 const RoverName = styled.h1`
     color: #fff;
     position:absolute;
@@ -127,12 +131,12 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                 && getDataByRover[selectedRover][selectCamera['camera']][selectCamera['sol']]['isFetching'] === false
                 &&
                 <ActiveCameraLayer>
-                        <Box flex={2}>
+                        <GalleryContain flex={2}>
                             <Gallery cameraAbbrev={selectCamera["camera"]}
                                 cameraFullName={getDataByRover[selectedRover][selectCamera['camera']][selectCamera["sol"]]["cameraFullName"]}
                                 photos={getDataByRover[selectedRover][selectCamera['camera']][selectCamera["sol"]]["photoData"]}
                                 unmountGallery={() => this.unmountGallery()} />
-                        </Box>
+                        </GalleryContain>
                         <Flex direction="column" flex={1}>
                             <Box>
                                 <CameraNavigation

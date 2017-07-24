@@ -199,6 +199,7 @@ function refreshRoverImages(rover, camera) {
 export const REQUEST_ROVERS_IMAGES = "requestRoversImages";
 
 function requestRoversImages(rover, camera, sol) {
+    console.log("request rovers images action");
     return {
         type: REQUEST_ROVERS_IMAGES,
         rover,
@@ -209,19 +210,16 @@ function requestRoversImages(rover, camera, sol) {
 
 export const ADD_EMPTY_SOL = "addEmptySol";
 
-const emptySols = [];
-
 function addEmptySol(rover, camera, sol){
-    emptySols.push(sol);
     return{
         type: ADD_EMPTY_SOL,
         rover,
         camera,
-        emptySols
+        sol,
     }
 }
 
-export const RECEIVE_ROVER_IMAGES = "receiveRoverImages"
+export const RECEIVE_ROVER_IMAGES = "receiveRoverImages";
 
 function receiveRoverImages(rover, json) {
     // For earthDate, camera, cameraFullName, and sol we just need to get the data from the first returned object
