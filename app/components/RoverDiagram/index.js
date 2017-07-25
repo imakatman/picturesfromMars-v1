@@ -25,6 +25,7 @@ const CameraBtn = styled.a`
 
 class RoverDiagram extends React.Component { // eslint-disable-line react/prefer-stateless-function
     render() {
+        console.log('ROVER DIAGRAM!');
         return (
             <Container>
                 {this.props.cameras.map((camera, i) =>

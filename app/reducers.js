@@ -9,6 +9,7 @@ import {SELECT_ROVER, INVALIDATE_ROVER, REFRESH_ROVER, REQUEST_ROVERS_DATA, RECE
 import {INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA, REQUEST_ALL_ROVERS_DATA} from './actions.js';
 import {INVALIDATE_ROVER_IMAGES, RECEIVE_ROVER_IMAGES, REQUEST_ROVERS_IMAGES} from './actions.js';
 import {CAMERA_SELECTED, CAMERA_UNSELECTED} from './actions';
+import {ADD_EMPTY_SOL} from './actions';
 
 // *** Rover reducers
 function selectedRover(state = "", action) {
@@ -20,33 +21,38 @@ function selectedRover(state = "", action) {
     }
 }
 
-function roversImages(state = {
-    isFetching: false,
-    didInvalidate: false,
-    sol: "",
-    earthDate: "",
-    camera: "",
-    cameraFullName: "",
-    photoData: {},
-    status: "",
-}, action) {
+const emptySolsArrays = [];
+
+function addEmptySol(state = {emptySols: []}, action){
+    emptySolsArrays.push(action.sol);
+    switch (action.type) {
+        case ADD_EMPTY_SOL:
+            return Object.assign({}, state, {
+                emptySols: emptySolsArrays
+            });
+        default:
+            return state
+    }
+}
+
+function receiveRoversImages(state = {}, action) {
     switch (action.type) {
         case INVALIDATE_ROVER_IMAGES:
             return Object.assign({}, state, {
-                [action.camera]: {
+                [action.sol]: {
                     didInvalidate: true,
                 }
             })
         case REQUEST_ROVERS_IMAGES:
             return Object.assign({}, state, {
-                [action.camera]: {
+                [action.sol]: {
                     isFetching: true,
                     didInvalidate: false
                 }
             })
         case RECEIVE_ROVER_IMAGES:
             return Object.assign({}, state, {
-                [action.camera]: {
+                [action.sol]: {
                     isFetching: false,
                     didInvalidate: false,
                     sol: action.sol,
@@ -54,8 +60,30 @@ function roversImages(state = {
                     camera: action.camera,
                     cameraFullName: action.cameraFullName,
                     photoData: action.photos,
-                    lastUpdated: action.receivedAt
                 }
+            })
+        default:
+            return state
+    }
+}
+
+function roversImages(state = {}, action) {
+    switch (action.type) {
+        case INVALIDATE_ROVER_IMAGES:
+            return Object.assign({}, state, {
+                [action.camera]: receiveRoversImages(state[action.camera], action)
+            })
+        case REQUEST_ROVERS_IMAGES:
+            return Object.assign({}, state, {
+                [action.camera]: receiveRoversImages(state[action.camera], action)
+            })
+        case ADD_EMPTY_SOL:
+            return Object.assign({}, state, {
+                [action.camera]: addEmptySol(state[action.camera], action)
+            })
+        case RECEIVE_ROVER_IMAGES:
+            return Object.assign({}, state, {
+                [action.camera]: receiveRoversImages(state[action.camera], action)
             })
         default:
             return state
@@ -102,6 +130,10 @@ function getDataByRover(state = {}, action) {
             })
         case INVALIDATE_ROVER_IMAGES:
         case RECEIVE_ROVER_IMAGES:
+        case ADD_EMPTY_SOL:
+            return Object.assign({}, state, {
+                [action.rover]: roversImages(state[action.rover], action)
+            })
         case REQUEST_ROVERS_IMAGES:
             return Object.assign({}, state, {
                 [action.rover]: roversImages(state[action.rover], action)
@@ -149,7 +181,8 @@ function selectCamera(state = {}, action) {
                 rover: action.rover,
                 cameraIndex: action.cameraIndex,
                 camera: action.camera,
-                sol: action.sol
+                cameraFullName: action.cameraFullName,
+                sol: action.sol,
             });
         case CAMERA_UNSELECTED:
             return Object.assign({}, state, {
@@ -157,6 +190,7 @@ function selectCamera(state = {}, action) {
                 rover: undefined,
                 cameraIndex: undefined,
                 camera: undefined,
+                cameraFullName: undefined,
                 sol: undefined,
             })
         default:

@@ -15,8 +15,15 @@ const Wrapper = styled.div`
     background-color: rgba(0,0,0,0.5);
 `;
 
+const CameraNavList = styled.ul`
+    padding: 0;
+`
+
 const CameraNavItem = styled.li`
       list-style:none;
+      padding: 4%;
+    text-align: center;
+    color: #fff;
 `;
 
 class CameraNavigation extends React.Component {
@@ -35,26 +42,27 @@ class CameraNavigation extends React.Component {
     }
 
     componentDidMount() {
-        this.state.cameras.map(imgPath =>
-        import(`assets/cameras/${this.props.rover}/${imgPath}.jpg`).then(path => {
+        this.state.cameras.map(imgPath =>import(`assets/cameras/${this.props.rover}/${imgPath}.jpg`).then(path => {
             const imageArray = this.state.cameraImages.concat(path);
             this.setState({cameraImages: imageArray});
         }).catch(error => console.log(error)));
     }
 
     render() {
+        console.log('CAMERA NAVIGATION!');
         return (
             <Flex direction={"column"}>
-                {this.props.cameras.map((camera, i) =>
-                    <ul key={i}>
+                <CameraNavList>
+                    {this.props.cameras.map((camera, i) =>
                         <CameraNavItem
+                            key={i}
                             style={{backgroundImage: "url(" + this.state.cameraImages[i] + ")"}}
                             data-camera={camera.name}
                             onClick={() => this.props.mountGallery(i)}>
                             {camera.full_name}
                         </CameraNavItem>
-                    </ul>
-                )}
+                    )}
+                </CameraNavList>
             </Flex>
         );
     }
