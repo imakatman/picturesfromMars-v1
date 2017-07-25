@@ -151,12 +151,12 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                                 <CameraNavigation
                                     rover={selectedRover}
                                     cameras={getDataByRover[selectedRover]["data"]["cameras"]}
-                                    mountGallery={(i) => this.mountGallery(i)} />
+                                    mountGallery={(i) => this.mountGallery(...[ ,i, , ,])} />
                             </Box>
                             <Box>
                                 <RoverDiagram
                                     cameras={getDataByRover[selectedRover]["data"]["cameras"]}
-                                    mountGallery={(i) => this.mountGallery(i)} />
+                                    mountGallery={(i) => this.mountGallery(...[ ,i, , ,])} />
                             </Box>
                         </Flex>
                 </ActiveCameraLayer>

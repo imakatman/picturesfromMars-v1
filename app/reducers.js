@@ -24,7 +24,6 @@ function selectedRover(state = "", action) {
 const emptySolsArrays = [];
 
 function addEmptySol(state = {emptySols: []}, action){
-    console.log("add empty sol reducer");
     emptySolsArrays.push(action.sol);
     switch (action.type) {
         case ADD_EMPTY_SOL:
@@ -69,7 +68,6 @@ function receiveRoversImages(state = {}, action) {
 }
 
 function roversImages(state = {}, action) {
-    console.log("rovers images reducer");
     switch (action.type) {
         case INVALIDATE_ROVER_IMAGES:
             return Object.assign({}, state, {
