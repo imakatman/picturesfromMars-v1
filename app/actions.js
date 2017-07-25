@@ -210,8 +210,8 @@ function requestRoversImages(rover, camera, sol) {
 
 export const ADD_EMPTY_SOL = "addEmptySol";
 
-function addEmptySol(rover, camera, sol){
-    return{
+function addEmptySol(rover, camera, sol) {
+    return {
         type: ADD_EMPTY_SOL,
         rover,
         camera,
@@ -253,13 +253,9 @@ export function fetchRoverImages(rover, sol, page, camera, cameraIndex) {
     }
 }
 
-function shouldFetchRoverImages(state, rover, camera, sol) {
-    var data;
-    if(typeof state.getDataByRover[rover][camera][sol] !== 'undefined'){
-        data = state.getDataByRover[rover][camera][sol];
-    } else {
-        data = state.getDataByRover[rover][camera];
-    }
+function shouldFetchRoverImages(state, rover, camera) {
+    const data = state.getDataByRover[rover][camera];
+
     if (!data) {
         return true
     } else if (data.isFetching) {
@@ -276,7 +272,7 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraIndex) 
     // This is useful for avoiding a network request if
     // a cached value is already available.
     return (dispatch, getState) => {
-        if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
+        if (shouldFetchRoverImages(getState(), rover, camera)) {
             // Dispatch a thunk from thunk!
             return dispatch(fetchRoverImages(rover, sol, page, camera, cameraIndex))
         } else {
@@ -284,6 +280,25 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraIndex) 
             return Promise.resolve()
         }
     }
+}
+
+export function fetchNextRoverImages(rover, sol, page, camera, cameraIndex) {
+    // Note that the function also receives getState()
+    // which lets you choose what to dispatch next.
+
+    // This is useful for avoiding a network request if
+    // a cached value is already available.
+    // return (dispatch, getState) => {
+    //     if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
+    //         // Dispatch a thunk from thunk!
+    return (dispatch, getState) => {
+        return dispatch(fetchRoverImages(rover, sol, page, camera, cameraIndex));
+    }
+    //     } else {
+    //         // Let the calling code know there's nothing to wait for.
+    //         return Promise.resolve()
+    //     }
+    // }
 }
 
 // LOOK AT http://redux.js.org/docs/introduction/Examples.html#real-world for ERROR MESSAGE HANDLING
