@@ -253,8 +253,13 @@ export function fetchRoverImages(rover, sol, page, camera, cameraIndex) {
     }
 }
 
-function shouldFetchRoverImages(state, rover, camera) {
-    const data = state.getDataByRover[rover][camera];
+function shouldFetchRoverImages(state, rover, camera, sol) {
+    var data;
+    if(typeof state.getDataByRover[rover][camera][sol] !== 'undefined'){
+        data = state.getDataByRover[rover][camera][sol];
+    } else {
+        data = state.getDataByRover[rover][camera];
+    }
     if (!data) {
         return true
     } else if (data.isFetching) {
@@ -271,7 +276,7 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraIndex) 
     // This is useful for avoiding a network request if
     // a cached value is already available.
     return (dispatch, getState) => {
-        if (shouldFetchRoverImages(getState(), rover, camera)) {
+        if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
             // Dispatch a thunk from thunk!
             return dispatch(fetchRoverImages(rover, sol, page, camera, cameraIndex))
         } else {

@@ -57,7 +57,7 @@ class CameraNavigation extends React.Component {
                             key={i}
                             style={{backgroundImage: "url(" + this.state.cameraImages[i] + ")"}}
                             data-camera={camera.name}
-                            onClick={() => this.props.mountGallery(i)}>
+                            onClick={() => this.props.mountGallery(...[ ,i, , , , ])}>
                             {camera.full_name}
                         </CameraNavItem>
                     )}

@@ -53,6 +53,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
 
         this.mountGallery   = this.mountGallery.bind(this);
         this.unmountGallery = this.unmountGallery.bind(this);
+        this.grabNextAvailablePhotos = this.grabNextAvailablePhotos.bind(this);
     }
 
     componentWillMount() {
@@ -70,7 +71,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         }
     }
 
-    mountGallery(rover, cameraIndex, selectedCamera, cameraFullName, currentSol, currentEarthDate) {
+    mountGallery(rover, cameraIndex, selectedCamera, cameraFullName, currentSol) {
         const {dispatch, selectedRover, getDataByRover, isFetching} = this.props;
 
         if (!isFetching) {
@@ -99,6 +100,12 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         this.setState({
             galleryMounted: false,
         })
+    }
+
+    grabNextAvailablePhotos(i){
+        const {dispatch, selectedRover, selectCamera} = this.props;
+
+        dispatch(fetchRoverImagesIfNeeded(selectedRover, selectCamera['sol'] - 1, 1, selectCamera['camera'], i));
     }
 
     render() {
@@ -135,6 +142,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                             <Gallery cameraAbbrev={selectCamera["camera"]}
                                 cameraFullName={getDataByRover[selectedRover][selectCamera['camera']][selectCamera["sol"]]["cameraFullName"]}
                                 photos={getDataByRover[selectedRover][selectCamera['camera']][selectCamera["sol"]]["photoData"]}
+                                grabNextAvailablePhotos={(i) => this.grabNextAvailablePhotos(i)}
                                 unmountGallery={() => this.unmountGallery()} />
                         </GalleryContain>
                         <Flex direction="column" flex={1}>

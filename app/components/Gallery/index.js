@@ -16,6 +16,14 @@ const GalleryContainer = styled.div`
     height: 100%;
 `;
 
+const Next = styled.div`
+    position: absolute;
+    top: 0;
+    right: 1%;
+    color: #fff;
+    font-size: 20px;
+`
+
 const Back = styled.div`
     position: absolute;
     bottom: 1%;
@@ -43,6 +51,9 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
                 <CameraName>
                     {this.props.cameraFullName} {this.props.cameraAbbrev}
                 </CameraName>
+                <Next onClick={(i) => this.props.grabNextAvailablePhotos(i)}>
+                    <p>Next Available Date with Photos</p>
+                </Next>
                 <Back onClick={() => this.props.unmountGallery()}>
                     <FaLongArrowLeft />
                 </Back>

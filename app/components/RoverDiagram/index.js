@@ -31,7 +31,7 @@ class RoverDiagram extends React.Component { // eslint-disable-line react/prefer
                     <CameraBtn
                         key={camera.full_name}
                         data-camera={camera.name}
-                        onClick={() => this.props.mountGallery(i)}>
+                        onClick={() => this.props.mountGallery(...[ ,i, , , , ])}>
                         {camera.full_name}
                     </CameraBtn>
                 )}
