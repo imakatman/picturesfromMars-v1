@@ -20,10 +20,12 @@ const CameraNavList = styled.ul`
 `
 
 const CameraNavItem = styled.li`
-      list-style:none;
-      padding: 4%;
+    list-style:none;
+    padding: 4%;
     text-align: center;
     color: #fff;
+    background-size: cover;
+    background-position: 50%;
 `;
 
 class CameraNavigation extends React.Component {
