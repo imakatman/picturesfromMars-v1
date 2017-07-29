@@ -137,7 +137,7 @@ function receiveRoversData(rover, json) {
 export function fetchRoversData(rover) {
     return function (dispatch) {
         dispatch(requestRoversData(rover))
-        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}?api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`).then(response => response.json()).then(json =>
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json =>
             dispatch(receiveRoversData(rover, json))
         )
     }
@@ -146,7 +146,8 @@ export function fetchRoversData(rover) {
 function shouldFetchRoverData(state, rover) {
     // const data = state.getDataByRover;
     const data = state.getDataByRover[rover];
-    if (!data) {
+    if (Object.keys(data["data"]).length === 0) {
+        console.log("no data");
         return true
     } else if (data.isFetching) {
         return false
@@ -161,6 +162,7 @@ export function fetchRoverDataIfNeeded(rover) {
 
     // This is useful for avoiding a network request if
     // a cached value is already available.
+    console.log("fetth rover data");
     return (dispatch, getState) => {
         if (shouldFetchRoverData(getState(), rover)) {
             // Dispatch a thunk from thunk!
@@ -239,7 +241,7 @@ function receiveRoverImages(rover, json) {
 export function fetchRoverImages(rover, sol, page, camera, cameraIndex) {
     return function (dispatch) {
         dispatch(requestRoversImages(rover, camera, sol))
-        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t`).then(response => response.json()).then(json => {
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
             if (json.photos.length > 0) {
                 console.log("there are images!");
                 dispatch(cameraSelected(rover, cameraIndex, camera, json.photos[0].camera.full_name, sol));

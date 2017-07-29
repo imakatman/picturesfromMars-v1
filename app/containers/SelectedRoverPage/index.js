@@ -52,8 +52,8 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
             page: 1,
         }
 
-        this.mountGallery   = this.mountGallery.bind(this);
-        this.unmountGallery = this.unmountGallery.bind(this);
+        this.mountGallery            = this.mountGallery.bind(this);
+        this.unmountGallery          = this.unmountGallery.bind(this);
         this.grabNextAvailablePhotos = this.grabNextAvailablePhotos.bind(this);
     }
 
@@ -79,11 +79,11 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
 
             console.log(cameraIndex);
 
-            const _rover  = rover || selectedRover,
-                  _sol    = currentSol || getDataByRover[selectedRover].data.max_sol,
-                  _camera = selectedCamera || getDataByRover[selectedRover].data.cameras[cameraIndex].name,
+            const _rover          = rover || selectedRover,
+                  _sol            = currentSol || getDataByRover[selectedRover].data.max_sol,
+                  _camera         = selectedCamera || getDataByRover[selectedRover].data.cameras[cameraIndex].name,
                   _cameraFullName = cameraFullName || getDataByRover[selectedRover].data.cameras[cameraIndex].full_name,
-                  _page   = this.state.page;
+                  _page           = this.state.page;
 
             dispatch(fetchRoverImagesIfNeeded(_rover, _sol, _page, _camera, _cameraFullName, cameraIndex));
 
@@ -103,7 +103,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         })
     }
 
-    grabNextAvailablePhotos(i){
+    grabNextAvailablePhotos(i) {
         const {dispatch, selectedRover, selectCamera} = this.props;
 
         dispatch(fetchNextRoverImages(selectedRover, selectCamera['sol'] - 1, 1, selectCamera['camera'], i));
@@ -129,7 +129,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                 || typeof selectCamera['selected'] === false ? (
                         <RoverDiagram
                             cameras={getDataByRover[selectedRover]["data"]["cameras"]}
-                            mountGallery={(i) => this.mountGallery(...[ ,i, , ,])}
+                            mountGallery={(i) => this.mountGallery(...[, i, , ,])}
                         />) : (
                         <Loading>Loading...</Loading>
                     )
@@ -139,26 +139,28 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                 && getDataByRover[selectedRover][selectCamera['camera']][selectCamera['sol']]['isFetching'] === false
                 &&
                 <ActiveCameraLayer>
-                        <GalleryContain flex={2}>
-                            <Gallery cameraAbbrev={selectCamera["camera"]}
-                                cameraFullName={getDataByRover[selectedRover][selectCamera['camera']][selectCamera["sol"]]["cameraFullName"]}
-                                photos={getDataByRover[selectedRover][selectCamera['camera']][selectCamera["sol"]]["photoData"]}
-                                grabNextAvailablePhotos={(i) => this.grabNextAvailablePhotos(i)}
-                                unmountGallery={() => this.unmountGallery()} />
-                        </GalleryContain>
-                        <Flex direction="column" flex={1}>
-                            <Box>
-                                <CameraNavigation
-                                    rover={selectedRover}
-                                    cameras={getDataByRover[selectedRover]["data"]["cameras"]}
-                                    mountGallery={(i) => this.mountGallery(...[ ,i, , ,])} />
-                            </Box>
-                            <Box>
-                                <RoverDiagram
-                                    cameras={getDataByRover[selectedRover]["data"]["cameras"]}
-                                    mountGallery={(i) => this.mountGallery(...[ ,i, , ,])} />
-                            </Box>
-                        </Flex>
+                    <Flex direction="column" flex={1}>
+                        <Box>
+                            <CameraNavigation
+                                rover={selectedRover}
+                                cameras={getDataByRover[selectedRover]["data"]["cameras"]}
+                                mountGallery={(i) => this.mountGallery(...[, i, , ,])} />
+                        </Box>
+                        <Box>
+                            <RoverDiagram
+                                cameras={getDataByRover[selectedRover]["data"]["cameras"]}
+                                mountGallery={(i) => this.mountGallery(...[, i, , ,])} />
+                        </Box>
+                    </Flex>
+                    <GalleryContain flex={2}>
+                        <Gallery cameraAbbrev={selectCamera["camera"]}
+                            cameraFullName={getDataByRover[selectedRover][selectCamera['camera']][selectCamera["sol"]]["cameraFullName"]}
+                            sol={getDataByRover[selectedRover][selectCamera['camera']]["sol"]}
+                            earthDay={getDataByRover[selectedRover][selectCamera['camera']]["earthDate"]}
+                            photos={getDataByRover[selectedRover][selectCamera['camera']][selectCamera["sol"]]["photoData"]}
+                            grabNextAvailablePhotos={(i) => this.grabNextAvailablePhotos(i)}
+                            unmountGallery={() => this.unmountGallery()} />
+                    </GalleryContain>
                 </ActiveCameraLayer>
                 }
 

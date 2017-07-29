@@ -47,7 +47,9 @@ function receiveRoversImages(state = {}, action) {
             return Object.assign({}, state, {
                 [action.sol]: {
                     isFetching: true,
-                    didInvalidate: false
+                    didInvalidate: false,
+                    earthDate: action.earthDate,
+                    sol: action.sol,
                 }
             })
         case RECEIVE_ROVER_IMAGES:
