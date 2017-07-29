@@ -48,7 +48,6 @@ function receiveRoversImages(state = {}, action) {
                 [action.sol]: {
                     isFetching: true,
                     didInvalidate: false,
-                    earthDate: action.earthDate,
                     sol: action.sol,
                 }
             })
