@@ -255,8 +255,10 @@ export function fetchRoverImages(rover, sol, page, camera, cameraIndex) {
         dispatch(requestRoversImages(rover, camera, sol))
         return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
             if (json.photos.length > 0) {
+                const cameraFullName = json.photos[0].camera.full_name,
+                    earthDate = json.photos[0].earth_date;
                 console.log("there are images!");
-                dispatch(cameraSelected(rover, cameraIndex, camera, json.photos[0].camera.full_name, sol));
+                dispatch(cameraSelected(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
                 dispatch(addMeaningfulSol(rover, camera, sol));
                 return dispatch(receiveRoverImages(rover, json));
             } else {
@@ -275,10 +277,10 @@ function shouldFetchRoverImages(state, rover, camera, sol) {
     } else if (typeof state.getDataByRover[rover][camera][sol] == 'undefined') {
         console.log("no specific sol data");
         return true
-    } else if (specificSolData.isFetching) {
+    } else if (state.getDataByRover[rover][camera][sol]["isFetching"]) {
         return false
     } else {
-        return data.didInvalidate
+        return state.getDataByRover[rover][camera][sol]["didInvalidate"] = true
     }
 }
 
@@ -326,7 +328,7 @@ export function fetchNextRoverImages(rover, sol, page, camera, cameraIndex) {
 
 export const CAMERA_SELECTED = "cameraSelected";
 
-export function cameraSelected(rover, cameraIndex, camera, cameraFullName, sol) {
+export function cameraSelected(rover, cameraIndex, camera, cameraFullName, sol, earthDate) {
     return {
         type: CAMERA_SELECTED,
         rover,
@@ -334,6 +336,7 @@ export function cameraSelected(rover, cameraIndex, camera, cameraFullName, sol) 
         camera,
         cameraFullName,
         sol,
+        earthDate
     }
 }
 

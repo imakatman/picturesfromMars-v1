@@ -56,13 +56,15 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
 
     render() {
         console.log('GALLERY!');
+        console.log(this.props.sol);
+        // console.log(this.props.earthDay);
         return (
             <GalleryContainer>
                 <CameraName>
                     {this.props.cameraFullName} {this.props.cameraAbbrev}
                 </CameraName>
                 <Date>
-                    {this.props.sol} || {this.props.earthDay}
+                    Sol: {this.props.sol} || {this.props.earthDate}
                 </Date>
                 <Next>
                     <span>Previous Date</span>

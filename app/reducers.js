@@ -21,34 +21,6 @@ function selectedRover(state = "", action) {
     }
 }
 
-// function addEmptySol(state = {emptySols: []}, action) {
-//     console.log(state);
-//     switch (action.type) {
-//         case ADD_EMPTY_SOL:
-//             return Object.assign({}, state, {
-//                 emptySols: action.sol
-//             });
-//         default:
-//             return state
-//     }
-// }
-//
-// function addMeaningfulSol(state = {
-//     latestMeaningfulSol: "",
-//     meaningfulSols: []
-// }, action) {
-//     console.log(state);
-//     switch (action.type) {
-//         case ADD_MEANINGFUL_SOL:
-//             return Object.assign({}, state, {
-//                 latestMeaningfulSol: action.sol,
-//                 meaningfulSolsArrays: action.sol
-//             });
-//         default:
-//             return state
-//     }
-// }
-
 function addSolImageData(state, action){
     switch (action.type) {
         case ADD_MEANINGFUL_SOL:
@@ -241,7 +213,15 @@ function getAllRoversData(state = {AllRovers: {}}, action) {
     }
 }
 
-function selectCamera(state = {}, action) {
+function selectCamera(state = {
+    selected: false,
+    rover: undefined,
+    cameraIndex: undefined,
+    camera: undefined,
+    cameraFullName: undefined,
+    sol: undefined,
+    earthDate: undefined
+}, action) {
     switch (action.type) {
         case CAMERA_SELECTED:
             return Object.assign({}, state, {
@@ -251,6 +231,7 @@ function selectCamera(state = {}, action) {
                 camera: action.camera,
                 cameraFullName: action.cameraFullName,
                 sol: action.sol,
+                earthDate: action.earthDate
             });
         case CAMERA_UNSELECTED:
             return Object.assign({}, state, {
