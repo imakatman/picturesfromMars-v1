@@ -75,22 +75,31 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     mountGallery(rover, cameraIndex, selectedCamera, cameraFullName, currentSol) {
         const {dispatch, selectedRover, getDataByRover, isFetching} = this.props;
 
-        if (!isFetching) {
+        if (!isFetching && typeof getDataByRover[selectedRover][selectedCamera] === 'undefined') {
 
-            console.log(cameraIndex);
+            console.log("has not fetched images from this camera");
 
             const _rover          = rover || selectedRover,
-                  _sol            = currentSol || getDataByRover[selectedRover].data.max_sol,
                   _camera         = selectedCamera || getDataByRover[selectedRover].data.cameras[cameraIndex].name,
                   _cameraFullName = cameraFullName || getDataByRover[selectedRover].data.cameras[cameraIndex].full_name,
+                  _sol            = currentSol || getDataByRover[selectedRover].data.max_sol,
                   _page           = this.state.page;
 
             dispatch(fetchRoverImagesIfNeeded(_rover, _sol, _page, _camera, _cameraFullName, cameraIndex));
 
-            this.setState((prevState) => {
-                page: prevState + 1
-            });
+        } else if (!isFetching && getDataByRover[selectedRover][selectedCamera]["hasFetchedImages"] === true) {
 
+            console.log("has fetched images from this camera");
+
+            const _rover          = rover || selectedRover,
+                  _camera         = selectedCamera || getDataByRover[selectedRover].data.cameras[cameraIndex].name,
+                  _cameraFullName = cameraFullName || getDataByRover[selectedRover].data.cameras[cameraIndex].full_name,
+                  _sol            = currentSol || getDataByRover[selectedRover]["latestMeaningfulSol"],
+                  _page           = this.state.page;
+
+            console.log(_sol);
+
+            dispatch(fetchRoverImagesIfNeeded(_rover, _sol, _page, _camera, _cameraFullName, cameraIndex));
         }
 
     }

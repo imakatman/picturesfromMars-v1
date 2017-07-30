@@ -137,7 +137,8 @@ function receiveRoversData(rover, json) {
 export function fetchRoversData(rover) {
     return function (dispatch) {
         dispatch(requestRoversData(rover))
-        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json =>
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`)
+        .then(response => response.json()).then(json =>
             dispatch(receiveRoversData(rover, json))
         )
     }
@@ -146,7 +147,8 @@ export function fetchRoversData(rover) {
 function shouldFetchRoverData(state, rover) {
     // const data = state.getDataByRover;
     const data = state.getDataByRover[rover];
-    if (Object.keys(data["data"]).length === 0) {
+    // if (Object.keys(data["data"]).length === 0) {
+    if (typeof data === 'undefined') {
         console.log("no data");
         return true
     } else if (data.isFetching) {
@@ -161,8 +163,7 @@ export function fetchRoverDataIfNeeded(rover) {
     // which lets you choose what to dispatch next.
 
     // This is useful for avoiding a network request if
-    // a cached value is already available.
-    console.log("fetth rover data");
+    // a cached value is already available.console.log("fetth rover data");
     return (dispatch, getState) => {
         if (shouldFetchRoverData(getState(), rover)) {
             // Dispatch a thunk from thunk!
@@ -177,6 +178,28 @@ export function fetchRoverDataIfNeeded(rover) {
 // *****
 // ** ACTIONS FOR ROVER PICTURES
 //
+
+export const ADD_EMPTY_SOL = "addEmptySol";
+
+function addEmptySol(rover, camera, sol) {
+    return {
+        type: ADD_EMPTY_SOL,
+        rover,
+        camera,
+        sol,
+    }
+}
+
+export const ADD_MEANINGFUL_SOL = "addMeaningfulSol";
+
+function addMeaningfulSol(rover, camera, sol) {
+    return {
+        type: ADD_MEANINGFUL_SOL,
+        rover,
+        camera,
+        sol,
+    }
+}
 
 export const INVALIDATE_ROVER_IMAGES = "invalidateAllRoverImages";
 
@@ -210,17 +233,6 @@ function requestRoversImages(rover, camera, sol) {
     }
 }
 
-export const ADD_EMPTY_SOL = "addEmptySol";
-
-function addEmptySol(rover, camera, sol) {
-    return {
-        type: ADD_EMPTY_SOL,
-        rover,
-        camera,
-        sol,
-    }
-}
-
 export const RECEIVE_ROVER_IMAGES = "receiveRoverImages";
 
 function receiveRoverImages(rover, json) {
@@ -234,7 +246,7 @@ function receiveRoverImages(rover, json) {
         camera: json.photos[0].camera.name,
         cameraFullName: json.photos[0].camera.full_name,
         photos: json.photos,
-        sol: json.photos[0].sol
+        sol: json.photos[0].sol,
     }
 }
 
@@ -245,6 +257,7 @@ export function fetchRoverImages(rover, sol, page, camera, cameraIndex) {
             if (json.photos.length > 0) {
                 console.log("there are images!");
                 dispatch(cameraSelected(rover, cameraIndex, camera, json.photos[0].camera.full_name, sol));
+                dispatch(addMeaningfulSol(rover, camera, sol));
                 return dispatch(receiveRoverImages(rover, json));
             } else {
                 console.log("there arent images lets try again!");
@@ -255,12 +268,14 @@ export function fetchRoverImages(rover, sol, page, camera, cameraIndex) {
     }
 }
 
-function shouldFetchRoverImages(state, rover, camera) {
-    const data = state.getDataByRover[rover][camera];
-
-    if (!data) {
+function shouldFetchRoverImages(state, rover, camera, sol) {
+    if (typeof state.getDataByRover[rover][camera] == null || typeof state.getDataByRover[rover][camera] == 'undefined') {
+        console.log("no camera data");
         return true
-    } else if (data.isFetching) {
+    } else if (typeof state.getDataByRover[rover][camera][sol] == 'undefined') {
+        console.log("no specific sol data");
+        return true
+    } else if (specificSolData.isFetching) {
         return false
     } else {
         return data.didInvalidate
@@ -274,7 +289,7 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraIndex) 
     // This is useful for avoiding a network request if
     // a cached value is already available.
     return (dispatch, getState) => {
-        if (shouldFetchRoverImages(getState(), rover, camera)) {
+        if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
             // Dispatch a thunk from thunk!
             return dispatch(fetchRoverImages(rover, sol, page, camera, cameraIndex))
         } else {
