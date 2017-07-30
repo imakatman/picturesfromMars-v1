@@ -50,16 +50,15 @@ function selectedRover(state = "", action) {
 // }
 
 function addSolImageData(state, action){
-    console.log(state);
     switch (action.type) {
         case ADD_MEANINGFUL_SOL:
             return Object.assign({}, state, {
                 latestMeaningfulSol: action.sol,
-                meaningfulSols: state.meaningfulSols.push(action.sol)
+                meaningfulSols: state.meaningfulSols.concat(action.sol)
             });
         case ADD_EMPTY_SOL:
             return Object.assign({}, state, {
-                emptySols: state.emptySols.push(action.sol)
+                emptySols: state.emptySols.concat(action.sol)
             });
         default:
             return state
