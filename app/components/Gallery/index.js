@@ -7,7 +7,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Flex, Box} from 'grid-styled';
-import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left';
 import Masonry from 'react-masonry-component';
 import {Overlay, TopLayer} from '../StyledComponents/Overlay';
 
@@ -25,14 +24,6 @@ const Next = styled.div`
     color: #fff;
     font-size: 20px;
 `
-
-const Back = styled.div`
-    position: absolute;
-    bottom: 1%;
-    left: 1%;
-    color: #fff;
-    font-size: 36px;
-`;
 
 const CameraName = styled.h2`
     color: #fff;
@@ -70,9 +61,6 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
                     <span>Previous Date</span>
                     <span onClick={(i) => this.props.grabNextAvailablePhotos(i)}>Next Available Date with Photos</span>
                 </Next>
-                <Back onClick={() => this.props.unmountGallery()}>
-                    <FaLongArrowLeft />
-                </Back>
                 <Flex wrap={true}>
                     <Masonry style={{width:"100%"}}>
                         {this.props.photos.map(photo =>

@@ -26,13 +26,23 @@ import CameraNavigation from 'components/CameraNavigation';
 const Loading = styled.div`
 `;
 
-const ActiveCameraLayer = styled(Flex)`
+const IntroLayer = styled(Flex)`
     background-color: #000;
     position: absolute;
+    top: 0;
     width: 100%;
     height: 100%;
+    z-index: 0;    
+`;
+
+const ActiveCameraLayer = styled(IntroLayer)`
     z-index: 1;    
 `;
+
+const NavigationBox = styled(Box)`
+    flex: 1;
+    position: relative;
+`
 
 const GalleryContain = styled(Box)`
     overflow-y: scroll;
@@ -145,12 +155,18 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                 && getDataByRover[selectedRover]['isFetching'] === false
                 || Object.keys(selectCamera).length === 0
                 || typeof selectCamera['selected'] === false ? (
-                        <RoverDiagram
-                            cameras={getDataByRover[selectedRover]["data"]["cameras"]}
-                            mountGallery={(i) =>
-                                this.mountGallery(...[, i, , ,])}
-                        />) : (
-                        <Loading>Loading...</Loading>
+                        <IntroLayer>
+                            <RoverDiagram
+                                cameras={getDataByRover[selectedRover]["data"]["cameras"]}
+                                mountGallery={(i) =>
+                                    this.mountGallery(...[, i, , ,])}
+                                landing={true}
+                            />
+                        </IntroLayer>
+                    ) : (
+                        <IntroLayer>
+                            <Loading>Loading...</Loading>
+                        </IntroLayer>
                     )
                 }
 
@@ -159,21 +175,23 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                 &&
                 <ActiveCameraLayer>
                     <Flex direction="column" flex={1}>
-                        <Box>
+                        <NavigationBox>
                             <CameraNavigation
                                 rover={selectedRover}
                                 cameras={getDataByRover[selectedRover]["data"]["cameras"]}
                                 mountGallery={(i) =>
                                     this.mountGallery(...[, i, , ,])}
                             />
-                        </Box>
-                        <Box>
+                        </NavigationBox>
+                        <NavigationBox>
                             <RoverDiagram
                                 cameras={getDataByRover[selectedRover]["data"]["cameras"]}
                                 mountGallery={(i) =>
                                     this.mountGallery(...[, i, , ,])}
+                                landing={false}
+                                unmountGallery={() => this.unmountGallery()}
                             />
-                        </Box>
+                        </NavigationBox>
                     </Flex>
                     <GalleryContain flex={2}>
                         <Gallery cameraAbbrev={selectCamera["camera"]}
@@ -182,7 +200,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                             earthDate={selectCamera["earthDate"]}
                             photos={getDataByRover[selectedRover][selectCamera['camera']][selectCamera["sol"]]["photoData"]}
                             grabNextAvailablePhotos={(i) => this.grabNextAvailablePhotos(i)}
-                            unmountGallery={() => this.unmountGallery()} />
+                        />
                     </GalleryContain>
                 </ActiveCameraLayer>
                 }

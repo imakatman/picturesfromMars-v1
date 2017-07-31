@@ -22,10 +22,22 @@ const CameraNavList = styled.ul`
 const CameraNavItem = styled.li`
     list-style:none;
     padding: 4%;
-    text-align: center;
+    text-align: left;
     color: #fff;
     background-size: cover;
     background-position: 50%;
+    position:relative;
+    z-index: 1;
+    &:after{
+        content: " ";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0));
+    }    
 `;
 
 class CameraNavigation extends React.Component {
