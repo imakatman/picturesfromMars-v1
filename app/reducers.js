@@ -24,14 +24,22 @@ function selectedRover(state = "", action) {
 function addSolImageData(state, action){
     switch (action.type) {
         case ADD_MEANINGFUL_SOL:
-            return Object.assign({}, state, {
-                latestMeaningfulSol: action.sol,
-                meaningfulSols: state.meaningfulSols.concat(action.sol)
-            });
+            if(!state.meaningfulSols.includes(action.sol)){
+                return Object.assign({}, state, {
+                    latestMeaningfulSol: action.sol,
+                    meaningfulSols: state.meaningfulSols.concat(action.sol)
+                });
+            } else {
+                return state;
+            }
         case ADD_EMPTY_SOL:
-            return Object.assign({}, state, {
-                emptySols: state.emptySols.concat(action.sol)
-            });
+            if(!state.emptySols.includes(action.sol)){
+                return Object.assign({}, state, {
+                    emptySols: state.emptySols.concat(action.sol)
+                });
+            } else {
+                return state;
+            }
         default:
             return state
     }
