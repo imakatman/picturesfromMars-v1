@@ -58,7 +58,7 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
                     Sol: {this.props.sol} || {this.props.earthDate}
                 </Date>
                 <Next>
-                    <span>Previous Date</span>
+                    <span onClick={() => this.props.returnToPreviousDate()}>Previous Date</span>
                     <span onClick={(i) => this.props.grabNextAvailablePhotos(i)}>Next Available Date with Photos</span>
                 </Next>
                 <Flex wrap={true}>

@@ -64,6 +64,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
 
         this.mountGallery            = this.mountGallery.bind(this);
         this.unmountGallery          = this.unmountGallery.bind(this);
+        this.returnToPreviousDate    = this.returnToPreviousDate.bind(this);
         this.grabNextAvailablePhotos = this.grabNextAvailablePhotos.bind(this);
     }
 
@@ -71,14 +72,14 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         const {dispatch, selectedRover, getDataByRover} = this.props;
 
         dispatch(selectRover(this.state.selectedRover));
-        dispatch(fetchRoverDataIfNeeded(this.state.selectedRover));
+        return dispatch(fetchRoverDataIfNeeded(this.state.selectedRover));
     }
 
     componentDidMount() {
         const {selectCamera} = this.props;
 
         if (typeof selectCamera['selected'] === true || Object.keys(selectCamera).length !== 0) {
-            this.mountGallery(selectCamera.rover, selectCamera.cameraIndex, selectCamera.camera, selectCamera.sol);
+            return this.mountGallery(selectCamera.rover, selectCamera.cameraIndex, selectCamera.camera, selectCamera.sol);
         }
     }
 
@@ -99,7 +100,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                       _sol            = currentSol || getDataByRover[selectedRover].data.max_sol,
                       _page           = this.state.page;
 
-                dispatch(fetchRoverImagesIfNeeded(_rover, _sol, _page, _camera, _cameraFullName, cameraIndex));
+                return dispatch(fetchRoverImagesIfNeeded(_rover, _sol, _page, _camera, _cameraFullName, cameraIndex));
 
             } else if (!isFetching && getDataByRover[selectedRover][_selectedCamera]["hasFetchedImages"] === true) {
 
@@ -114,7 +115,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
 
                 console.log(_sol);
 
-                dispatch(fetchRoverImagesIfNeeded(_rover, _sol, _page, _camera, _cameraFullName, cameraIndex, _emptySols));
+                return dispatch(fetchRoverImagesIfNeeded(_rover, _sol, _page, _camera, _cameraFullName, cameraIndex, _emptySols));
 
             }
         }
@@ -124,17 +125,28 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     unmountGallery() {
         const {dispatch} = this.props;
         dispatch(cameraUnselected());
-        this.setState({
+        return this.setState({
             galleryMounted: false,
         })
+    }
+
+    returnToPreviousDate() {
+        console.log("return to previous date");
+
+        const {dispatch, selectedRover, getDataByRover, selectCamera} = this.props;
+
+        const meaningfulSols = getDataByRover[selectedRover][selectCamera['camera']]["meaningfulSols"];
+        const i = meaningfulSols.indexOf(selectCamera['sol']);
+
+        return dispatch(cameraSelected(selectCamera["rover"], selectCamera["cameraIndex"], selectCamera["camera"], selectCamera["cameraFullName"], meaningfulSols[i - 1], selectCamera["earthDate"]));
     }
 
     grabNextAvailablePhotos(i) {
         const {dispatch, selectedRover, getDataByRover, selectCamera} = this.props;
 
-        const _emptySols      = getDataByRover[selectedRover][selectCamera['camera']]["emptySols"];
+        const _emptySols = getDataByRover[selectedRover][selectCamera['camera']]["emptySols"];
 
-        dispatch(fetchNextRoverImages(selectedRover, selectCamera['sol'] - 1, 1, selectCamera['camera'], i, _emptySols));
+        return dispatch(fetchNextRoverImages(selectedRover, selectCamera['sol'] - 1, 1, selectCamera['camera'], i, _emptySols));
     }
 
     render() {
@@ -199,6 +211,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                             sol={selectCamera["sol"]}
                             earthDate={selectCamera["earthDate"]}
                             photos={getDataByRover[selectedRover][selectCamera['camera']][selectCamera["sol"]]["photoData"]}
+                            returnToPreviousDate={()=>this.returnToPreviousDate()}
                             grabNextAvailablePhotos={(i) => this.grabNextAvailablePhotos(i)}
                         />
                     </GalleryContain>
