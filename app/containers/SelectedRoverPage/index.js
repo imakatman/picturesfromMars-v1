@@ -83,6 +83,14 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         }
     }
 
+    componentWillUpdate(){
+        console.log("component will update");
+    }
+
+    componentDidUpdate(){
+        console.log("component updated");
+    }
+
     mountGallery(rover, cameraIndex, selectedCamera, cameraFullName, currentSol) {
         const {dispatch, selectedRover, getDataByRover, isFetching} = this.props;
 
@@ -138,7 +146,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         const meaningfulSols = getDataByRover[selectedRover][selectCamera['camera']]["meaningfulSols"];
         const i = meaningfulSols.indexOf(selectCamera['sol']);
 
-        return dispatch(cameraSelected(selectCamera["rover"], selectCamera["cameraIndex"], selectCamera["camera"], selectCamera["cameraFullName"], meaningfulSols[i - 1], selectCamera["earthDate"]));
+        return dispatch(cameraSelected(selectedRover, selectCamera["cameraIndex"], selectCamera["camera"], selectCamera["cameraFullName"], meaningfulSols[i - 1], selectCamera["earthDate"]));
     }
 
     grabNextAvailablePhotos(i) {
@@ -226,28 +234,25 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
 function mapStateToProps(state) {
     const {selectedRover, getDataByRover, selectCamera} = state;
 
-    const {
-              isFetching,
-              lastUpdated,
-              data: roverData
-          } = getDataByRover[selectedRover] || {
-        isFetching: true,
-        data: []
-    }
-
-    const {
-              rover,
-              cameraIndex,
-              camera,
-              sol,
-          } = selectCamera || {}
+    // const {
+    //           isFetching,
+    //           lastUpdated,
+    //           data: roverData
+    //       } = getDataByRover[selectedRover] || {
+    //     isFetching: true,
+    //     data: []
+    // }
+    //
+    // const {
+    //           rover,
+    //           cameraIndex,
+    //           camera,
+    //           sol,
+    //       } = selectCamera;
 
     return {
         selectedRover,
-        roverData,
         getDataByRover,
-        isFetching,
-        lastUpdated,
         selectCamera
     };
 }

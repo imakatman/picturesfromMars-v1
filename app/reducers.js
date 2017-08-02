@@ -256,9 +256,9 @@ function selectCamera(state = {
 }
 
 const rootReducer = combineReducers({
-    getDataByRover,
-    selectedRover,
     getAllRoversData,
+    selectedRover,
+    getDataByRover,
     selectCamera,
     routing: routerReducer,
 });
