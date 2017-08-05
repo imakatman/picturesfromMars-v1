@@ -19,6 +19,8 @@ import {
     unselectedCamera
 } from '../../actions'
 import {Flex, Box} from 'grid-styled';
+import 'rc-calendar/assets/index.less';
+import MonthCalendar from 'rc-calendar/lib/MonthCalendar';
 import Gallery from 'components/Gallery';
 import RoverDiagram from 'components/RoverDiagram';
 import CameraNavigation from 'components/CameraNavigation';
@@ -207,13 +209,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                             />
                         </NavigationBox>
                         <NavigationBox>
-                            <RoverDiagram
-                                cameras={getDataByRover[selectedRover]["data"]["cameras"]}
-                                mountGallery={(i) =>
-                                    this.mountGallery(...[, i, , ,])}
-                                landing={false}
-                                unmountGallery={() => this.unmountGallery()}
-                            />
+                            <MonthCalendar/>
                         </NavigationBox>
                     </Flex>
                     <GalleryContain flex={2}>
