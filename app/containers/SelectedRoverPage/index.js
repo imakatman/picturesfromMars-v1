@@ -15,8 +15,8 @@ import {
     invalidateRover,
     fetchRoverImagesIfNeeded,
     fetchNextRoverImages,
-    cameraSelected,
-    cameraUnselected
+    selectedCamera,
+    unselectedCamera
 } from '../../actions'
 import {Flex, Box} from 'grid-styled';
 import Gallery from 'components/Gallery';
@@ -71,6 +71,8 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     componentWillMount() {
         const {dispatch, selectedRover, getDataByRover} = this.props;
 
+        console.log("component will mount");
+
         dispatch(selectRover(this.state.selectedRover));
         return dispatch(fetchRoverDataIfNeeded(this.state.selectedRover));
     }
@@ -78,7 +80,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     componentDidMount() {
         const {selectCamera} = this.props;
 
-        if (typeof selectCamera['selected'] === true || Object.keys(selectCamera).length !== 0) {
+        if (typeof selectCamera['selected'] === true) {
             return this.mountGallery(selectCamera.rover, selectCamera.cameraIndex, selectCamera.camera, selectCamera.sol);
         }
     }
@@ -132,7 +134,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
 
     unmountGallery() {
         const {dispatch} = this.props;
-        dispatch(cameraUnselected());
+        dispatch(unselectedCamera());
         return this.setState({
             galleryMounted: false,
         })
@@ -146,7 +148,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         const meaningfulSols = getDataByRover[selectedRover][selectCamera['camera']]["meaningfulSols"];
         const i = meaningfulSols.indexOf(selectCamera['sol']);
 
-        return dispatch(cameraSelected(selectedRover, selectCamera["cameraIndex"], selectCamera["camera"], selectCamera["cameraFullName"], meaningfulSols[i - 1], selectCamera["earthDate"]));
+        return dispatch(selectedCamera(selectedRover, selectCamera["cameraIndex"], selectCamera["camera"], selectCamera["cameraFullName"], meaningfulSols[i - 1], selectCamera["earthDate"]));
     }
 
     grabNextAvailablePhotos(i) {

@@ -275,7 +275,7 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
             if (json.photos.length > 0) {
                 const earthDate = json.photos[0].earth_date;
                 console.log("there are images!");
-                dispatch(cameraSelected(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
+                dispatch(selectedCamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
                 dispatch(addMeaningfulSol(rover, camera, sol));
                 return dispatch(receiveRoverImages(rover, json));
             } else {
@@ -332,11 +332,11 @@ export function fetchNextRoverImages(rover, sol, page, camera, cameraIndex, empt
 // ** ACTIONS FOR APP
 //
 
-export const CAMERA_SELECTED = "cameraSelected";
+export const SELECTED_CAMERA = "selectedCamera";
 
-export function cameraSelected(rover, cameraIndex, camera, cameraFullName, sol, earthDate) {
+export function selectedCamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate) {
     return {
-        type: CAMERA_SELECTED,
+        type: SELECTED_CAMERA,
         rover,
         cameraIndex,
         camera,
@@ -346,10 +346,10 @@ export function cameraSelected(rover, cameraIndex, camera, cameraFullName, sol, 
     }
 }
 
-export const CAMERA_UNSELECTED = "cameraUnselected";
+export const UNSELECTED_CAMERA = "unselectedCamera";
 
-export function cameraUnselected() {
+export function unselectedCamera() {
     return {
-        type: CAMERA_UNSELECTED
+        type: UNSELECTED_CAMERA
     }
 }

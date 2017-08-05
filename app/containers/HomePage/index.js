@@ -11,7 +11,8 @@ import {
     invalidateAllRovers,
     selectRover,
     fetchRoverDataIfNeeded,
-    invalidateRover
+    invalidateRover,
+    unselectedCamera
 } from '../../actions'
 import Picker from 'components/Picker'
 import InsideRoverContainer from 'components/InsideRoverContainer'
@@ -31,6 +32,7 @@ class RoversApp extends React.Component {
         const {dispatch} = this.props;
 
         dispatch(fetchAllRoverDataIfNeeded());
+        dispatch(unselectedCamera());
     }
 
     // handleClick(i) {

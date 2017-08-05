@@ -6,6 +6,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import {Link} from 'react-router';
 import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left';
 
 const Container = styled.div`
@@ -21,6 +22,12 @@ const CameraBtn = styled.a`
         color: rgba(231, 125, 17, 0.77);
         transition: all 0.2s ease;
     }
+`;
+
+const BackLink = styled(Link)`
+    text-decoration: none;
+    cursor:pointer;
+    color: #fff;
 `;
 
 const Back = styled.div`
@@ -45,10 +52,16 @@ class RoverDiagram extends React.Component { // eslint-disable-line react/prefer
                         {camera.full_name}
                     </CameraBtn>
                 )}
-                {!this.props.landing &&
-                <Back onClick={() => this.props.unmountGallery()}>
-                    <FaLongArrowLeft />
-                </Back> }
+                {this.props.landing ?(
+                    <Back>
+                        <BackLink to={"/"}>
+                            <FaLongArrowLeft />
+                        </BackLink>
+                    </Back> ) : (
+                    <Back onClick={() => this.props.unmountGallery()}>
+                        <FaLongArrowLeft />
+                    </Back>
+                )}
             </Container>
         );
     }

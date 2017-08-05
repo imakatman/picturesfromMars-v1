@@ -8,7 +8,7 @@ import {routerReducer} from 'react-router-redux'
 import {SELECT_ROVER, INVALIDATE_ROVER, REFRESH_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DATA} from './actions.js';
 import {INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA, REQUEST_ALL_ROVERS_DATA} from './actions.js';
 import {INVALIDATE_ROVER_IMAGES, RECEIVE_ROVER_IMAGES, REQUEST_ROVERS_IMAGES} from './actions.js';
-import {CAMERA_SELECTED, CAMERA_UNSELECTED} from './actions';
+import {SELECTED_CAMERA, UNSELECTED_CAMERA} from './actions';
 import {ADD_EMPTY_SOL, ADD_MEANINGFUL_SOL} from './actions';
 
 // *** Rover reducers
@@ -231,7 +231,7 @@ function selectCamera(state = {
     earthDate: undefined
 }, action) {
     switch (action.type) {
-        case CAMERA_SELECTED:
+        case SELECTED_CAMERA:
             return Object.assign({}, state, {
                 selected: true,
                 rover: action.rover,
@@ -241,7 +241,7 @@ function selectCamera(state = {
                 sol: action.sol,
                 earthDate: action.earthDate
             });
-        case CAMERA_UNSELECTED:
+        case UNSELECTED_CAMERA:
             return Object.assign({}, state, {
                 selected: false,
                 rover: undefined,
