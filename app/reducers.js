@@ -85,7 +85,8 @@ function receiveRoversImages(state = {
 function putRoverImageDataIntoSolObjects(state = {
     latestMeaningfulSol: "",
     meaningfulSols: [],
-    emptySols: []
+    emptySols: [],
+    isFetching: false,
 }, action) {
     switch (action.type) {
         case INVALIDATE_ROVER_IMAGES:
@@ -94,10 +95,12 @@ function putRoverImageDataIntoSolObjects(state = {
             })
         case REQUEST_ROVERS_IMAGES:
             return Object.assign({}, state, {
+                isFetching: true,
                 [action.sol]: receiveRoversImages(state[action.sol], action)
             })
         case RECEIVE_ROVER_IMAGES:
             return Object.assign({}, state, {
+                isFetching: false,
                 hasFetchedImages: true,
                 [action.sol]: receiveRoversImages(state[action.sol], action)
             })

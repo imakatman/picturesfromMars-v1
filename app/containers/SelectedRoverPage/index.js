@@ -23,8 +23,6 @@ import Gallery from 'components/Gallery';
 import RoverDiagram from 'components/RoverDiagram';
 import CameraNavigation from 'components/CameraNavigation';
 
-const Loading = styled.div`
-`;
 
 const IntroLayer = styled(Flex)`
     background-color: #000;
@@ -94,11 +92,14 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     }
 
     mountGallery(rover, cameraIndex, selectedCamera, cameraFullName, currentSol) {
+        console.log("mount gallery");
         const {dispatch, selectedRover, getDataByRover, isFetching} = this.props;
 
         if (!isFetching) {
 
             const _selectedCamera = getDataByRover[selectedRover].data.cameras[cameraIndex].name;
+
+            console.log(_selectedCamera);
 
             if (typeof getDataByRover[selectedRover][_selectedCamera] === 'undefined') {
 
@@ -165,7 +166,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         return (
             <div>
                 <Helmet
-                    title="SelectedRoverPage"
+                    title="Pictures From Mars"
                     meta={[
                         {name: 'description', content: 'Description of SelectedRoverPage'},
                     ]}
@@ -187,7 +188,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                         </IntroLayer>
                     ) : (
                         <IntroLayer>
-                            <Loading>Loading...</Loading>
+                            <p>Loading...</p>
                         </IntroLayer>
                     )
                 }
@@ -216,7 +217,8 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                         </NavigationBox>
                     </Flex>
                     <GalleryContain flex={2}>
-                        <Gallery cameraAbbrev={selectCamera["camera"]}
+                        <Gallery fetchingImagesState={getDataByRover[selectedRover][selectCamera['camera']]["isFetching"]}
+                            cameraAbbrev={selectCamera["camera"]}
                             cameraFullName={getDataByRover[selectedRover][selectCamera['camera']][selectCamera["sol"]]["cameraFullName"]}
                             sol={selectCamera["sol"]}
                             earthDate={selectCamera["earthDate"]}

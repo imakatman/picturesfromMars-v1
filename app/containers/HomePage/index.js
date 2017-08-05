@@ -4,8 +4,9 @@
  *
  */
 
-import React, {PropTypes} from 'react'
-import {connect} from 'react-redux'
+import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
+import Helmet from 'react-helmet';
 import {
     fetchAllRoverDataIfNeeded,
     invalidateAllRovers,
@@ -13,9 +14,8 @@ import {
     fetchRoverDataIfNeeded,
     invalidateRover,
     unselectedCamera
-} from '../../actions'
-import Picker from 'components/Picker'
-import InsideRoverContainer from 'components/InsideRoverContainer'
+} from '../../actions';
+import Picker from 'components/Picker';
 
 class RoversApp extends React.Component {
     constructor(props) {
@@ -47,6 +47,12 @@ class RoversApp extends React.Component {
 
         return (
             <div>
+                <Helmet
+                    title="Pictures From Mars"
+                    meta={[
+                        {name: 'description', content: ''},
+                    ]}
+                />
                 {getAllRoversData.AllRovers.simpleDataAboutAllRovers &&
                     <Picker
                         activeState={this.state.clickStateOfRovers}

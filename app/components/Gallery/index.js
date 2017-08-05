@@ -8,7 +8,6 @@ import React from 'react';
 import styled from 'styled-components';
 import {Flex, Box} from 'grid-styled';
 import Masonry from 'react-masonry-component';
-import {Overlay, TopLayer} from '../StyledComponents/Overlay';
 
 const GalleryContainer = styled.div`
     position:relative;
@@ -48,28 +47,35 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
     render() {
         console.log('GALLERY!');
         console.log(this.props.sol);
-        // console.log(this.props.earthDay);
         return (
             <GalleryContainer>
                 <CameraName>
                     {this.props.cameraFullName} {this.props.cameraAbbrev}
                 </CameraName>
-                <Date>
-                    Sol: {this.props.sol} || {this.props.earthDate}
-                </Date>
-                <Next>
-                    <span onClick={() => this.props.returnToPreviousDate()}>Previous Date</span>
-                    <span onClick={(i) => this.props.grabNextAvailablePhotos(i)}>Next Available Date with Photos</span>
-                </Next>
-                <Flex wrap={true}>
-                    <Masonry style={{width:"100%"}}>
-                        {this.props.photos.map(photo =>
-                            <Box w={1 / 4} m="10px 0" p="0 15px" key={photo.id}>
-                                <Img src={photo.img_src} alt={photo.roverName + ":" + photo.camera + "-" + photo.id} key={photo.id}/>
-                            </Box>
-                        )}
-                    </Masonry>
-                </Flex>
+                {this.props.fetchingImagesState ? (
+                        <p>Loading...</p>
+                    ) : (
+                        <div>
+                            <Date>
+                                Sol: {this.props.sol} || {this.props.earthDate}
+                            </Date>
+                            <Next>
+                                <span onClick={() => this.props.returnToPreviousDate()}>Previous Date</span>
+                                <span onClick={(i) => this.props.grabNextAvailablePhotos(i)}>Next Available Date with Photos</span>
+                            </Next>
+                            <Flex wrap={true}>
+                                <Masonry style={{width: "100%"}}>
+                                    {this.props.photos.map(photo =>
+                                        <Box w={1 / 4} m="10px 0" p="0 15px" key={photo.id}>
+                                            <Img src={photo.img_src}
+                                                alt={photo.roverName + ":" + photo.camera + "-" + photo.id}
+                                                key={photo.id} />
+                                        </Box>
+                                    )}
+                                </Masonry>
+                            </Flex>
+                        </div>
+                    )}
             </GalleryContainer>
         );
     }
