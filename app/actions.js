@@ -261,9 +261,8 @@ function findSolNotInEmptySols(emptySols, sol, dispatch, rover, camera){
     }
 }
 
-export function fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex, emptySols) {
+export function justFetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex, emptySols){
     return function (dispatch) {
-        console.log(emptySols);
         if(!emptySols){
             console.log("empty sols was not passed as a parameter");
             dispatch(requestRoversImages(rover, camera, sol));
@@ -271,6 +270,32 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
             console.log("empty sols was passed as a parameter");
             findSolNotInEmptySols(emptySols, sol, dispatch, rover, camera);
         }
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
+            if (json.photos.length > 0) {
+                const earthDate = json.photos[0].earth_date;
+                console.log("there are images!");
+                dispatch(selectedCamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
+                dispatch(addMeaningfulSol(rover, camera, sol));
+                return dispatch(receiveRoverImages(rover, json));
+            } else {
+                console.log("there arent images lets try again!");
+                dispatch(addEmptySol(rover, camera, sol));
+                return;
+            }
+        })
+    }
+}
+
+export function fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex, emptySols) {
+    return function (dispatch) {
+        // console.log(emptySols);
+        // if(!emptySols){
+        //     console.log("empty sols was not passed as a parameter");
+        //     dispatch(requestRoversImages(rover, camera, sol));
+        // } else {
+        //     console.log("empty sols was passed as a parameter");
+        //     findSolNotInEmptySols(emptySols, sol, dispatch, rover, camera);
+        // }
         return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
             if (json.photos.length > 0) {
                 const earthDate = json.photos[0].earth_date;

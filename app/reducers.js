@@ -224,7 +224,7 @@ function getAllRoversData(state = {AllRovers: {}}, action) {
     }
 }
 
-function selectCamera(state = {
+function selectedCamera(state = {
     selected: false,
     rover: undefined,
     cameraIndex: undefined,
@@ -262,7 +262,7 @@ const rootReducer = combineReducers({
     getAllRoversData,
     selectedRover,
     getDataByRover,
-    selectCamera,
+    selectedCamera,
     routing: routerReducer,
 });
 
