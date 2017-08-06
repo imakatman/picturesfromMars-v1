@@ -12,7 +12,7 @@ import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left';
 const Container = styled.div`
   background-color: rgba(0,0,0,0.9);
   width: 100%;
-    height: 100%;
+  height: 90%;
 `;
 
 const CameraBtn = styled.a`

@@ -50,13 +50,15 @@ const RoverName = styled.h1`
     position:absolute;
 `;
 
-const Back = styled.div`
+const SearchForm = styled.form`
     position: absolute;
-    bottom: 1%;
-    left: 1%;
+    bottom: 40px;
+`
+
+const Label = styled.label`
     color: #fff;
-    font-size: 36px;
-`;
+`
+
 
 class SelectedRoverPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
@@ -65,13 +67,14 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         this.state = {
             selectedRover: this.props.routeParams.rover,
             page: 1,
+            value: ""
         }
 
         this.mountGallery            = this.mountGallery.bind(this);
         this.unmountGallery          = this.unmountGallery.bind(this);
         this.returnToPreviousDate    = this.returnToPreviousDate.bind(this);
         this.grabNextAvailablePhotos = this.grabNextAvailablePhotos.bind(this);
-        this.calenderBasedPhotosFetcher = this.calenderBasedPhotosFetcher.bind(this);
+        this.datePicker = this.datePicker.bind(this);
     }
 
     componentWillMount() {
@@ -168,18 +171,15 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         return dispatch(fetchNextRoverImages(selectedRover, selectCamera['sol'] - 1, 1, selectCamera['camera'], i, _emptySols));
     }
 
-    calenderBasedPhotosFetcher(date){
-        const year = date.getFullYear();
-        const month = addZ(date.getMonth() + 1);
-        const day = addZ(date.getDate());
+    datePicker(e){
+        e.preventDefault();
 
-        const formattedDate = "'" + year + "-" + month + "-" + day + "'";
+        const {dispatch, getDataByRover, selectedRover, selectCamera} = this.props;
 
-        console.log(formattedDate);
+        const _emptySols = getDataByRover[selectedRover][selectCamera['camera']]["emptySols"];
 
-        function addZ(n) {
-            return n < 10 ? '0' + n : '' + n;
-        }
+        console.log(this.state.value);
+        return dispatch(fetchRoverImagesIfNeeded(selectedRover, this.state.value, 1, selectCamera['camera'], selectCamera['cameraIndex'], _emptySols));
     }
 
     render() {
@@ -235,6 +235,13 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                                    this.mountGallery(...[, i, , ,])}
                                landing={false}
                            />
+                            <SearchForm onSubmit={this.datePicker}>
+                                <Label htmlFor="sol">
+                                Sol:
+                                <input type="text" value={this.state.value} onChange={(e)=>this.setState({value:e.target.value})}/>
+                                </Label>
+                                <input type="submit" value="Submit"/>
+                            </SearchForm>
                         </NavigationBox>
                     </Flex>
                     <GalleryContain flex={2}>
@@ -250,7 +257,6 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                     </GalleryContain>
                 </ActiveCameraLayer>
                 }
-
             </div>
         );
     }
