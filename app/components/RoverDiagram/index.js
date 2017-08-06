@@ -52,16 +52,11 @@ class RoverDiagram extends React.Component { // eslint-disable-line react/prefer
                         {camera.full_name}
                     </CameraBtn>
                 )}
-                {this.props.landing ?(
-                    <Back>
-                        <BackLink to={"/"}>
-                            <FaLongArrowLeft />
-                        </BackLink>
-                    </Back> ) : (
-                    <Back onClick={() => this.props.unmountGallery()}>
+                <Back>
+                    <BackLink to={"/"}>
                         <FaLongArrowLeft />
-                    </Back>
-                )}
+                    </BackLink>
+                </Back>
             </Container>
         );
     }

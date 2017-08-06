@@ -21,12 +21,13 @@ import {
 import {Flex, Box} from 'grid-styled';
 import 'rc-calendar/assets/index.css';
 import Calendar from 'rc-calendar';
+import moment from 'moment';
+import zhcn from 'moment/locale/zh-cn';
+import engb from 'moment/locale/en-gb';
+import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left';
 import Gallery from 'components/Gallery';
 import RoverDiagram from 'components/RoverDiagram';
 import CameraNavigation from 'components/CameraNavigation';
-import moment from 'moment';
-import 'moment/locale/zh-cn';
-import 'moment/locale/en-gb';
 
 const IntroLayer = styled(Flex)`
     background-color: #000;
@@ -55,7 +56,15 @@ const RoverName = styled.h1`
     position:absolute;
 `;
 
-const format = 'YYYY-MM-DD';
+const Back = styled.div`
+    position: absolute;
+    bottom: 1%;
+    left: 1%;
+    color: #fff;
+    font-size: 36px;
+`;
+
+
 const cn = location.search.indexOf('cn') !== -1;
 
 const now = moment();
@@ -78,6 +87,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         this.unmountGallery          = this.unmountGallery.bind(this);
         this.returnToPreviousDate    = this.returnToPreviousDate.bind(this);
         this.grabNextAvailablePhotos = this.grabNextAvailablePhotos.bind(this);
+        this.calenderBasedPhotosFetcher = this.calenderBasedPhotosFetcher.bind(this);
     }
 
     componentWillMount() {
@@ -174,6 +184,20 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         return dispatch(fetchNextRoverImages(selectedRover, selectCamera['sol'] - 1, 1, selectCamera['camera'], i, _emptySols));
     }
 
+    calenderBasedPhotosFetcher(date){
+        const year = date.getFullYear();
+        const month = addZ(date.getMonth() + 1);
+        const day = addZ(date.getDate());
+
+        const formattedDate = "'" + year + "-" + month + "-" + day + "'";
+
+        console.log(formattedDate);
+
+        function addZ(n) {
+            return n < 10 ? '0' + n : '' + n;
+        }
+    }
+
     render() {
         const {selectedRover, getDataByRover, isFetching, selectCamera} = this.props;
 
@@ -222,9 +246,12 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                         </NavigationBox>
                         <NavigationBox>
                             <Calendar
-                                onChange={(e)=>console.log(console.log(e + " " + e.target))}
-                                onSelect={(e)=>console.log(console.log(e + " " + e.target))}
+                                locale={cn ? zhcn : engb}
+                                onSelect={(e)=>this.calenderBasedPhotosFetcher(e._d)}
                             />
+                            <Back onClick={() => this.unmountGallery()}>
+                                <FaLongArrowLeft />
+                            </Back>
                         </NavigationBox>
                     </Flex>
                     <GalleryContain flex={2}>
