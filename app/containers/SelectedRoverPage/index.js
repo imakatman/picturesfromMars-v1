@@ -19,7 +19,7 @@ import {
     unselectedCamera
 } from '../../actions'
 import {Flex, Box} from 'grid-styled';
-import 'rc-calendar/assets/index.less';
+import 'rc-calendar/assets/index.css';
 import MonthCalendar from 'rc-calendar/lib/MonthCalendar';
 import Gallery from 'components/Gallery';
 import RoverDiagram from 'components/RoverDiagram';
