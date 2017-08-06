@@ -20,11 +20,13 @@ import {
 } from '../../actions'
 import {Flex, Box} from 'grid-styled';
 import 'rc-calendar/assets/index.css';
-import MonthCalendar from 'rc-calendar/lib/MonthCalendar';
+import Calendar from 'rc-calendar';
 import Gallery from 'components/Gallery';
 import RoverDiagram from 'components/RoverDiagram';
 import CameraNavigation from 'components/CameraNavigation';
-
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+import 'moment/locale/en-gb';
 
 const IntroLayer = styled(Flex)`
     background-color: #000;
@@ -52,6 +54,16 @@ const RoverName = styled.h1`
     color: #fff;
     position:absolute;
 `;
+
+const format = 'YYYY-MM-DD';
+const cn = location.search.indexOf('cn') !== -1;
+
+const now = moment();
+if (cn) {
+    now.locale('zh-cn').utcOffset(8);
+} else {
+    now.locale('en-gb').utcOffset(0);
+}
 
 class SelectedRoverPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
@@ -209,7 +221,10 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                             />
                         </NavigationBox>
                         <NavigationBox>
-                            <MonthCalendar/>
+                            <Calendar
+                                onChange={(e)=>console.log(console.log(e + " " + e.target))}
+                                onSelect={(e)=>console.log(console.log(e + " " + e.target))}
+                            />
                         </NavigationBox>
                     </Flex>
                     <GalleryContain flex={2}>
