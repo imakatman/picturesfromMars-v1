@@ -19,12 +19,6 @@ import {
     unselectedCamera
 } from '../../actions'
 import {Flex, Box} from 'grid-styled';
-import 'rc-calendar/assets/index.css';
-import Calendar from 'rc-calendar';
-import moment from 'moment';
-import zhcn from 'moment/locale/zh-cn';
-import engb from 'moment/locale/en-gb';
-import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left';
 import Gallery from 'components/Gallery';
 import RoverDiagram from 'components/RoverDiagram';
 import CameraNavigation from 'components/CameraNavigation';
@@ -63,16 +57,6 @@ const Back = styled.div`
     color: #fff;
     font-size: 36px;
 `;
-
-
-const cn = location.search.indexOf('cn') !== -1;
-
-const now = moment();
-if (cn) {
-    now.locale('zh-cn').utcOffset(8);
-} else {
-    now.locale('en-gb').utcOffset(0);
-}
 
 class SelectedRoverPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
@@ -245,13 +229,12 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
                             />
                         </NavigationBox>
                         <NavigationBox>
-                            <Calendar
-                                locale={cn ? zhcn : engb}
-                                onSelect={(e)=>this.calenderBasedPhotosFetcher(e._d)}
-                            />
-                            <Back onClick={() => this.unmountGallery()}>
-                                <FaLongArrowLeft />
-                            </Back>
+                           <RoverDiagram
+                               cameras={getDataByRover[selectedRover]["data"]["cameras"]}
+                               mountGallery={(i) =>
+                                   this.mountGallery(...[, i, , ,])}
+                               landing={false}
+                           />
                         </NavigationBox>
                     </Flex>
                     <GalleryContain flex={2}>
