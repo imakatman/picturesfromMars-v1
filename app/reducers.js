@@ -22,6 +22,12 @@ function selectedRover(state = "", action) {
     }
 }
 
+function displayNotFoundData(state={displayNotFound: false}, action){
+    return Object.assign({}, state, {
+        displayNotFound: false
+    });
+}
+
 function addSolImageData(state, action){
     switch (action.type) {
         case ADD_MEANINGFUL_SOL:
@@ -84,6 +90,7 @@ function putRoverImageDataIntoSolObjects(state = {
     meaningfulSols: [],
     emptySols: [],
     isFetching: false,
+    hasFetchedImages: false,
 }, action) {
     switch (action.type) {
         case REQUEST_ROVERS_IMAGES:
@@ -106,6 +113,11 @@ function roversImages(state = {
     displayNotFound: false,
 }, action) {
     switch (action.type) {
+        case REQUEST_ROVERS_IMAGES:
+            return Object.assign({}, state, {
+                displayNotFound: false,
+                [action.camera]: putRoverImageDataIntoSolObjects(state[action.camera], action)
+            })
         case DISPLAY_NOT_FOUND:
             return Object.assign({}, state, {
                 displayNotFound: true
@@ -117,11 +129,6 @@ function roversImages(state = {
         case ADD_MEANINGFUL_SOL:
             return Object.assign({}, state, {
                 [action.camera]: addSolImageData(state[action.camera], action)
-            })
-        case REQUEST_ROVERS_IMAGES:
-            return Object.assign({}, state, {
-                displayNotFound: false,
-                [action.camera]: putRoverImageDataIntoSolObjects(state[action.camera], action)
             })
         case RECEIVE_ROVER_IMAGES:
             return Object.assign({}, state, {
@@ -164,11 +171,14 @@ function roversData(state = {
 
 function getDataByRover(state = {}, action) {
     switch (action.type) {
-        case INVALIDATE_ROVER:
         case RECEIVE_ROVERS_DATA:
         case REQUEST_ROVERS_DATA:
             return Object.assign({}, state, {
                 [action.rover]: roversData(state[action.rover], action)
+            })
+        case DISPLAY_NOT_FOUND:
+            return Object.assign({}, state, {
+                [action.rover]: roversImages(state[action.rover], action)
             })
         case ADD_EMPTY_SOL:
             return Object.assign({}, state, {
@@ -178,6 +188,7 @@ function getDataByRover(state = {}, action) {
             return Object.assign({}, state, {
                 [action.rover]: roversImages(state[action.rover], action)
             })
+        case RECEIVE_ROVER_IMAGES:
         case REQUEST_ROVERS_IMAGES:
             return Object.assign({}, state, {
                 [action.rover]: roversImages(state[action.rover], action)

@@ -203,10 +203,10 @@ function addMeaningfulSol(rover, camera, sol) {
 
 export const DISPLAY_NOT_FOUND = "displayNotFound";
 
-function displayNotFound(){
+function displayNotFound(rover){
     return {
         type: DISPLAY_NOT_FOUND,
-        true
+        rover
     }
 }
 
@@ -273,7 +273,7 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
         return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
             if (json.photos.length > 0) {
                 const earthDate = json.photos[0].earth_date;
-                console.log("there are images!");
+                console.log(cameraIndex + " " +  cameraFullName);
                 dispatch(selectedCamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
                 dispatch(addMeaningfulSol(rover, camera, sol));
                 return dispatch(receiveRoverImages(rover, json));
@@ -294,7 +294,10 @@ function shouldFetchRoverImages(state, rover, camera, sol) {
         console.log("no specific sol data");
         return true
     } else if (state.getDataByRover[rover][camera]['emptySols'].includes(sol)){
-        return false;
+        return (dispatch) => {
+            dispatch(displayNotFound(rover));
+            return false;
+        }
     } else if (state.getDataByRover[rover][camera][sol]["isFetching"]) {
         return false
     } else {
@@ -335,7 +338,7 @@ export function fetchRoverImagesIfNeededOnce(rover, sol, page, camera, cameraFul
             return dispatch(fetchRoverImagesOnce(rover, sol, page, camera, cameraFullName, cameraIndex))
         } else {
             // Let the calling code know there's nothing to wait for.
-            dispatch(displayNotFound());
+            dispatch(displayNotFound(rover));
             return Promise.resolve()
         }
     }
