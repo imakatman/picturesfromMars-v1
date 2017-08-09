@@ -63,13 +63,17 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
                             </Next>
                             <Flex wrap={true}>
                                 <Masonry style={{width: "100%"}}>
-                                    {this.props.photos.map(photo =>
-                                        <Box w={1 / 4} m="10px 0" p="0 15px" key={photo.id}>
-                                            <Img src={photo.img_src}
-                                                alt={photo.roverName + ":" + photo.camera + "-" + photo.id}
-                                                key={photo.id} />
-                                        </Box>
-                                    )}
+                                    {this.props.photos ? (
+                                            this.props.photos.map(photo =>
+                                                <Box w={1 / 4} m="10px 0" p="0 15px" key={photo.id}>
+                                                    <Img src={photo.img_src}
+                                                        alt={photo.roverName + ":" + photo.camera + "-" + photo.id}
+                                                        key={photo.id} />
+                                                </Box> )
+                                        ) : (
+                                            <p style={{color:'#fff'}}>No Photos Available</p>
+                                        )
+                                    }
                                 </Masonry>
                             </Flex>
                         </div>

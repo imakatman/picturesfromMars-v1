@@ -22,12 +22,6 @@ function selectedRover(state = "", action) {
     }
 }
 
-function displayNotFoundData(state={displayNotFound: false}, action){
-    return Object.assign({}, state, {
-        displayNotFound: false
-    });
-}
-
 function addSolImageData(state, action){
     switch (action.type) {
         case ADD_MEANINGFUL_SOL:
@@ -42,7 +36,10 @@ function addSolImageData(state, action){
         case ADD_EMPTY_SOL:
             if(!state.emptySols.includes(action.sol)){
                 return Object.assign({}, state, {
-                    emptySols: state.emptySols.concat(action.sol)
+                    emptySols: state.emptySols.concat(action.sol),
+                    [action.sol]: {
+                        isFetching: false
+                    }
                 });
             } else {
                 return state;

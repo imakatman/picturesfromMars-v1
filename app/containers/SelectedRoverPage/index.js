@@ -166,7 +166,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     grabNextAvailablePhotos(i) {
         const {dispatch, selectedRover, selectedCamera} = this.props;
 
-        return dispatch(fetchNextRoverImages(selectedRover, selectedCamera['sol'] - 1, 1, selectedCamera['camera'], i));
+        return dispatch(fetchNextRoverImages(selectedRover, selectedCamera['sol'] - 1, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], i));
     }
 
     datePicker(e){
@@ -175,7 +175,7 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
         const {dispatch, selectedRover, selectedCamera} = this.props;
 
         console.log(this.state.value);
-        return dispatch(fetchRoverImagesIfNeededOnce(selectedRover, this.state.value, 1, selectedCamera['camera'], selectedCamera['cameraIndex']));
+        return dispatch(fetchRoverImagesIfNeededOnce(selectedRover, this.state.value, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']));
     }
 
     render() {
