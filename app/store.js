@@ -13,12 +13,12 @@ export default function configureStore() {
     return createStore(
         rootReducer,
         compose(
+            autoRehydrate(),
             applyMiddleware(
                 thunkMiddleware,
                 routerMiddleware(history),
                 loggerMiddleware
-            ),
-            autoRehydrate()
+            )
         )
     )
 }

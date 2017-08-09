@@ -1,24 +1,124 @@
 /*
- * HomePage
  *
- * This is the first thing users see of our App, at the '/' route
+ * RoversApp
  *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
  */
 
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
+import Helmet from 'react-helmet';
+import {
+    fetchAllRoverDataIfNeeded,
+    invalidateAllRovers,
+    selectRover,
+    fetchRoverDataIfNeeded,
+    invalidateRover,
+    unselectedCamera
+} from '../../actions';
+import Picker from 'components/Picker';
 
-export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  render() {
-    return (
-      <h1>
-        <FormattedMessage {...messages.header} />
-      </h1>
-    );
-  }
+class RoversApp extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            clickStateOfRovers: Array(3).fill(false)
+        }
+
+        // this.handleClick = this.handleClick.bind(this);
+    }
+
+    componentWillMount() {
+        const {dispatch} = this.props;
+
+        dispatch(fetchAllRoverDataIfNeeded());
+        dispatch(unselectedCamera());
+    }
+
+    // handleClick(i) {
+    //     const {dispatch, getAllRoversData} = this.props;
+    //     const selectedRover = getAllRoversData.AllRovers.simpleDataAboutAllRovers[i].name;
+    //
+    //     dispatch(selectRover(selectedRover));
+    // }
+
+    render() {
+        const {dispatch, getAllRoversData, isFetchingAll} = this.props;
+
+        return (
+            <div>
+                <Helmet
+                    title="Pictures From Mars"
+                    meta={[
+                        {name: 'description', content: ''},
+                    ]}
+                />
+                {getAllRoversData.AllRovers.simpleDataAboutAllRovers &&
+                    <Picker
+                        activeState={this.state.clickStateOfRovers}
+                        values={getAllRoversData.AllRovers.simpleDataAboutAllRovers} />
+                }
+            </div>
+        )
+    }
 }
+
+function mapStateToProps(state) {
+
+    const {selectedRover, getDataByRover, getAllRoversData, route} = state;
+
+    const {
+              isFetching,
+              lastUpdated,
+              data: roverData
+          } = getDataByRover[selectedRover] || {
+        isFetching: true,
+        data: []
+    }
+
+    const {
+              isFetchingAll,
+              lastUpdatedAll,
+              simpleDataAboutAllRovers: allRoversData
+          } = getAllRoversData || {
+        isFetchingAll: true,
+        simpleDataAboutAllRovers: []
+    }
+
+    return {
+        selectedRover,
+        roverData,
+        getAllRoversData,
+        isFetching,
+        isFetchingAll,
+        lastUpdated,
+        lastUpdatedAll
+    };
+}
+
+RoversApp.propTypes = {
+    // routeParams: PropTypes.objectOf(PropTypes.string).isRequired,
+    // selectedRover: PropTypes.string.isRequired,
+    // getDataByRover: PropTypes.objectOf(PropTypes.shape({
+    //         didInvalidate: PropTypes.bool,
+    //         isFetching: PropTypes.bool,
+    //         lastUpdated: PropTypes.number,
+    //         name: PropTypes.string,
+    //         data: PropTypes.shape({
+    //             cameras: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
+    //             id: PropTypes.number,
+    //             landing_date: PropTypes.string,
+    //             launch_date: PropTypes.string,
+    //             max_date: PropTypes.string,
+    //             max_sol: PropTypes.number,
+    //             name: PropTypes.string,
+    //             status: PropTypes.string,
+    //             total_photos: PropTypes.number,
+    //         })
+    //     })
+    // ).isRequired,
+    dispatch: PropTypes.func.isRequired,
+};
+
+export default connect(mapStateToProps)(RoversApp);
+
