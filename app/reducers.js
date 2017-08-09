@@ -7,9 +7,10 @@ import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux'
 import {SELECT_ROVER, INVALIDATE_ROVER, REFRESH_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DATA} from './actions.js';
 import {INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA, REQUEST_ALL_ROVERS_DATA} from './actions.js';
-import {INVALIDATE_ROVER_IMAGES, RECEIVE_ROVER_IMAGES, REQUEST_ROVERS_IMAGES} from './actions.js';
-import {CAMERA_SELECTED, CAMERA_UNSELECTED} from './actions';
-import {ADD_EMPTY_SOL} from './actions';
+import {RECEIVE_ROVER_IMAGES, REQUEST_ROVERS_IMAGES} from './actions.js';
+import {SELECTED_CAMERA, UNSELECTED_CAMERA} from './actions';
+import {ADD_EMPTY_SOL, ADD_MEANINGFUL_SOL} from './actions';
+import {DISPLAY_NOT_FOUND} from './actions';
 
 // *** Rover reducers
 function selectedRover(state = "", action) {
@@ -21,70 +22,114 @@ function selectedRover(state = "", action) {
     }
 }
 
-const emptySolsArrays = [];
-
-function addEmptySol(state = {emptySols: []}, action){
-    emptySolsArrays.push(action.sol);
+function addSolImageData(state, action){
     switch (action.type) {
+        case ADD_MEANINGFUL_SOL:
+            if(!state.meaningfulSols.includes(action.sol)){
+                return Object.assign({}, state, {
+                    latestMeaningfulSol: action.sol,
+                    meaningfulSols: state.meaningfulSols.concat(action.sol)
+                });
+            } else {
+                return state;
+            }
         case ADD_EMPTY_SOL:
-            return Object.assign({}, state, {
-                emptySols: emptySolsArrays
-            });
+            if(!state.emptySols.includes(action.sol)){
+                return Object.assign({}, state, {
+                    emptySols: state.emptySols.concat(action.sol),
+                    [action.sol]: {
+                        isFetching: false
+                    }
+                });
+            } else {
+                return state;
+            }
         default:
             return state
     }
 }
 
-function receiveRoversImages(state = {}, action) {
+function receiveRoversImages(state = {
+    didInvalidate: false,
+    isFetching: false,
+    hasFetchedImages: false,
+    sol: "",
+    earthDate: "",
+    camera: "",
+    cameraFullName: "",
+    photoData: [],
+}, action) {
     switch (action.type) {
-        case INVALIDATE_ROVER_IMAGES:
-            return Object.assign({}, state, {
-                [action.sol]: {
-                    didInvalidate: true,
-                }
-            })
         case REQUEST_ROVERS_IMAGES:
             return Object.assign({}, state, {
-                [action.sol]: {
-                    isFetching: true,
-                    didInvalidate: false,
-                    sol: action.sol,
-                }
+                isFetching: true,
+                didInvalidate: false,
+                sol: action.sol,
             })
         case RECEIVE_ROVER_IMAGES:
             return Object.assign({}, state, {
-                [action.sol]: {
-                    isFetching: false,
-                    didInvalidate: false,
-                    sol: action.sol,
-                    earthDate: action.earthDate,
-                    camera: action.camera,
-                    cameraFullName: action.cameraFullName,
-                    photoData: action.photos,
-                }
+                hasFetchedImages: true,
+                isFetching: false,
+                didInvalidate: false,
+                sol: action.sol,
+                earthDate: action.earthDate,
+                camera: action.camera,
+                cameraFullName: action.cameraFullName,
+                photoData: action.photos,
             })
         default:
             return state
     }
 }
 
-function roversImages(state = {}, action) {
+function putRoverImageDataIntoSolObjects(state = {
+    latestMeaningfulSol: "",
+    meaningfulSols: [],
+    emptySols: [],
+    isFetching: false,
+    hasFetchedImages: false,
+}, action) {
     switch (action.type) {
-        case INVALIDATE_ROVER_IMAGES:
-            return Object.assign({}, state, {
-                [action.camera]: receiveRoversImages(state[action.camera], action)
-            })
         case REQUEST_ROVERS_IMAGES:
             return Object.assign({}, state, {
-                [action.camera]: receiveRoversImages(state[action.camera], action)
-            })
-        case ADD_EMPTY_SOL:
-            return Object.assign({}, state, {
-                [action.camera]: addEmptySol(state[action.camera], action)
+                isFetching: true,
+                [action.sol]: receiveRoversImages(state[action.sol], action)
             })
         case RECEIVE_ROVER_IMAGES:
             return Object.assign({}, state, {
-                [action.camera]: receiveRoversImages(state[action.camera], action)
+                isFetching: false,
+                hasFetchedImages: true,
+                [action.sol]: receiveRoversImages(state[action.sol], action)
+            })
+        default:
+            return state
+    }
+}
+
+function roversImages(state = {
+    displayNotFound: false,
+}, action) {
+    switch (action.type) {
+        case REQUEST_ROVERS_IMAGES:
+            return Object.assign({}, state, {
+                displayNotFound: false,
+                [action.camera]: putRoverImageDataIntoSolObjects(state[action.camera], action)
+            })
+        case DISPLAY_NOT_FOUND:
+            return Object.assign({}, state, {
+                displayNotFound: true
+            })
+        case ADD_EMPTY_SOL:
+            return Object.assign({}, state, {
+                [action.camera]: addSolImageData(state[action.camera], action),
+            })
+        case ADD_MEANINGFUL_SOL:
+            return Object.assign({}, state, {
+                [action.camera]: addSolImageData(state[action.camera], action)
+            })
+        case RECEIVE_ROVER_IMAGES:
+            return Object.assign({}, state, {
+                [action.camera]: putRoverImageDataIntoSolObjects(state[action.camera], action)
             })
         default:
             return state
@@ -114,7 +159,7 @@ function roversData(state = {
                 didInvalidate: false,
                 name: action.name,
                 data: action.data,
-                lastUpdated: action.receivedAt
+                lastUpdated: action.receivedAt,
             })
         default:
             return state
@@ -123,18 +168,24 @@ function roversData(state = {
 
 function getDataByRover(state = {}, action) {
     switch (action.type) {
-        case INVALIDATE_ROVER:
         case RECEIVE_ROVERS_DATA:
         case REQUEST_ROVERS_DATA:
             return Object.assign({}, state, {
                 [action.rover]: roversData(state[action.rover], action)
             })
-        case INVALIDATE_ROVER_IMAGES:
-        case RECEIVE_ROVER_IMAGES:
+        case DISPLAY_NOT_FOUND:
+            return Object.assign({}, state, {
+                [action.rover]: roversImages(state[action.rover], action)
+            })
         case ADD_EMPTY_SOL:
             return Object.assign({}, state, {
                 [action.rover]: roversImages(state[action.rover], action)
             })
+        case ADD_MEANINGFUL_SOL:
+            return Object.assign({}, state, {
+                [action.rover]: roversImages(state[action.rover], action)
+            })
+        case RECEIVE_ROVER_IMAGES:
         case REQUEST_ROVERS_IMAGES:
             return Object.assign({}, state, {
                 [action.rover]: roversImages(state[action.rover], action)
@@ -174,9 +225,17 @@ function getAllRoversData(state = {AllRovers: {}}, action) {
     }
 }
 
-function selectCamera(state = {}, action) {
+function selectedCamera(state = {
+    selected: false,
+    rover: undefined,
+    cameraIndex: undefined,
+    camera: undefined,
+    cameraFullName: undefined,
+    sol: undefined,
+    earthDate: undefined
+}, action) {
     switch (action.type) {
-        case CAMERA_SELECTED:
+        case SELECTED_CAMERA:
             return Object.assign({}, state, {
                 selected: true,
                 rover: action.rover,
@@ -184,8 +243,9 @@ function selectCamera(state = {}, action) {
                 camera: action.camera,
                 cameraFullName: action.cameraFullName,
                 sol: action.sol,
+                earthDate: action.earthDate
             });
-        case CAMERA_UNSELECTED:
+        case UNSELECTED_CAMERA:
             return Object.assign({}, state, {
                 selected: false,
                 rover: undefined,
@@ -200,10 +260,10 @@ function selectCamera(state = {}, action) {
 }
 
 const rootReducer = combineReducers({
-    getDataByRover,
-    selectedRover,
     getAllRoversData,
-    selectCamera,
+    selectedRover,
+    getDataByRover,
+    selectedCamera,
     routing: routerReducer,
 });
 

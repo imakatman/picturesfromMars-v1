@@ -30,7 +30,6 @@ function SelectARover(props) {
                 style={{backgroundImage: "url(" + props.portrait + ")"}}>
                 <TopLayer>
                     <Heading color={"white"}>
-
                         {props.name}
                     </Heading>
                     <SubHeading color={"white"}>

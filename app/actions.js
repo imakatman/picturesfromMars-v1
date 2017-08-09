@@ -137,7 +137,8 @@ function receiveRoversData(rover, json) {
 export function fetchRoversData(rover) {
     return function (dispatch) {
         dispatch(requestRoversData(rover))
-        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json =>
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`)
+        .then(response => response.json()).then(json =>
             dispatch(receiveRoversData(rover, json))
         )
     }
@@ -146,7 +147,8 @@ export function fetchRoversData(rover) {
 function shouldFetchRoverData(state, rover) {
     // const data = state.getDataByRover;
     const data = state.getDataByRover[rover];
-    if (Object.keys(data["data"]).length === 0) {
+    // if (Object.keys(data["data"]).length === 0) {
+    if (typeof data === 'undefined') {
         console.log("no data");
         return true
     } else if (data.isFetching) {
@@ -161,8 +163,7 @@ export function fetchRoverDataIfNeeded(rover) {
     // which lets you choose what to dispatch next.
 
     // This is useful for avoiding a network request if
-    // a cached value is already available.
-    console.log("fetth rover data");
+    // a cached value is already available.console.log("fetth rover data");
     return (dispatch, getState) => {
         if (shouldFetchRoverData(getState(), rover)) {
             // Dispatch a thunk from thunk!
@@ -178,15 +179,36 @@ export function fetchRoverDataIfNeeded(rover) {
 // ** ACTIONS FOR ROVER PICTURES
 //
 
-export const INVALIDATE_ROVER_IMAGES = "invalidateAllRoverImages";
+export const ADD_EMPTY_SOL = "addEmptySol";
 
-export function invalidateRoverImages(rover, camera) {
+function addEmptySol(rover, camera, sol) {
     return {
-        type: INVALIDATE_ROVER_IMAGES,
+        type: ADD_EMPTY_SOL,
         rover,
         camera,
+        sol,
     }
-};
+}
+
+export const ADD_MEANINGFUL_SOL = "addMeaningfulSol";
+
+function addMeaningfulSol(rover, camera, sol) {
+    return {
+        type: ADD_MEANINGFUL_SOL,
+        rover,
+        camera,
+        sol,
+    }
+}
+
+export const DISPLAY_NOT_FOUND = "displayNotFound";
+
+function displayNotFound(rover){
+    return {
+        type: DISPLAY_NOT_FOUND,
+        rover
+    }
+}
 
 export const REFRESH_ROVER_IMAGES = "refreshRoverImages";
 
@@ -210,17 +232,6 @@ function requestRoversImages(rover, camera, sol) {
     }
 }
 
-export const ADD_EMPTY_SOL = "addEmptySol";
-
-function addEmptySol(rover, camera, sol) {
-    return {
-        type: ADD_EMPTY_SOL,
-        rover,
-        camera,
-        sol,
-    }
-}
-
 export const RECEIVE_ROVER_IMAGES = "receiveRoverImages";
 
 function receiveRoverImages(rover, json) {
@@ -234,17 +245,39 @@ function receiveRoverImages(rover, json) {
         camera: json.photos[0].camera.name,
         cameraFullName: json.photos[0].camera.full_name,
         photos: json.photos,
-        sol: json.photos[0].sol
+        sol: json.photos[0].sol,
     }
 }
 
-export function fetchRoverImages(rover, sol, page, camera, cameraIndex) {
-    return function (dispatch) {
-        dispatch(requestRoversImages(rover, camera, sol))
+function findSolNotInEmptySols(state, rover, camera, sol){
+    if(state.getDataByRover[rover][camera]["emptySols"].includes(sol)){
+        console.log("the provided sol" + sol + " is in the empty sols array");
+        return findSolNotInEmptySols(state, rover, camera, sol - 1);
+    } else {
+        console.log("the provided sol is not in the empty sols array");
+        return function(dispatch){
+            dispatch(requestRoversImages(rover, camera, sol));
+        }
+    }
+}
+
+export function fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex) {
+    return function (dispatch, getState) {
+        // console.log(getState.getDataByRover[rover][camera]["emptySols"]);
+        console.log(getState());
+        if(typeof getState().getDataByRover[rover][camera] !== 'undefined' && getState().getDataByRover[rover][camera]["emptySols"].includes(sol)){
+            console.log("there is an empty sols array for this camera and the provided sol is in it");
+            findSolNotInEmptySols(getState(), rover, camera, sol - 1);
+        } else {
+            console.log("there isnt an empty sols array for this camera");
+            dispatch(requestRoversImages(rover, camera, sol));
+        }
         return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
             if (json.photos.length > 0) {
-                console.log("there are images!");
-                dispatch(cameraSelected(rover, cameraIndex, camera, json.photos[0].camera.full_name, sol));
+                const earthDate = json.photos[0].earth_date;
+                console.log(cameraIndex + " " +  cameraFullName);
+                dispatch(selectedCamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
+                dispatch(addMeaningfulSol(rover, camera, sol));
                 return dispatch(receiveRoverImages(rover, json));
             } else {
                 console.log("there arent images lets try again!");
@@ -255,28 +288,30 @@ export function fetchRoverImages(rover, sol, page, camera, cameraIndex) {
     }
 }
 
-function shouldFetchRoverImages(state, rover, camera) {
-    const data = state.getDataByRover[rover][camera];
-
-    if (!data) {
+function shouldFetchRoverImages(state, rover, camera, sol) {
+    if (typeof state.getDataByRover[rover][camera] == null || typeof state.getDataByRover[rover][camera] == 'undefined') {
+        console.log("no camera data");
         return true
-    } else if (data.isFetching) {
-        return false
+    } else if (typeof state.getDataByRover[rover][camera][sol] == 'undefined') {
+        console.log("no specific sol data");
+        return true
     } else {
-        return data.didInvalidate
+        return false
     }
 }
 
-export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraIndex) {
+export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraFullName, cameraIndex) {
     // Note that the function also receives getState()
     // which lets you choose what to dispatch next.
 
     // This is useful for avoiding a network request if
     // a cached value is already available.
+    console.log("hi");
     return (dispatch, getState) => {
-        if (shouldFetchRoverImages(getState(), rover, camera)) {
+        if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
             // Dispatch a thunk from thunk!
-            return dispatch(fetchRoverImages(rover, sol, page, camera, cameraIndex))
+            console.log("should fetch rover images");
+            return dispatch(fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex))
         } else {
             // Let the calling code know there's nothing to wait for.
             return Promise.resolve()
@@ -284,23 +319,51 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraIndex) 
     }
 }
 
-export function fetchNextRoverImages(rover, sol, page, camera, cameraIndex) {
+export function fetchRoverImagesOnce(rover, sol, page, camera, cameraFullName, cameraIndex) {
+    return function (dispatch) {
+        dispatch(requestRoversImages(rover, camera, sol));
+        return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
+            if (json.photos.length > 0) {
+                const earthDate = json.photos[0].earth_date;
+                console.log("there are images!");
+                dispatch(selectedCamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
+                dispatch(addMeaningfulSol(rover, camera, sol));
+                return dispatch(receiveRoverImages(rover, json));
+            } else {
+                console.log("there arent images in this sol!");
+                dispatch(displayNotFound(rover));
+                return dispatch(selectedCamera(...[rover, cameraIndex, camera, cameraFullName, sol, ]));
+            }
+        })
+    }
+}
+
+export function fetchRoverImagesIfNeededOnce(rover, sol, page, camera, cameraFullName, cameraIndex) {
     // Note that the function also receives getState()
     // which lets you choose what to dispatch next.
 
     // This is useful for avoiding a network request if
     // a cached value is already available.
-    // return (dispatch, getState) => {
-    //     if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
-    //         // Dispatch a thunk from thunk!
+    console.log("fetching rover images if needed");
     return (dispatch, getState) => {
-        return dispatch(fetchRoverImages(rover, sol, page, camera, cameraIndex));
+        if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
+            // Dispatch a thunk from thunk!
+            console.log("should fetch rover images");
+            return dispatch(fetchRoverImagesOnce(rover, sol, page, camera, cameraFullName, cameraIndex))
+        } else {
+            // Let the calling code know there's nothing to wait for.
+            dispatch(displayNotFound(rover));
+            dispatch(selectedCamera(...[rover, cameraIndex, camera, cameraFullName, sol, ]));
+            return Promise.resolve()
+        }
     }
-    //     } else {
-    //         // Let the calling code know there's nothing to wait for.
-    //         return Promise.resolve()
-    //     }
-    // }
+}
+export function fetchNextRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex) {
+    // Note that the function also receives getState()
+    // which lets you choose what to dispatch next.
+    return (dispatch) => {
+        return dispatch(fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex));
+    }
 }
 
 // LOOK AT http://redux.js.org/docs/introduction/Examples.html#real-world for ERROR MESSAGE HANDLING
@@ -309,23 +372,24 @@ export function fetchNextRoverImages(rover, sol, page, camera, cameraIndex) {
 // ** ACTIONS FOR APP
 //
 
-export const CAMERA_SELECTED = "cameraSelected";
+export const SELECTED_CAMERA = "selectedCamera";
 
-export function cameraSelected(rover, cameraIndex, camera, cameraFullName, sol) {
+export function selectedCamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate) {
     return {
-        type: CAMERA_SELECTED,
+        type: SELECTED_CAMERA,
         rover,
         cameraIndex,
         camera,
         cameraFullName,
         sol,
+        earthDate
     }
 }
 
-export const CAMERA_UNSELECTED = "cameraUnselected";
+export const UNSELECTED_CAMERA = "unselectedCamera";
 
-export function cameraUnselected() {
+export function unselectedCamera() {
     return {
-        type: CAMERA_UNSELECTED
+        type: UNSELECTED_CAMERA
     }
 }
