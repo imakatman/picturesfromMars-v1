@@ -9,7 +9,7 @@ export const INVALIDATE_ALL_ROVERS = "invalidateAllRovers";
 export function invalidateAllRovers(rovers) {
     return {
         type: INVALIDATE_ALL_ROVERS,
-        rovers
+        rovers,
     }
 };
 
@@ -18,7 +18,7 @@ export const REFRESH_ROVERS = "refreshRovers";
 function refreshRover(rovers) {
     return {
         type: REFRESH_ROVERS,
-        rovers
+        rovers,
     }
 };
 
@@ -27,7 +27,7 @@ export const REQUEST_ALL_ROVERS_DATA = "requestAllRoversData";
 function requestAllRoversData(rovers) {
     return {
         type: REQUEST_ALL_ROVERS_DATA,
-        rovers
+        rovers,
     }
 };
 
@@ -36,7 +36,7 @@ export const RECEIVE_ALL_ROVERS_DATA = "receiveAllRoversData";
 function receiveAllRoversData(json) {
     return {
         type: RECEIVE_ALL_ROVERS_DATA,
-        simpleDataAboutAllRovers: json.rovers
+        simpleDataAboutAllRovers: json.rovers,
     }
 }
 
