@@ -251,8 +251,8 @@ function receiveRoverImages(rover, json) {
 
 function findSolNotInEmptySols(state, rover, camera, sol){
     if(state.getDataByRover[rover][camera]["emptySols"].includes(sol)){
-        console.log("the provided sol + 1 is in the empty sols array");
-        return findSolNotInEmptySols(state, sol + 1);
+        console.log("the provided sol" + sol + " is in the empty sols array");
+        return findSolNotInEmptySols(state, rover, camera, sol - 1);
     } else {
         console.log("the provided sol is not in the empty sols array");
         return function(dispatch){
@@ -267,7 +267,7 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
         console.log(getState());
         if(typeof getState().getDataByRover[rover][camera] !== 'undefined' && getState().getDataByRover[rover][camera]["emptySols"].includes(sol)){
             console.log("there is an empty sols array for this camera and the provided sol is in it");
-            findSolNotInEmptySols(getState(), rover, camera, sol + 1);
+            findSolNotInEmptySols(getState(), rover, camera, sol - 1);
         } else {
             console.log("there isnt an empty sols array for this camera");
             dispatch(requestRoversImages(rover, camera, sol));
