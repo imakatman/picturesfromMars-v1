@@ -53,11 +53,11 @@ function shouldFetchAllRoverData(state) {
     // const data = state.getDataByRover;
     const data = state.getAllRoversData.AllRovers.simpleDataAboutAllRovers;
     if (!data) {
-        return true
+        return true;
     } else if (data.isFetching) {
-        return false
+        return false;
     } else {
-        return data.didInvalidate
+        return data.didInvalidate;
     }
 }
 
