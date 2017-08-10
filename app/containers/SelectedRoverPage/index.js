@@ -8,21 +8,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
-import {connect} from 'react-redux';
-import {
-    selectRover,
-    fetchRoverDataIfNeeded,
-    invalidateRover,
-    fetchRoverImagesIfNeeded,
-    fetchRoverImagesIfNeededOnce,
-    fetchNextRoverImages,
-    selectedCamera,
-    unselectedCamera
-} from '../../actions'
-import {Flex, Box} from 'grid-styled';
+import { connect } from 'react-redux';
+import { Flex, Box } from 'grid-styled';
+
 import Gallery from 'components/Gallery';
 import RoverDiagram from 'components/RoverDiagram';
 import CameraNavigation from 'components/CameraNavigation';
+
+import {
+    selectRover,
+    fetchRoverDataIfNeeded,
+    fetchRoverImagesIfNeeded,
+    fetchRoverImagesIfNeededOnce,
+    fetchNextRoverImages,
+    unselectedCamera,
+} from './actions';
 
 const IntroLayer = styled(Flex)`
     background-color: #000;
@@ -79,9 +79,9 @@ class SelectedRoverPage extends React.Component { // eslint-disable-line react/p
     }
 
     componentWillMount() {
-        const {dispatch, selectedRover, getDataByRover} = this.props;
+        const { dispatch } = this.props;
 
-        console.log("component will mount");
+        console.log('component will mount');
 
         dispatch(selectRover(this.state.selectedRover));
         return dispatch(fetchRoverDataIfNeeded(this.state.selectedRover));

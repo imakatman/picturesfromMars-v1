@@ -3,24 +3,13 @@
  * If we were to do this in store.js, reducers wouldn't be hot reloadable.
  */
 
-import {combineReducers} from 'redux';
-import {routerReducer} from 'react-router-redux'
-import {SELECT_ROVER, INVALIDATE_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DATA,
-        INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA,
-        RECEIVE_ROVER_IMAGES, REQUEST_ROVERS_IMAGES,
-        SELECTED_CAMERA, UNSELECTED_CAMERA,
-        ADD_EMPTY_SOL, ADD_MEANINGFUL_SOL,
-        DISPLAY_NOT_FOUND } from './actions';
+import { combineReducers } from 'redux';
+import { SELECT_ROVER, INVALIDATE_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DATA,
+    RECEIVE_ROVER_IMAGES, REQUEST_ROVERS_IMAGES,
+    SELECTED_CAMERA, UNSELECTED_CAMERA,
+    ADD_EMPTY_SOL, ADD_MEANINGFUL_SOL,
+    DISPLAY_NOT_FOUND } from './actions';
 
-// *** Rover reducers
-function selectedRover(state = '', action) {
-    switch (action.type) {
-        case SELECT_ROVER:
-            return action.rover;
-        default:
-            return state;
-    }
-}
 
 function addSolImageData(state, action) {
     switch (action.type) {
@@ -166,7 +155,16 @@ function roversData(state = {
     }
 }
 
-function getDataByRover(state = {}, action) {
+export function selectedRover(state = '', action) {
+    switch (action.type) {
+        case SELECT_ROVER:
+            return action.rover;
+        default:
+            return state;
+    }
+}
+
+export function getDataByRover(state = {}, action) {
     switch (action.type) {
         case RECEIVE_ROVERS_DATA:
         case REQUEST_ROVERS_DATA:
@@ -195,37 +193,7 @@ function getDataByRover(state = {}, action) {
     }
 }
 
-function allRoversData(state = {}, action) {
-    switch (action.type) {
-        case INVALIDATE_ALL_ROVERS:
-            return Object.assign({}, state, {
-                didInvalidate: true,
-            });
-        case RECEIVE_ALL_ROVERS_DATA:
-            return Object.assign({}, state, {
-                isFetchingAll: false,
-                didInvalidateAll: false,
-                simpleDataAboutAllRovers: action.simpleDataAboutAllRovers,
-                lastUpdatedAll: Date.now(),
-            });
-        default:
-            return state;
-    }
-}
-
-function getAllRoversData(state = { AllRovers: {} }, action) {
-    switch (action.type) {
-        case INVALIDATE_ALL_ROVERS:
-        case RECEIVE_ALL_ROVERS_DATA:
-            return Object.assign({}, state, {
-                AllRovers: allRoversData(state[action.rovers], action),
-            });
-        default:
-            return state;
-    }
-}
-
-function selectedCamera(state = {
+export function selectedCamera(state = {
     selected: false,
     rover: undefined,
     cameraIndex: undefined,
@@ -258,11 +226,3 @@ function selectedCamera(state = {
             return state;
     }
 }
-
-const rootReducer = combineReducers({
-    homepageReducer,
-    selectedRoverReducer,
-    routing: routerReducer,
-});
-
-export default rootReducer;
