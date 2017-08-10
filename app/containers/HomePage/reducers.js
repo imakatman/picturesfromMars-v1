@@ -3,7 +3,7 @@
  * If we were to do this in store.js, reducers wouldn't be hot reloadable.
  */
 
-import { INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA, } from './actions';
+import { INVALIDATE_ALL_ROVERS, RECEIVE_ALL_ROVERS_DATA } from './actions';
 
 function allRoversData(state = {}, action) {
     switch (action.type) {
