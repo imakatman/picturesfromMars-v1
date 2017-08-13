@@ -42,7 +42,8 @@
     "test:clean": "rimraf ./coverage",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "heroku-postbuild": "npm run build"
   },
   "lint-staged": {
     "*.js": "lint:eslint"
@@ -139,6 +140,7 @@
       "newline-per-chained-call": 0,
       "no-confusing-arrow": 0,
       "no-console": 1,
+      "no-underscore-dangle": [2, { "allow": [] }],
       "no-use-before-define": 0,
       "prefer-template": 2,
       "class-methods-use-this": 0,
