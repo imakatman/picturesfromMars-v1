@@ -6,7 +6,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left';
 
 const Container = styled.div`
@@ -40,8 +40,6 @@ const Back = styled.div`
 
 class RoverDiagram extends React.Component { // eslint-disable-line react/prefer-stateless-function
     render() {
-        console.log('ROVER DIAGRAM!');
-        console.log(this.props.landing);
         return (
             <Container>
                 {this.props.cameras.map((camera, i) =>
@@ -52,9 +50,9 @@ class RoverDiagram extends React.Component { // eslint-disable-line react/prefer
                         {camera.full_name}
                     </CameraBtn>
                 )}
-                {this.props.landing ?(
+                {this.props.landing ? å(
                     <Back>
-                        <BackLink to={"/"}>
+                        <BackLink to={'/'}>
                             <FaLongArrowLeft />
                         </BackLink>
                     </Back> ) : (

@@ -2,24 +2,24 @@
 // ** ACTIONS USED IN ALL PAGES
 //
 
-export const SELECTED_CAMERA = "selectedCamera";
+export const SELECTED_A_CAMERA = 'selectedCamera';
 
-export function selectedCamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate) {
+export function selectedACamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate) {
     return {
-        type: SELECTED_CAMERA,
+        type: SELECTED_A_CAMERA,
         rover,
         cameraIndex,
         camera,
         cameraFullName,
         sol,
-        earthDate
-    }
+        earthDate,
+    };
 }
 
-export const UNSELECTED_CAMERA = "unselectedCamera";
+export const UNSELECTED_CAMERA = 'unselectedCamera';
 
 export function unselectedCamera() {
     return {
-        type: UNSELECTED_CAMERA
-    }
+        type: UNSELECTED_CAMERA,
+    };
 }

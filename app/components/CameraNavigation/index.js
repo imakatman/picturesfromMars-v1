@@ -7,17 +7,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {Flex, Box} from 'grid-styled';
-
-const Wrapper = styled.div`
-    position: absolute;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-`;
+import { Flex } from 'grid-styled';
 
 const CameraNavList = styled.ul`
     padding: 0;
-`
+`;
 
 const CameraNavItem = styled.li`
     list-style:none;
@@ -29,7 +23,7 @@ const CameraNavItem = styled.li`
     position:relative;
     z-index: 1;
     &:after{
-        content: " ";
+        content: ' ';
         position: absolute;
         top: 0;
         left: 0;
@@ -41,51 +35,50 @@ const CameraNavItem = styled.li`
 `;
 
 class CameraNavigation extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            cameraImages: [],
-        }
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      cameraImages: [],
     }
+  }
 
-    componentWillMount() {
-        this.setState({
-            cameras: this.props.cameras.map(camera => camera.name),
-        });
-    }
+  componentWillMount() {
+    this.setState({
+      cameras: this.props.cameras.map(camera => camera.name),
+    });
+  }
 
-    componentDidMount() {
-        this.state.cameras.map(imgPath =>import(`assets/cameras/${this.props.rover}/${imgPath}.jpg`).then(path => {
-            const imageArray = this.state.cameraImages.concat(path);
-            this.setState({cameraImages: imageArray});
-        }).catch(error => console.log(error)));
-    }
+  componentDidMount() {
+    this.state.cameras.map(imgPath =>
+      System.import(`assets/cameras/${this.props.rover}/${imgPath}.jpg`).then(path => {
+        const imageArray = this.state.cameraImages.concat(path);
+        return this.setState({ cameraImages: imageArray });
+      }).catch(error => console.log(error)));
+  }
 
-    render() {
-        console.log('CAMERA NAVIGATION!');
-        return (
-            <Flex direction={"column"}>
-                <CameraNavList>
-                    {this.props.cameras.map((camera, i) =>
-                        <CameraNavItem
-                            key={i}
-                            style={{backgroundImage: "url(" + this.state.cameraImages[i] + ")"}}
-                            data-camera={camera.name}
-                            onClick={() => this.props.mountGallery(i)}>
-                            {camera.full_name}
-                        </CameraNavItem>
-                    )}
-                </CameraNavList>
-            </Flex>
-        );
-    }
+  render() {
+    return (
+      <Flex direction={'column'}>
+        <CameraNavList>
+          {this.props.cameras.map((camera, i) =>
+            <CameraNavItem
+              key={i}
+              style={{ backgroundImage: 'url(' + this.state.cameraImages[i] + ')' }}
+              data-camera={camera.name}
+              onClick={() => this.props.mountGallery(i)}>
+              {camera.full_name}
+            </CameraNavItem>
+          )}
+        </CameraNavList>
+      </Flex>
+    );
+  }
 }
 
 CameraNavigation.propTypes = {
-    rover: PropTypes.string.isRequired,
-    cameras: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
-    mountGallery: PropTypes.func.isRequired,
+  rover: PropTypes.string.isRequired,
+  cameras: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
+  mountGallery: PropTypes.func.isRequired,
 };
 
 export default CameraNavigation;
