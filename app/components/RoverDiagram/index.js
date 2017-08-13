@@ -50,7 +50,7 @@ class RoverDiagram extends React.Component { // eslint-disable-line react/prefer
                         {camera.full_name}
                     </CameraBtn>
                 )}
-                {this.props.landing ? å(
+                {this.props.landing ? (
                     <Back>
                         <BackLink to={'/'}>
                             <FaLongArrowLeft />
