@@ -25,11 +25,19 @@ const Next = styled.div`
 `;
 
 const CameraName = styled.h2`
-    color: #fff;
+    
+`;
+
+const Loading = styled.p`
+    
 `;
 
 const Date = styled.h3`
-    color: #fff;
+    
+`;
+
+const LoadMore = styled.p`
+  text-align:right;
 `;
 
 const Img = styled.img`
@@ -51,15 +59,15 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
           {this.props.cameraFullName} {this.props.cameraAbbrev}
         </CameraName>
         {this.props.fetchingImagesState ? (
-            <p>Loading...</p>
+            <Loading>Loading... looking for the latest sol in which this camera took photos</Loading>
           ) : (
             <div>
               <Date>
                 Sol: {this.props.sol} || {this.props.earthDate}
               </Date>
               <Next>
-                <a onClick={() => this.props.returnToPreviousDate()}>Previous Date</a>
-                <a onClick={(i) => this.props.grabNextAvailablePhotos(i)}>Next Available Date with Photos</a>
+                <span onClick={() => this.props.returnToPreviousDate()}>Previous Date</span>
+                <span onClick={(i) => this.props.fetchNextAvailablePhotos(i)}>Next Available Date with Photos</span>
               </Next>
               <Flex wrap={true}>
                 <Masonry style={{ width: '100%' }}>
@@ -83,6 +91,9 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
                   }
                 </Masonry>
               </Flex>
+              <LoadMore onClick={() => this.props.fetchNextSet()}>
+                Load more photos
+              </LoadMore>
             </div>
           )}
       </GalleryContainer>

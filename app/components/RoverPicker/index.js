@@ -64,7 +64,9 @@ class Picker extends React.Component {
                       {value.total_photos}
                     </SubHeading>
                     <SubHeading color={'white'}>
-                      <SmallLabel>Total Photos</SmallLabel>
+                      <SmallLabel>
+                        {value.status}
+                      </SmallLabel>
                     </SubHeading>
                   </TopLayer>
                   <Overlay opacity='0.3' />
