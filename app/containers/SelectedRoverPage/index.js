@@ -217,7 +217,7 @@ class SelectedRoverPage extends React.Component {
                                     <input
                                         type="text"
                                         value={this.state.value}
-                                        onChange={(e) => this.setState({value: e.target.value})} />
+                                        onChange={(e) => this.setState({ value: e.target.value })} />
                                 </Label>
                                 <input
                                     type="submit"
@@ -228,14 +228,13 @@ class SelectedRoverPage extends React.Component {
                     <GalleryContain flex={2}>
                         <Gallery
                             fetchingImagesState={getDataByRover[selectedRover][selectedCamera['camera']]["isFetching"]}
-                            cameraAbbrev={selectedCamera["camera"]}
-                            cameraFullName={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera["sol"]]["cameraFullName"]}
-                            sol={selectedCamera["sol"]}
-                            earthDate={selectedCamera["earthDate"]}
-                            photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera["sol"]]["photoData"]}
+                            cameraAbbrev={selectedCamera['camera']}
+                            cameraFullName={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['cameraFullName']}
+                            sol={selectedCamera['sol']}
+                            earthDate={selectedCamera['earthDate']}
+                            photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['photoData']}
                             returnToPreviousDate={() => this.returnToPreviousDate()}
-                            grabNextAvailablePhotos={(i) => this.grabNextAvailablePhotos(i)}
-                        />
+                            grabNextAvailablePhotos={(i) => this.grabNextAvailablePhotos(i)} />
                     </GalleryContain>
                 </ActiveCameraLayer>
                 }
@@ -245,7 +244,7 @@ class SelectedRoverPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const {selectedRover, getDataByRover, selectedCamera} = state;
+    const { selectedRover, getDataByRover, selectedCamera } = state;
 
     return {
         selectedRover,
@@ -272,7 +271,7 @@ SelectedRoverPage.propTypes = {
                 name: PropTypes.string,
                 status: PropTypes.string,
                 total_photos: PropTypes.number,
-            })
+            }),
         })
     ).isRequired,
     selectedCamera: PropTypes.objectOf(PropTypes.shape({
