@@ -8,7 +8,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import Picker from 'components/Picker';
+import RoverPicker from 'components/RoverPicker';
 
 import { fetchAllRoverDataIfNeeded } from './actions';
 import { unselectedCamera } from '../../actions';
@@ -41,7 +41,7 @@ class RoversApp extends React.Component {
           ]}
         />
         {getAllRoversData.AllRovers.simpleDataAboutAllRovers &&
-        <Picker
+        <RoverPicker
           activeState={this.state.clickStateOfRovers}
           values={getAllRoversData.AllRovers.simpleDataAboutAllRovers} />
         }
