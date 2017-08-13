@@ -4,7 +4,8 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { autoRehydrate } from 'redux-persist';
 import { getAllRoversData } from './containers/HomePage/reducers';
-import { selectedRover, getDataByRover, selectedCamera } from './containers/SelectedRoverPage/reducers';
+import { selectedRover, getDataByRover } from './containers/SelectedRoverPage/reducers';
+import { selectedCamera } from './reducers';
 
 
 const rootReducer = combineReducers({

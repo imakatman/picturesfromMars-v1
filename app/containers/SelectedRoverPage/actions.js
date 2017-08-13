@@ -1,5 +1,5 @@
 // *****
-// ** ACTIONS FOR INDIVIDUAL ROVER
+// ** ACTIONS FOR SELECTED ROVER PAGE
 //
 
 import fetch from 'isomorphic-fetch';
@@ -279,29 +279,3 @@ export function fetchNextRoverImages(rover, sol, page, camera, cameraFullName, c
 }
 
 // LOOK AT http://redux.js.org/docs/introduction/Examples.html#real-world for ERROR MESSAGE HANDLING
-
-// *****
-// ** ACTIONS FOR APP
-//
-
-export const SELECTED_CAMERA = "selectedCamera";
-
-export function selectedCamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate) {
-    return {
-        type: SELECTED_CAMERA,
-        rover,
-        cameraIndex,
-        camera,
-        cameraFullName,
-        sol,
-        earthDate
-    }
-}
-
-export const UNSELECTED_CAMERA = "unselectedCamera";
-
-export function unselectedCamera() {
-    return {
-        type: UNSELECTED_CAMERA
-    }
-}

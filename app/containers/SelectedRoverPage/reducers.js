@@ -1,12 +1,10 @@
-/**
- * Combine all reducers in this file and export the combined reducers.
- * If we were to do this in store.js, reducers wouldn't be hot reloadable.
- */
+// *****
+// ** REDUCERS USED FOR ACTIONS IN SELECTED ROVER PAGE
+//
 
-import { combineReducers } from 'redux';
+
 import { SELECT_ROVER, INVALIDATE_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DATA,
     RECEIVE_ROVER_IMAGES, REQUEST_ROVERS_IMAGES,
-    SELECTED_CAMERA, UNSELECTED_CAMERA,
     ADD_EMPTY_SOL, ADD_MEANINGFUL_SOL,
     DISPLAY_NOT_FOUND } from './actions';
 
@@ -187,40 +185,6 @@ export function getDataByRover(state = {}, action) {
         case REQUEST_ROVERS_IMAGES:
             return Object.assign({}, state, {
                 [action.rover]: roversImages(state[action.rover], action),
-            });
-        default:
-            return state;
-    }
-}
-
-export function selectedCamera(state = {
-    selected: false,
-    rover: undefined,
-    cameraIndex: undefined,
-    camera: undefined,
-    cameraFullName: undefined,
-    sol: undefined,
-    earthDate: undefined
-}, action) {
-    switch (action.type) {
-        case SELECTED_CAMERA:
-            return Object.assign({}, state, {
-                selected: true,
-                rover: action.rover,
-                cameraIndex: action.cameraIndex,
-                camera: action.camera,
-                cameraFullName: action.cameraFullName,
-                sol: action.sol,
-                earthDate: action.earthDate,
-            });
-        case UNSELECTED_CAMERA:
-            return Object.assign({}, state, {
-                selected: false,
-                rover: undefined,
-                cameraIndex: undefined,
-                camera: undefined,
-                cameraFullName: undefined,
-                sol: undefined,
             });
         default:
             return state;
