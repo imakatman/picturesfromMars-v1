@@ -2,7 +2,7 @@
 // ** REDUCERS USED FOR ACTIONS IN ALL PAGES
 //
 
-import { SELECTED_CAMERA, UNSELECTED_CAMERA,} from './actions';
+import { SELECTED_CAMERA, UNSELECTED_CAMERA } from './actions';
 
 export function selectedCamera(state = {
     selected: false,
@@ -11,7 +11,7 @@ export function selectedCamera(state = {
     camera: undefined,
     cameraFullName: undefined,
     sol: undefined,
-    earthDate: undefined
+    earthDate: undefined,
 }, action) {
     switch (action.type) {
         case SELECTED_CAMERA:
@@ -27,11 +27,6 @@ export function selectedCamera(state = {
         case UNSELECTED_CAMERA:
             return Object.assign({}, state, {
                 selected: false,
-                rover: undefined,
-                cameraIndex: undefined,
-                camera: undefined,
-                cameraFullName: undefined,
-                sol: undefined,
             });
         default:
             return state;

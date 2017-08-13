@@ -3,6 +3,7 @@
 //
 
 import fetch from 'isomorphic-fetch';
+import { selectedCamera } from '../../actions';
 
 
 export const SELECT_ROVER = "selectRover";
@@ -212,7 +213,7 @@ function shouldFetchRoverImages(state, rover, camera, sol) {
     }
 }
 
-export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraFullName, cameraIndex) {
+export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraFullName, cameraIndex, earthDate) {
     // Note that the function also receives getState()
     // which lets you choose what to dispatch next.
 
@@ -226,6 +227,7 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraFullNam
             return dispatch(fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex))
         } else {
             // Let the calling code know there's nothing to wait for.
+            dispatch(selectedCamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
             return Promise.resolve()
         }
     }

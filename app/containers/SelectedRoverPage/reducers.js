@@ -8,7 +8,6 @@ import { SELECT_ROVER, INVALIDATE_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DAT
     ADD_EMPTY_SOL, ADD_MEANINGFUL_SOL,
     DISPLAY_NOT_FOUND } from './actions';
 
-
 function addSolImageData(state, action) {
     switch (action.type) {
         case ADD_MEANINGFUL_SOL:
@@ -26,7 +25,7 @@ function addSolImageData(state, action) {
                     emptySols: state.emptySols.concat(action.sol),
                     [action.sol]: {
                         isFetching: false,
-                    }
+                    },
                 });
             } else {
                 return state;
