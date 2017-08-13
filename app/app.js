@@ -11,10 +11,10 @@ import 'babel-polyfill';
 // Import all the third party stuff
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
-import {Router, browserHistory} from 'react-router';
+import { Provider } from 'react-redux';
+import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
-import {persistStore} from 'redux-persist'
+import { persistStore } from 'redux-persist';
 import configureStore from './store';
 
 
@@ -40,8 +40,8 @@ import createRoutes from './routes';
 const store = configureStore();
 
 // begin periodically persisting the store
-//persistStore(store, {blacklist: "routing: routerReducer"});
-persistStore(store).purge();
+persistStore(store, {blacklist: "routing: routerReducer"});
+//persistStore(store).purge();
 
 const history = syncHistoryWithStore(browserHistory, store);
 
