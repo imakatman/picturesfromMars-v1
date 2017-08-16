@@ -4,7 +4,7 @@
 import {
   SELECT_ROVER, INVALIDATE_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DATA,
   RECEIVE_ROVER_IMAGES, REQUEST_ROVERS_IMAGES,
-  RECEIVE_MORE_ROVER_IMAGES, NO_MORE_ROVER_IMAGES,
+  REQUEST_MORE_ROVER_IMAGES, RECEIVE_MORE_ROVER_IMAGES, NO_MORE_ROVER_IMAGES,
   ADD_EMPTY_SOL, ADD_MEANINGFUL_SOL,
   DISPLAY_NOT_FOUND
 } from './actions';
@@ -64,6 +64,10 @@ function receiveRoversImages(state = {
         cameraFullName: action.cameraFullName,
         photoData: action.photos,
       });
+    case REQUEST_MORE_ROVER_IMAGES:
+      return Object.assign({}, state, {
+        isFetching: true,
+      });
     case RECEIVE_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {
         isFetching: false,
@@ -99,9 +103,12 @@ function putRoverImageDataIntoSolObjects(state = {
         hasFetchedImages: true,
         [action.sol]: receiveRoversImages(state[action.sol], action),
       });
+    case REQUEST_MORE_ROVER_IMAGES:
+      return Object.assign({}, state, {
+        [action.sol]: receiveRoversImages(state[action.sol], action),
+      });
     case RECEIVE_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {
-        isFetching: false,
         [action.sol]: receiveRoversImages(state[action.sol], action),
       });
     case NO_MORE_ROVER_IMAGES:
@@ -136,6 +143,10 @@ function roversImages(state = {
         [action.camera]: addSolImageData(state[action.camera], action),
       });
     case RECEIVE_ROVER_IMAGES:
+      return Object.assign({}, state, {
+        [action.camera]: putRoverImageDataIntoSolObjects(state[action.camera], action),
+      });
+    case REQUEST_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {
         [action.camera]: putRoverImageDataIntoSolObjects(state[action.camera], action),
       });

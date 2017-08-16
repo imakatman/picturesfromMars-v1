@@ -154,6 +154,17 @@ function receiveRoverImages(rover, json) {
   };
 }
 
+export const REQUEST_MORE_ROVER_IMAGES = 'requestMoreRoverImages';
+
+function requestMoreRoverImages(rover, camera, sol) {
+  return {
+    type: REQUEST_MORE_ROVER_IMAGES,
+    rover,
+    camera,
+    sol,
+  };
+}
+
 export const RECEIVE_MORE_ROVER_IMAGES = 'receiveMoreRoverImages';
 
 function receiveMoreRoverImages(rover, camera, sol, json) {
@@ -291,7 +302,7 @@ export function fetchNextRoverImages(rover, sol, page, camera, cameraFullName, c
 
 export function fetchNextPhotoSet(rover, sol, page, camera){
   return function (dispatch) {
-    dispatch(requestRoversImages(rover, camera, sol));
+    dispatch(requestMoreRoverImages(rover, camera, sol));
     return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
       if (json.photos.length > 0) {
         return dispatch(receiveMoreRoverImages(rover, camera, sol, json));
