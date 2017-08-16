@@ -152,19 +152,33 @@ class SelectedRoverPage extends React.Component {
   fetchNextPhotoSet() {
     const { dispatch, selectedRover, selectedCamera } = this.props;
     if (typeof this.state[selectedRover] !== 'undefined') {
-      console.log("data for this exists");
-      this.setState((prevState) => {
-        return {
+      if(typeof this.state[selectedCamera['camera']] !== 'undefined'){
+        console.log("data for this exists");
+        this.setState((prevState) => {
+          return {
+            [selectedRover]: {
+              [selectedCamera['camera']]: {
+                [selectedCamera['sol']]: prevState[selectedRover][selectedCamera['camera']][selectedCamera['sol']] + 1,
+              }
+            }
+          };
+        }, () => {
+          const page = this.state[selectedRover][selectedCamera['camera']][selectedCamera['sol']];
+          return dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], page, selectedCamera['camera']));
+        });
+      } else {
+        console.log("data for this does NOT exist");
+        this.setState({
           [selectedRover]: {
             [selectedCamera['camera']]: {
-              [selectedCamera['sol']]: prevState[selectedRover][selectedCamera['camera']][selectedCamera['sol']] + 1,
+              [selectedCamera['sol']]: 2,
             }
           }
-        };
-      }, () => {
-        const page = this.state[selectedRover][selectedCamera['camera']][selectedCamera['sol']];
-        return dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], page, selectedCamera['camera']));
-      });
+        }, () => {
+          const page = this.state[selectedRover][selectedCamera['camera']][selectedCamera['sol']];
+          return dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], page, selectedCamera['camera']));
+        });
+      }
     } else {
       console.log("data for this does NOT exist");
       this.setState({
