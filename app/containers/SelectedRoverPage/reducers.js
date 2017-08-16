@@ -101,10 +101,12 @@ function putRoverImageDataIntoSolObjects(state = {
       });
     case RECEIVE_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {
+        isFetching: false,
         [action.sol]: receiveRoversImages(state[action.sol], action),
       });
     case NO_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {
+        isFetching: false,
         [action.sol]: receiveRoversImages(state[action.sol], action),
       });
     default:
