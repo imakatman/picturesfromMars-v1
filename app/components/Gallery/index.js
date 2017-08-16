@@ -90,7 +90,7 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
                   }
                 </Masonry>
               </Flex>
-              <LoadMore onClick={() => this.props.fetchNextSet()}>
+              <LoadMore onClick={(i) => this.props.fetchNextSet(i)}>
                 Load more photos
               </LoadMore>
             </div>

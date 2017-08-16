@@ -156,10 +156,8 @@ function receiveRoverImages(rover, json) {
 
 function findSolNotInEmptySols(state, rover, camera, sol) {
   if (state.getDataByRover[rover][camera]['emptySols'].includes(sol)) {
-    console.log("the provided sol" + sol + " is in the empty sols array");
     return findSolNotInEmptySols(state, rover, camera, sol - 1);
   } else {
-    console.log("the provided sol is not in the empty sols array");
     return function (dispatch) {
       dispatch(requestRoversImages(rover, camera, sol));
     };
@@ -167,12 +165,11 @@ function findSolNotInEmptySols(state, rover, camera, sol) {
 }
 
 export function fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex) {
+  console.log(cameraIndex + " " + cameraFullName);
   return function (dispatch, getState) {
     if (typeof getState().getDataByRover[rover][camera] !== 'undefined' && getState().getDataByRover[rover][camera]['emptySols'].includes(sol)) {
-      console.log("there is an empty sols array for this camera and the provided sol is in it");
       findSolNotInEmptySols(getState(), rover, camera, sol - 1);
     } else {
-      console.log("there isnt an empty sols array for this camera");
       dispatch(requestRoversImages(rover, camera, sol));
     }
     return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
@@ -207,6 +204,7 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraFullNam
 
   // This is useful for avoiding a network request if
   // a cached value is already available.
+  console.log(cameraIndex);
   return (dispatch, getState) => {
     if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
       // Dispatch a thunk from thunk!
@@ -225,12 +223,10 @@ export function fetchRoverImagesOnce(rover, sol, page, camera, cameraFullName, c
     return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
       if (json.photos.length > 0) {
         const earthDate = json.photos[0].earth_date;
-        console.log("there are images!");
         dispatch(selectedACamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
         dispatch(addMeaningfulSol(rover, camera, sol));
         return dispatch(receiveRoverImages(rover, json));
       } else {
-        console.log("there arent images in this sol!");
         dispatch(displayNotFound(rover));
         return dispatch(selectedACamera(...[rover, cameraIndex, camera, cameraFullName, sol,]));
       }
@@ -247,7 +243,6 @@ export function fetchRoverImagesIfNeededOnce(rover, sol, page, camera, cameraFul
   return (dispatch, getState) => {
     if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
       // Dispatch a thunk from thunk!
-      console.log("should fetch rover images");
       return dispatch(fetchRoverImagesOnce(rover, sol, page, camera, cameraFullName, cameraIndex));
     } else {
       // Let the calling code know there's nothing to wait for.
@@ -300,11 +295,13 @@ export function fetchNextRoverImages(rover, sol, page, camera, cameraFullName, c
   return dispatch => dispatch(fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex));
 }
 
-export function fetchNextPhotoSet(rover, sol, page, camera){
+export function fetchNextPhotoSet(rover, sol, page, camera, cameraFullName, cameraIndex){
   return function (dispatch) {
     dispatch(requestMoreRoverImages(rover, camera, sol));
     return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
       if (json.photos.length > 0) {
+        const earthDate = json.photos[0].earth_date;
+        dispatch(selectedACamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
         return dispatch(receiveMoreRoverImages(rover, camera, sol, json));
       } else {
         return dispatch(noMoreRoverImages(rover, camera, sol));
