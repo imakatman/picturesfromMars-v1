@@ -204,6 +204,8 @@ class SelectedRoverPage extends React.Component {
   render() {
     const { selectedRover, getDataByRover, selectedCamera } = this.props;
 
+    console.log(Object.keys(getDataByRover[selectedRover]['data']).length !== 0);
+
     return (
       <div>
         <Helmet
@@ -215,10 +217,9 @@ class SelectedRoverPage extends React.Component {
 
         {selectedRover && <RoverName>{selectedRover}</RoverName>}
 
-        { (Object.keys(getDataByRover[selectedRover]['data']).length !== 0
-        && getDataByRover[selectedRover]['isFetching'] === false)
-        || Object.keys(selectedCamera).length === 0
-        || selectedCamera['selected'] === false ? (
+        { Object.keys(getDataByRover[selectedRover]['data']).length !== 0
+        && getDataByRover[selectedRover]['isFetching'] === false
+        && selectedCamera['selected'] === false ? (
             <IntroLayer>
               <RoverDiagram
                 cameras={getDataByRover[selectedRover]['data']['cameras']}
