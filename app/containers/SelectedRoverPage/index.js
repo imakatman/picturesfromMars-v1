@@ -69,13 +69,14 @@ class SelectedRoverPage extends React.Component {
     this.state = {
       selectedRover: this.props.routeParams.rover,
       value: '',
+      firstPage: 1,
     };
 
-    this.mountGallery            = this.mountGallery.bind(this);
-    this.unmountGallery          = this.unmountGallery.bind(this);
-    this.returnToPreviousDate    = this.returnToPreviousDate.bind(this);
+    this.mountGallery             = this.mountGallery.bind(this);
+    this.unmountGallery           = this.unmountGallery.bind(this);
+    this.returnToPreviousDate     = this.returnToPreviousDate.bind(this);
     this.fetchNextAvailablePhotos = this.fetchNextAvailablePhotos.bind(this);
-    this.datePicker              = this.datePicker.bind(this);
+    this.datePicker               = this.datePicker.bind(this);
   }
 
   componentWillMount() {
@@ -148,10 +149,35 @@ class SelectedRoverPage extends React.Component {
     return dispatch(fetchNextRoverImages(selectedRover, selectedCamera['sol'] - 1, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], i));
   }
 
-  fetchNextPhotoSet(){
+  fetchNextPhotoSet() {
     const { dispatch, selectedRover, selectedCamera } = this.props;
-
-    return dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], 2, selectedCamera['camera']));
+    if (typeof this.state[selectedRover] !== 'undefined') {
+      console.log("data for this exists");
+      this.setState((prevState) => {
+        return {
+          [selectedRover]: {
+            [selectedCamera['camera']]: {
+              [selectedCamera['sol']]: prevState[selectedRover][selectedCamera['camera']][selectedCamera['sol']] + 1,
+            }
+          }
+        };
+      }, () => {
+        const page = this.state[selectedRover][selectedCamera['camera']][selectedCamera['sol']];
+        return dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], page, selectedCamera['camera']));
+      });
+    } else {
+      console.log("data for this does NOT exist");
+      this.setState({
+        [selectedRover]: {
+          [selectedCamera['camera']]: {
+            [selectedCamera['sol']]: 2,
+          }
+        }
+      }, () => {
+        const page = this.state[selectedRover][selectedCamera['camera']][selectedCamera['sol']];
+        return dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], page, selectedCamera['camera']));
+      });
+    }
   }
 
   datePicker() {
@@ -237,7 +263,7 @@ class SelectedRoverPage extends React.Component {
               photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['photoData']}
               returnToPreviousDate={() => this.returnToPreviousDate()}
               fetchNextAvailablePhotos={(i) => this.fetchNextAvailablePhotos(i)}
-              fetchNextSet={()=> this.fetchNextPhotoSet()} />
+              fetchNextSet={() => this.fetchNextPhotoSet()} />
           </GalleryContain>
         </ActiveCameraLayer>
         }

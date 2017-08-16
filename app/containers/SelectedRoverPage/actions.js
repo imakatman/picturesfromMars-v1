@@ -154,42 +154,6 @@ function receiveRoverImages(rover, json) {
   };
 }
 
-export const REQUEST_MORE_ROVER_IMAGES = 'requestMoreRoverImages';
-
-function requestMoreRoverImages(rover, camera, sol) {
-  return {
-    type: REQUEST_MORE_ROVER_IMAGES,
-    rover,
-    camera,
-    sol,
-  };
-}
-
-export const RECEIVE_MORE_ROVER_IMAGES = 'receiveMoreRoverImages';
-
-function receiveMoreRoverImages(rover, camera, sol, json) {
-  return {
-    type: RECEIVE_MORE_ROVER_IMAGES,
-    rover,
-    camera,
-    sol,
-    photos: json.photos,
-  };
-}
-
-export const NO_MORE_ROVER_IMAGES = 'noMoreRoverImages';
-
-function noMoreRoverImages(rover, camera, sol) {
-  // For earthDate, camera, cameraFullName, and sol we just need to get the data from the first returned object
-  // because this data will stay the same for each photo object from a Request
-  return {
-    type: NO_MORE_ROVER_IMAGES,
-    rover,
-    camera,
-    sol,
-  };
-}
-
 function findSolNotInEmptySols(state, rover, camera, sol) {
   if (state.getDataByRover[rover][camera]['emptySols'].includes(sol)) {
     console.log("the provided sol" + sol + " is in the empty sols array");
@@ -291,6 +255,42 @@ export function fetchRoverImagesIfNeededOnce(rover, sol, page, camera, cameraFul
       dispatch(selectedACamera(...[rover, cameraIndex, camera, cameraFullName, sol,]));
       return Promise.resolve();
     }
+  };
+}
+
+export const REQUEST_MORE_ROVER_IMAGES = 'requestMoreRoverImages';
+
+function requestMoreRoverImages(rover, camera, sol) {
+  return {
+    type: REQUEST_MORE_ROVER_IMAGES,
+    rover,
+    camera,
+    sol,
+  };
+}
+
+export const RECEIVE_MORE_ROVER_IMAGES = 'receiveMoreRoverImages';
+
+function receiveMoreRoverImages(rover, camera, sol, json) {
+  return {
+    type: RECEIVE_MORE_ROVER_IMAGES,
+    rover,
+    camera,
+    sol,
+    photos: json.photos,
+  };
+}
+
+export const NO_MORE_ROVER_IMAGES = 'noMoreRoverImages';
+
+function noMoreRoverImages(rover, camera, sol) {
+  // For earthDate, camera, cameraFullName, and sol we just need to get the data from the first returned object
+  // because this data will stay the same for each photo object from a Request
+  return {
+    type: NO_MORE_ROVER_IMAGES,
+    rover,
+    camera,
+    sol,
   };
 }
 

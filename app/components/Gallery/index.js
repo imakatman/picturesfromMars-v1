@@ -80,8 +80,7 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
                           key={photo.id}>
                           <Img
                             src={photo.img_src}
-                            alt={photo.roverName + ':' + photo.camera + '-' + photo.id}
-                            key={photo.id} />
+                            alt={photo.roverName + ':' + photo.camera + '-' + photo.id} />
                         </Box>)
                     ) : (
                       <p style={{ color: '#fff' }}>
