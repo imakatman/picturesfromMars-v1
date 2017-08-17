@@ -24,10 +24,6 @@ const Next = styled.div`
     font-size: 20px;
 `;
 
-const CameraName = styled.h2`
-    
-`;
-
 const Loading = styled.p`
     
 `;
