@@ -182,7 +182,7 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
       } else {
         console.log("there arent images lets try again!");
         dispatch(addEmptySol(rover, camera, sol));
-        return dispatch(fetchRoverImages(rover, sol - 1, page, camera, cameraIndex, cameraFullName));
+        return dispatch(fetchRoverImages(rover, sol - 1, page, camera, cameraFullName, cameraIndex));
       }
     });
   };
