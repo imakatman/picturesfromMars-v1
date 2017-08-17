@@ -149,55 +149,10 @@ class SelectedRoverPage extends React.Component {
     return dispatch(fetchNextRoverImages(selectedRover, selectedCamera['sol'] - 1, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], i));
   }
 
-  fetchNextPhotoSet(i) {
+  fetchNextPhotoSet() {
     const { dispatch, selectedRover, selectedCamera } = this.props;
-    const cameraIndex = i;
-    if (typeof this.state[selectedRover] !== 'undefined') {
-      if(typeof this.state[selectedRover][selectedCamera['camera']] !== 'undefined' && typeof this.state[selectedRover][selectedCamera['camera']][selectedCamera['sol']] !== 'undefined'){
-        console.log("data for this exists");
-        const selectedRoverCameraState = this.state[selectedRover][selectedCamera['camera']];
-        this.setState((prevState) => {
-          return {
-            [selectedRover]: {
-              [selectedCamera['camera']]: selectedRoverCameraState.concat([{
-                [selectedCamera['sol']]: prevState[selectedRover][selectedCamera['camera']][selectedCamera['sol']] + 1,
-              }])
-            },
-          };
-        }, () => {
-          const page = this.state[selectedRover][selectedCamera['camera']][[selectedCamera['sol']]];
-          console.log(page);
-          return dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], page, selectedCamera['camera'], selectedCamera['cameraFullName'], cameraIndex));
-        });
-      } else {
-        const selectedRoverCameraState = this.state[selectedRover][selectedCamera['camera']];
-        this.setState({
-          [selectedRover]: {
-            [selectedCamera['camera']]: selectedRoverCameraState.concat([{
-              [selectedCamera['sol']]: 2,
-            }])
-          }
-        }, () => {
-          const page = this.state[selectedRover][selectedCamera['camera']][1][[selectedCamera['sol']]];
-          console.log(this.state);
-          console.log(page);
-          return dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], page, selectedCamera['camera'], selectedCamera['cameraFullName'], cameraIndex));
-        });
-      }
-    } else {
-      console.log("data for this does NOT exist");
-      this.setState({
-        [selectedRover]: {
-          [selectedCamera['camera']]: [
-            { [selectedCamera['sol']]: 2, }
-          ]
-        }
-      }, () => {
-        const page = this.state[selectedRover][selectedCamera['camera']][0][selectedCamera['sol']];
-        console.log(page);
-        return dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], page, selectedCamera['camera'], selectedCamera['cameraFullName'], cameraIndex));
-      });
-    }
+
+    return dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']));
   }
 
   datePicker() {

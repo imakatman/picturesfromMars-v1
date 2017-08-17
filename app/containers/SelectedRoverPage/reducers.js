@@ -39,12 +39,14 @@ function addSolImageData(state, action) {
 function receiveRoversImages(state = {
   didInvalidate: false,
   isFetching: false,
+  isFetchingMoreImages: false,
   hasFetchedImages: false,
   sol: '',
   earthDate: '',
   camera: '',
   cameraFullName: '',
   photoData: [],
+  page: 1,
 }, action) {
   switch (action.type) {
     case REQUEST_ROVERS_IMAGES:
@@ -66,11 +68,12 @@ function receiveRoversImages(state = {
       });
     case REQUEST_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {
-        isFetching: true,
+        isFetchingMoreImages: true,
+        page: action.page
       });
     case RECEIVE_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {
-        isFetching: false,
+        isFetchingMoreImages: false,
         fetchMoreImages: true,
         photoData: state.photoData.concat(action.photos),
       });
@@ -142,11 +145,11 @@ function roversImages(state = {
       return Object.assign({}, state, {
         [action.camera]: addSolImageData(state[action.camera], action),
       });
-    case RECEIVE_ROVER_IMAGES:
+    case REQUEST_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {
         [action.camera]: putRoverImageDataIntoSolObjects(state[action.camera], action),
       });
-    case REQUEST_MORE_ROVER_IMAGES:
+    case RECEIVE_ROVER_IMAGES:
       return Object.assign({}, state, {
         [action.camera]: putRoverImageDataIntoSolObjects(state[action.camera], action),
       });
@@ -221,8 +224,12 @@ export function getDataByRover(state = {}, action) {
       return Object.assign({}, state, {
         [action.rover]: roversImages(state[action.rover], action),
       });
-    case RECEIVE_ROVER_IMAGES:
     case REQUEST_ROVERS_IMAGES:
+      return Object.assign({}, state, {
+        [action.rover]: roversImages(state[action.rover], action),
+      });
+    case RECEIVE_ROVER_IMAGES:
+    case REQUEST_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {
         [action.rover]: roversImages(state[action.rover], action),
       });
