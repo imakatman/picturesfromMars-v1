@@ -6,7 +6,7 @@ import {
   RECEIVE_ROVER_IMAGES, REQUEST_ROVERS_IMAGES,
   REQUEST_MORE_ROVER_IMAGES, RECEIVE_MORE_ROVER_IMAGES, NO_MORE_ROVER_IMAGES,
   ADD_EMPTY_SOL, ADD_MEANINGFUL_SOL,
-  DISPLAY_NOT_FOUND
+  DISPLAY_NOT_FOUND,
 } from './actions';
 
 function addSolImageData(state, action) {
@@ -69,7 +69,7 @@ function receiveRoversImages(state = {
     case REQUEST_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {
         isFetchingMoreImages: true,
-        page: action.page
+        page: action.page,
       });
     case RECEIVE_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {

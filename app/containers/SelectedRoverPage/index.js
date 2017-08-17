@@ -143,10 +143,10 @@ class SelectedRoverPage extends React.Component {
     return dispatch(selectedACamera(selectedRover, selectedCamera['cameraIndex'], selectedCamera['camera'], selectedCamera['cameraFullName'], meaningfulSols[i - 1], selectedCamera['earthDate']));
   }
 
-  fetchNextAvailablePhotos(i) {
+  fetchNextAvailablePhotos() {
     const { dispatch, selectedRover, selectedCamera } = this.props;
 
-    return dispatch(fetchNextRoverImages(selectedRover, selectedCamera['sol'] - 1, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], i));
+    return dispatch(fetchNextRoverImages(selectedRover, selectedCamera['sol'] - 1, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']));
   }
 
   fetchNextPhotoSet() {
@@ -236,8 +236,8 @@ class SelectedRoverPage extends React.Component {
               earthDate={selectedCamera['earthDate']}
               photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['photoData']}
               returnToPreviousDate={() => this.returnToPreviousDate()}
-              fetchNextAvailablePhotos={(i) => this.fetchNextAvailablePhotos(selectedCamera['cameraIndex'])}
-              fetchNextSet={(i) => this.fetchNextPhotoSet(selectedCamera['cameraIndex'])} />
+              fetchNextAvailablePhotos={() => this.fetchNextAvailablePhotos()}
+              fetchNextSet={() => this.fetchNextPhotoSet()} />
           </GalleryContain>
         </ActiveCameraLayer>
         }
