@@ -99,27 +99,27 @@ class SelectedRoverPage extends React.Component {
     const { dispatch, selectedRover, getDataByRover, isFetching } = this.props;
 
     if (!isFetching) {
-      const _selectedCamera = getDataByRover[selectedRover]['data']['cameras'][cameraIndex]['name'];
+      const mgfSelectedCamera = getDataByRover[selectedRover]['data']['cameras'][cameraIndex]['name'];
 
-      if (typeof getDataByRover[selectedRover][_selectedCamera] === 'undefined') {
+      if (typeof getDataByRover[selectedRover][mgfSelectedCamera] === 'undefined') {
         console.log('has not fetched images from this camera');
 
-        const _rover          = rover || selectedRover;
-        const _camera         = camera || _selectedCamera;
-        const _cameraFullName = cameraFullName || getDataByRover[selectedRover].data.cameras[cameraIndex].full_name;
-        const _sol            = currentSol || getDataByRover[selectedRover]['data']['max_sol'];
+        const mgfRover          = rover || selectedRover;
+        const mgfCamera         = camera || mgfSelectedCamera;
+        const mgfCameraFullName = cameraFullName || getDataByRover[selectedRover].data.cameras[cameraIndex].full_name;
+        const mgfSol            = currentSol || getDataByRover[selectedRover]['data']['max_sol'];
 
-        return dispatch(fetchRoverImagesIfNeeded(...[_rover, _sol, 1, _camera, _cameraFullName, cameraIndex,]));
-      } else if (!isFetching && getDataByRover[selectedRover][_selectedCamera]['hasFetchedImages'] === true) {
+        return dispatch(fetchRoverImagesIfNeeded(...[mgfRover, mgfSol, 1, mgfCamera, mgfCameraFullName, cameraIndex,]));
+      } else if (!isFetching && getDataByRover[selectedRover][mgfSelectedCamera]['hasFetchedImages'] === true) {
         console.log('has fetched images from this camera');
 
-        const _rover          = rover || selectedRover;
-        const _camera         = camera || _selectedCamera;
-        const _cameraFullName = cameraFullName || getDataByRover[selectedRover].data.cameras[cameraIndex].full_name;
-        const _sol            = currentSol || getDataByRover[selectedRover][_selectedCamera]['latestMeaningfulSol'];
-        const _earthDate      = getDataByRover[selectedRover][_selectedCamera][_sol]['earthDate'];
+        const mgfRover          = rover || selectedRover;
+        const mgfCamera         = camera || mgfSelectedCamera;
+        const mgfCameraFullName = cameraFullName || getDataByRover[selectedRover].data.cameras[cameraIndex].full_name;
+        const mgfSol            = currentSol || getDataByRover[selectedRover][mgfSelectedCamera]['latestMeaningfulSol'];
+        const mgfEarthDate      = getDataByRover[selectedRover][mgfSelectedCamera][mgfSol]['earthDate'];
 
-        return dispatch(fetchRoverImagesIfNeeded(_rover, _sol, 1, _camera, _cameraFullName, cameraIndex, _earthDate));
+        return dispatch(fetchRoverImagesIfNeeded(mgfRover, mgfSol, 1, mgfCamera, mgfCameraFullName, cameraIndex, mgfEarthDate));
       }
     }
   }
