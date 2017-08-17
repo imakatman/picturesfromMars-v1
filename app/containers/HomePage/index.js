@@ -8,7 +8,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import Picker from 'components/Picker';
+import RoverPicker from 'components/RoverPicker';
 
 import { fetchAllRoverDataIfNeeded } from './actions';
 import { unselectedCamera } from '../../actions';
@@ -23,10 +23,16 @@ class RoversApp extends React.Component {
   }
 
   componentWillMount() {
-    const { dispatch } = this.props;
+    const { dispatch, selectedCamera } = this.props;
 
-    dispatch(fetchAllRoverDataIfNeeded());
-    return dispatch(unselectedCamera());
+    if(selectedCamera.selected == true){
+      console.log("camera is still selecte");
+      dispatch(fetchAllRoverDataIfNeeded());
+      return dispatch(unselectedCamera());
+    } else {
+      console.log("camera is not selecte");
+      return dispatch(fetchAllRoverDataIfNeeded());
+    }
   }
 
   render() {
@@ -41,7 +47,7 @@ class RoversApp extends React.Component {
           ]}
         />
         {getAllRoversData.AllRovers.simpleDataAboutAllRovers &&
-        <Picker
+        <RoverPicker
           activeState={this.state.clickStateOfRovers}
           values={getAllRoversData.AllRovers.simpleDataAboutAllRovers} />
         }
@@ -51,9 +57,9 @@ class RoversApp extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { getAllRoversData } = state;
+  const { getAllRoversData, selectedCamera, routing } = state;
 
-  return { getAllRoversData };
+  return { getAllRoversData, selectedCamera, routing };
 }
 
 RoversApp.propTypes = {

@@ -21,6 +21,7 @@ import {
   fetchRoverImagesIfNeeded,
   fetchRoverImagesIfNeededOnce,
   fetchNextRoverImages,
+  fetchNextPhotoSet,
 } from './actions';
 
 import { selectedACamera, unselectedCamera } from '../../actions';
@@ -67,15 +68,15 @@ class SelectedRoverPage extends React.Component {
 
     this.state = {
       selectedRover: this.props.routeParams.rover,
-      page: 1,
       value: '',
+      firstPage: 1,
     };
 
-    this.mountGallery            = this.mountGallery.bind(this);
-    this.unmountGallery          = this.unmountGallery.bind(this);
-    this.returnToPreviousDate    = this.returnToPreviousDate.bind(this);
-    this.grabNextAvailablePhotos = this.grabNextAvailablePhotos.bind(this);
-    this.datePicker              = this.datePicker.bind(this);
+    this.mountGallery             = this.mountGallery.bind(this);
+    this.unmountGallery           = this.unmountGallery.bind(this);
+    this.returnToPreviousDate     = this.returnToPreviousDate.bind(this);
+    this.fetchNextAvailablePhotos = this.fetchNextAvailablePhotos.bind(this);
+    this.datePicker               = this.datePicker.bind(this);
   }
 
   componentWillMount() {
@@ -94,7 +95,7 @@ class SelectedRoverPage extends React.Component {
     }
   }
 
-  mountGallery(rover, cameraIndex, selectedCamera, cameraFullName, currentSol) {
+  mountGallery(rover, cameraIndex, camera, cameraFullName, currentSol) {
     const { dispatch, selectedRover, getDataByRover, isFetching } = this.props;
 
     if (!isFetching) {
@@ -104,23 +105,21 @@ class SelectedRoverPage extends React.Component {
         console.log('has not fetched images from this camera');
 
         const _rover          = rover || selectedRover;
-        const _camera         = selectedCamera || _selectedCamera;
+        const _camera         = camera || _selectedCamera;
         const _cameraFullName = cameraFullName || getDataByRover[selectedRover].data.cameras[cameraIndex].full_name;
         const _sol            = currentSol || getDataByRover[selectedRover]['data']['max_sol'];
-        const _page           = this.state.page;
 
-        return dispatch(fetchRoverImagesIfNeeded(...[_rover, _sol, _page, _camera, _cameraFullName, cameraIndex,]));
+        return dispatch(fetchRoverImagesIfNeeded(...[_rover, _sol, 1, _camera, _cameraFullName, cameraIndex,]));
       } else if (!isFetching && getDataByRover[selectedRover][_selectedCamera]['hasFetchedImages'] === true) {
         console.log('has fetched images from this camera');
 
         const _rover          = rover || selectedRover;
-        const _camera         = selectedCamera || _selectedCamera;
+        const _camera         = camera || _selectedCamera;
         const _cameraFullName = cameraFullName || getDataByRover[selectedRover].data.cameras[cameraIndex].full_name;
         const _sol            = currentSol || getDataByRover[selectedRover][_selectedCamera]['latestMeaningfulSol'];
-        const _page           = this.state.page;
         const _earthDate      = getDataByRover[selectedRover][_selectedCamera][_sol]['earthDate'];
 
-        return dispatch(fetchRoverImagesIfNeeded(_rover, _sol, _page, _camera, _cameraFullName, cameraIndex, _earthDate));
+        return dispatch(fetchRoverImagesIfNeeded(_rover, _sol, 1, _camera, _cameraFullName, cameraIndex, _earthDate));
       }
     }
   }
@@ -144,10 +143,16 @@ class SelectedRoverPage extends React.Component {
     return dispatch(selectedACamera(selectedRover, selectedCamera['cameraIndex'], selectedCamera['camera'], selectedCamera['cameraFullName'], meaningfulSols[i - 1], selectedCamera['earthDate']));
   }
 
-  grabNextAvailablePhotos(i) {
+  fetchNextAvailablePhotos(i) {
     const { dispatch, selectedRover, selectedCamera } = this.props;
 
     return dispatch(fetchNextRoverImages(selectedRover, selectedCamera['sol'] - 1, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], i));
+  }
+
+  fetchNextPhotoSet() {
+    const { dispatch, selectedRover, selectedCamera } = this.props;
+
+    return dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']));
   }
 
   datePicker() {
@@ -170,10 +175,9 @@ class SelectedRoverPage extends React.Component {
 
         {selectedRover && <RoverName>{selectedRover}</RoverName>}
 
-        { (Object.keys(getDataByRover[selectedRover]['data']).length !== 0
-        && getDataByRover[selectedRover]['isFetching'] === false)
-        || Object.keys(selectedCamera).length === 0
-        || selectedCamera['selected'] === false ? (
+        { Object.keys(getDataByRover[selectedRover]['data']).length !== 0
+        && getDataByRover[selectedRover]['isFetching'] === false
+        && selectedCamera['selected'] === false ? (
             <IntroLayer>
               <RoverDiagram
                 cameras={getDataByRover[selectedRover]['data']['cameras']}
@@ -225,14 +229,15 @@ class SelectedRoverPage extends React.Component {
           </Flex>
           <GalleryContain flex={2}>
             <Gallery
-              fetchingImagesState={getDataByRover[selectedRover][selectedCamera['camera']]["isFetching"]}
+              fetchingImagesState={getDataByRover[selectedRover][selectedCamera['camera']]['isFetching']}
               cameraAbbrev={selectedCamera['camera']}
               cameraFullName={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['cameraFullName']}
               sol={selectedCamera['sol']}
               earthDate={selectedCamera['earthDate']}
               photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['photoData']}
               returnToPreviousDate={() => this.returnToPreviousDate()}
-              grabNextAvailablePhotos={(i) => this.grabNextAvailablePhotos(i)} />
+              fetchNextAvailablePhotos={(i) => this.fetchNextAvailablePhotos(selectedCamera['cameraIndex'])}
+              fetchNextSet={(i) => this.fetchNextPhotoSet(selectedCamera['cameraIndex'])} />
           </GalleryContain>
         </ActiveCameraLayer>
         }

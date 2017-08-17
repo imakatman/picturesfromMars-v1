@@ -3,6 +3,7 @@
 //
 
 import fetch from 'isomorphic-fetch';
+
 import { selectedACamera } from '../../actions';
 
 export const SELECT_ROVER = 'selectRover';
@@ -155,10 +156,8 @@ function receiveRoverImages(rover, json) {
 
 function findSolNotInEmptySols(state, rover, camera, sol) {
   if (state.getDataByRover[rover][camera]['emptySols'].includes(sol)) {
-    console.log("the provided sol" + sol + " is in the empty sols array");
     return findSolNotInEmptySols(state, rover, camera, sol - 1);
   } else {
-    console.log("the provided sol is not in the empty sols array");
     return function (dispatch) {
       dispatch(requestRoversImages(rover, camera, sol));
     };
@@ -166,12 +165,11 @@ function findSolNotInEmptySols(state, rover, camera, sol) {
 }
 
 export function fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex) {
+  console.log(cameraIndex + " " + cameraFullName);
   return function (dispatch, getState) {
     if (typeof getState().getDataByRover[rover][camera] !== 'undefined' && getState().getDataByRover[rover][camera]['emptySols'].includes(sol)) {
-      console.log("there is an empty sols array for this camera and the provided sol is in it");
       findSolNotInEmptySols(getState(), rover, camera, sol - 1);
     } else {
-      console.log("there isnt an empty sols array for this camera");
       dispatch(requestRoversImages(rover, camera, sol));
     }
     return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
@@ -184,7 +182,7 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
       } else {
         console.log("there arent images lets try again!");
         dispatch(addEmptySol(rover, camera, sol));
-        return dispatch(fetchRoverImages(rover, sol - 1, page, camera, cameraIndex));
+        return dispatch(fetchRoverImages(rover, sol - 1, page, camera, cameraFullName, cameraIndex));
       }
     });
   };
@@ -206,6 +204,7 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraFullNam
 
   // This is useful for avoiding a network request if
   // a cached value is already available.
+  console.log(cameraIndex);
   return (dispatch, getState) => {
     if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
       // Dispatch a thunk from thunk!
@@ -224,12 +223,10 @@ export function fetchRoverImagesOnce(rover, sol, page, camera, cameraFullName, c
     return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
       if (json.photos.length > 0) {
         const earthDate = json.photos[0].earth_date;
-        console.log("there are images!");
         dispatch(selectedACamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
         dispatch(addMeaningfulSol(rover, camera, sol));
         return dispatch(receiveRoverImages(rover, json));
       } else {
-        console.log("there arent images in this sol!");
         dispatch(displayNotFound(rover));
         return dispatch(selectedACamera(...[rover, cameraIndex, camera, cameraFullName, sol,]));
       }
@@ -246,7 +243,6 @@ export function fetchRoverImagesIfNeededOnce(rover, sol, page, camera, cameraFul
   return (dispatch, getState) => {
     if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
       // Dispatch a thunk from thunk!
-      console.log("should fetch rover images");
       return dispatch(fetchRoverImagesOnce(rover, sol, page, camera, cameraFullName, cameraIndex));
     } else {
       // Let the calling code know there's nothing to wait for.
@@ -256,10 +252,64 @@ export function fetchRoverImagesIfNeededOnce(rover, sol, page, camera, cameraFul
     }
   };
 }
+
+export const REQUEST_MORE_ROVER_IMAGES = 'requestMoreRoverImages';
+
+function requestMoreRoverImages(rover, camera, sol, nextPage) {
+  return {
+    type: REQUEST_MORE_ROVER_IMAGES,
+    rover,
+    camera,
+    sol,
+    page: nextPage,
+  };
+}
+
+export const RECEIVE_MORE_ROVER_IMAGES = 'receiveMoreRoverImages';
+
+function receiveMoreRoverImages(rover, camera, sol, json) {
+  return {
+    type: RECEIVE_MORE_ROVER_IMAGES,
+    rover,
+    camera,
+    sol,
+    photos: json.photos,
+  };
+}
+
+export const NO_MORE_ROVER_IMAGES = 'noMoreRoverImages';
+
+function noMoreRoverImages(rover, camera, sol) {
+  // For earthDate, camera, cameraFullName, and sol we just need to get the data from the first returned object
+  // because this data will stay the same for each photo object from a Request
+  return {
+    type: NO_MORE_ROVER_IMAGES,
+    rover,
+    camera,
+    sol,
+  };
+}
+
 export function fetchNextRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex) {
   // Note that the function also receives getState()
   // which lets you choose what to dispatch next.
   return dispatch => dispatch(fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex));
+}
+
+export function fetchNextPhotoSet(rover, sol, camera, cameraFullName, cameraIndex) {
+  return function (dispatch, getState) {
+    const pageToFetch = getState().getDataByRover[rover][camera][sol]['page'] + 1;
+    dispatch(requestMoreRoverImages(rover, camera, sol, pageToFetch));
+    return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + pageToFetch + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
+      if (json.photos.length > 0) {
+        const earthDate = json.photos[0].earth_date;
+        dispatch(selectedACamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
+        return dispatch(receiveMoreRoverImages(rover, camera, sol, json));
+      } else {
+        return dispatch(noMoreRoverImages(rover, camera, sol));
+      }
+    });
+  };
 }
 
 // LOOK AT http://redux.js.org/docs/introduction/Examples.html#real-world for ERROR MESSAGE HANDLING
