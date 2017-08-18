@@ -68,6 +68,8 @@ class RoverDiagram extends React.Component { // eslint-disable-line react/prefer
 
 RoverDiagram.propTypes = {
   cameras: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
+  mountGallery: PropTypes.func.isRequired,
+  landing: PropTypes.bool.isRequired,
   unmountGallery: PropTypes.func,
 };
 

@@ -165,7 +165,6 @@ function findSolNotInEmptySols(state, rover, camera, sol) {
 }
 
 export function fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex) {
-  console.log(cameraIndex + " " + cameraFullName);
   return function (dispatch, getState) {
     if (typeof getState().getDataByRover[rover][camera] !== 'undefined' && getState().getDataByRover[rover][camera]['emptySols'].includes(sol)) {
       findSolNotInEmptySols(getState(), rover, camera, sol - 1);
@@ -175,12 +174,10 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
     return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
       if (json.photos.length > 0) {
         const earthDate = json.photos[0].earth_date;
-        console.log(cameraIndex + ' ' + cameraFullName);
         dispatch(selectedACamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
         dispatch(addMeaningfulSol(rover, camera, sol));
         return dispatch(receiveRoverImages(rover, json));
       } else {
-        console.log("there arent images lets try again!");
         dispatch(addEmptySol(rover, camera, sol));
         return dispatch(fetchRoverImages(rover, sol - 1, page, camera, cameraFullName, cameraIndex));
       }
@@ -204,7 +201,6 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraFullNam
 
   // This is useful for avoiding a network request if
   // a cached value is already available.
-  console.log(cameraIndex);
   return (dispatch, getState) => {
     if (shouldFetchRoverImages(getState(), rover, camera, sol)) {
       // Dispatch a thunk from thunk!

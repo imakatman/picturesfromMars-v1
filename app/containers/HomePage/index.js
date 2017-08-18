@@ -25,7 +25,7 @@ class RoversApp extends React.Component {
   componentWillMount() {
     const { dispatch, selectedCamera } = this.props;
 
-    if(selectedCamera.selected == true){
+    if (selectedCamera.selected === true) {
       dispatch(fetchAllRoverDataIfNeeded());
       return dispatch(unselectedCamera());
     } else {
@@ -61,7 +61,6 @@ function mapStateToProps(state) {
 }
 
 RoversApp.propTypes = {
-  routeParams: PropTypes.objectOf(PropTypes.string).isRequired,
   dispatch: PropTypes.func.isRequired,
   selectedCamera: PropTypes.object,
   getAllRoversData: PropTypes.shape({
