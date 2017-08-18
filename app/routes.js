@@ -20,7 +20,7 @@ export default function createRoutes() {
       name: 'home',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-            System.import('containers/HomePage'),
+            import('containers/HomePage'),
         ]);
         const renderRoute = loadModule(cb);
         importModules.then(([component]) => {
@@ -33,14 +33,14 @@ export default function createRoutes() {
           path: '/r/:rover',
           name: 'rover',
           getComponent(nextState, cb) {
-              System.import('containers/SelectedRoverPage').then(loadModule(cb)).catch(errorLoading);
+              import('containers/SelectedRoverPage').then(loadModule(cb)).catch(errorLoading);
           },
       },
       {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
-          System.import('containers/NotFoundPage')
+          import('containers/NotFoundPage')
           .then(loadModule(cb))
           .catch(errorLoading);
       },
