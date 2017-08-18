@@ -51,7 +51,7 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
     return (
       <GalleryContainer>
         <h1>
-          {this.props.cameraFullName} {this.props.cameraAbbrev}
+          {this.props.cameraFullName}
         </h1>
         {this.props.fetchingImagesState ? (
             <p>Loading... looking for the latest sol in which this camera took photos</p>
@@ -97,7 +97,6 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
 
 Gallery.propTypes = {
   cameraFullName: PropTypes.string.isRequired,
-  cameraAbbrev: PropTypes.string.isRequired,
   fetchingImagesState: PropTypes.bool.isRequired,
   sol: PropTypes.number.isRequired,
   earthDate: PropTypes.string.isRequired,

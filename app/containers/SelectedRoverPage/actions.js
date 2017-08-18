@@ -154,12 +154,13 @@ function receiveRoverImages(rover, json) {
   };
 }
 
-function findSolNotInEmptySols(state, rover, camera, sol) {
+function findSolNotInEmptySols(state, rover, cameraIndex, camera, cameraFullName, sol) {
   if (state.getDataByRover[rover][camera]['emptySols'].includes(sol)) {
     return findSolNotInEmptySols(state, rover, camera, sol - 1);
   } else {
     return function (dispatch) {
       dispatch(requestRoversImages(rover, camera, sol));
+      dispatch(selectedACamera(...[rover, cameraIndex, camera, cameraFullName, sol, ]));
     };
   }
 }
@@ -167,9 +168,10 @@ function findSolNotInEmptySols(state, rover, camera, sol) {
 export function fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex) {
   return function (dispatch, getState) {
     if (typeof getState().getDataByRover[rover][camera] !== 'undefined' && getState().getDataByRover[rover][camera]['emptySols'].includes(sol)) {
-      findSolNotInEmptySols(getState(), rover, camera, sol - 1);
+      findSolNotInEmptySols(getState(), rover, cameraIndex, camera, cameraFullName, sol - 1);
     } else {
       dispatch(requestRoversImages(rover, camera, sol));
+      dispatch(selectedACamera(...[rover, cameraIndex, camera, cameraFullName, sol, ]));
     }
     return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
       if (json.photos.length > 0) {

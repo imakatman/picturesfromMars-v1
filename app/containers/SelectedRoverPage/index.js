@@ -194,9 +194,7 @@ class SelectedRoverPage extends React.Component {
           )
         }
 
-        {selectedCamera['selected'] === true
-        && getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['isFetching'] === false
-        &&
+        {selectedCamera['selected'] === true &&
         <ActiveCameraLayer>
           <Flex direction="column" flex={1}>
             <NavigationBox>
@@ -231,8 +229,7 @@ class SelectedRoverPage extends React.Component {
           <GalleryContain flex={2}>
             <Gallery
               fetchingImagesState={getDataByRover[selectedRover][selectedCamera['camera']]['isFetching']}
-              cameraAbbrev={selectedCamera['camera']}
-              cameraFullName={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['cameraFullName']}
+              cameraFullName={selectedCamera['cameraFullName']}
               sol={selectedCamera['sol']}
               earthDate={selectedCamera['earthDate']}
               photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['photoData']}
