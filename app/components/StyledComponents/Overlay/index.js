@@ -7,7 +7,7 @@ export const Overlay = styled.div`
     top: 0;
     left: 0;
     z-index: 0;
-    background-color: ${props=>'rgba(0,0,0,' + props.opacity + ')'};
+    background-color: ${ props => 'rgba(0,0,0,' + props.opacity + ')' };
 `;
 
 export const TopLayer = styled.div`
