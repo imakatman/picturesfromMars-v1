@@ -22,6 +22,7 @@ const CameraNavItem = styled.li`
     background-position: 50%;
     position:relative;
     z-index: 1;
+    cursor: pointer;
     &:after{
         content: ' ';
         position: absolute;
@@ -31,7 +32,11 @@ const CameraNavItem = styled.li`
         height: 100%;
         z-index: -1;
         background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0));
-    }    
+    }
+    &:hover{
+      &:after{
+        background: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0));
+    }
 `;
 
 class CameraNavigation extends React.Component {

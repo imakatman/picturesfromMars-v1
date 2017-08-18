@@ -69,7 +69,7 @@ class Picker extends React.Component {
                       </SmallLabel>
                     </SubHeading>
                   </TopLayer>
-                  <Overlay opacity='0.3' />
+                  <Overlay opacity="0.3" />
                 </RoverColumn>
               </HeadingLink>
             </div>
