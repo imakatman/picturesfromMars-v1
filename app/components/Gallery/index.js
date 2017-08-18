@@ -24,10 +24,6 @@ const Next = styled.div`
     font-size: 20px;
 `;
 
-const Loading = styled.p`
-    
-`;
-
 const Date = styled.h3`
     
 `;
@@ -51,11 +47,11 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
   render() {
     return (
       <GalleryContainer>
-        <CameraName>
+        <h1>
           {this.props.cameraFullName} {this.props.cameraAbbrev}
-        </CameraName>
+        </h1>
         {this.props.fetchingImagesState ? (
-            <Loading>Loading... looking for the latest sol in which this camera took photos</Loading>
+            <p>Loading... looking for the latest sol in which this camera took photos</p>
           ) : (
             <div>
               <Date>

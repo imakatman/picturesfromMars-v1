@@ -277,15 +277,7 @@ SelectedRoverPage.propTypes = {
       }),
     })
   ).isRequired,
-  selectedCamera: PropTypes.objectOf(PropTypes.shape({
-      camera: PropTypes.string,
-      cameraFullName: PropTypes.string,
-      cameraIndex: PropTypes.number,
-      earthDate: PropTypes.string,
-      selected: PropTypes.bool,
-      sol: PropTypes.number,
-    })
-  ).isRequired,
+  selectedCamera: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 

@@ -65,6 +65,24 @@ class RoverDiagram extends React.Component { // eslint-disable-line react/prefer
     }
 }
 
-RoverDiagram.propTypes = {};
+RoverDiagram.propTypes = {
+  // cameras: PropTypes.objectOf(PropTypes.shape({
+  //   didInvalidate: PropTypes.bool,
+  //   isFetching: PropTypes.bool,
+  //   lastUpdated: PropTypes.number,
+  //   name: PropTypes.string,
+  //   data: PropTypes.shape({
+  //     cameras: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
+  //     id: PropTypes.number,
+  //     landing_date: PropTypes.string,
+  //     launch_date: PropTypes.string,
+  //     max_date: PropTypes.string,
+  //     max_sol: PropTypes.number,
+  //     name: PropTypes.string,
+  //     status: PropTypes.string,
+  //     total_photos: PropTypes.number,
+  //   }),
+  // })
+};
 
 export default RoverDiagram;
