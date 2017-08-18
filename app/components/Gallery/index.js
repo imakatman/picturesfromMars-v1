@@ -24,10 +24,6 @@ const Next = styled.div`
     font-size: 20px;
 `;
 
-const Date = styled.h3`
-    
-`;
-
 const LoadMore = styled.p`
   text-align:right;
 `;
@@ -54,9 +50,9 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
             <p>Loading... looking for the latest sol in which this camera took photos</p>
           ) : (
             <div>
-              <Date>
+              <h3>
                 Sol: {this.props.sol} || {this.props.earthDate}
-              </Date>
+              </h3>
               <Next>
                 <span onClick={() => this.props.returnToPreviousDate()}>Previous Date</span>
                 <span onClick={(i) => this.props.fetchNextAvailablePhotos(i)}>Next Available Date with Photos</span>
