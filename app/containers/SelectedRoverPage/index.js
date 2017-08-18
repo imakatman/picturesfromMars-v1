@@ -175,7 +175,8 @@ class SelectedRoverPage extends React.Component {
 
         {selectedRover && <RoverName>{selectedRover}</RoverName>}
 
-        { Object.keys(getDataByRover[selectedRover]['data']).length !== 0
+        { typeof getDataByRover[selectedRover] !== 'undefined'
+        && Object.keys(getDataByRover[selectedRover]['data']).length !== 0
         && getDataByRover[selectedRover]['isFetching'] === false
         && selectedCamera['selected'] === false ? (
             <IntroLayer>

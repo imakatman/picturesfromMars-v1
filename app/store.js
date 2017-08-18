@@ -7,27 +7,26 @@ import { getAllRoversData } from './containers/HomePage/reducers';
 import { selectedRover, getDataByRover } from './containers/SelectedRoverPage/reducers';
 import { selectedCamera } from './reducers';
 
-
 const rootReducer = combineReducers({
-    getAllRoversData,
-    selectedRover,
-    getDataByRover,
-    selectedCamera,
-    routing: routerReducer,
+  getAllRoversData,
+  selectedRover,
+  getDataByRover,
+  selectedCamera,
+  routing: routerReducer,
 });
 
 const loggerMiddleware = createLogger();
 
 export default function configureStore() {
-    return createStore(
-        rootReducer,
-        compose(
-            autoRehydrate(),
-            applyMiddleware(
-                thunkMiddleware,
-                routerMiddleware(history),
-                loggerMiddleware
-            )
-        )
-    );
+  return createStore(
+    rootReducer,
+    compose(
+      autoRehydrate(),
+      applyMiddleware(
+        thunkMiddleware,
+        routerMiddleware(history),
+        loggerMiddleware
+      )
+    )
+  );
 }
