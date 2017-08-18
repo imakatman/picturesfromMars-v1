@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Flex, Box } from 'grid-styled';
 import Masonry from 'react-masonry-component';
@@ -20,8 +21,14 @@ const Next = styled.div`
     position: absolute;
     top: 0;
     right: 1%;
-    color: #fff;
+    color: #ececec;
     font-size: 20px;
+    span{
+      &:hover{
+        color: #fff;
+        cursor: pointer;
+      }
+    }
 `;
 
 const LoadMore = styled.p`
@@ -88,6 +95,20 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
   }
 }
 
-Gallery.propTypes = {};
+Gallery.propTypes = {
+  cameraFullName: PropTypes.string.isRequired,
+  cameraAbbrev: PropTypes.string.isRequired,
+  fetchingImagesState: PropTypes.bool.isRequired,
+  sol: PropTypes.number.isRequired,
+  earthDate: PropTypes.string.isRequired,
+  photos: PropTypes.arrayOf(PropTypes.shape({
+    camera: PropTypes.object,
+    earth_date: PropTypes.string,
+    id: PropTypes.number,
+    img_src: PropTypes.string,
+    rover: PropTypes.object,
+  })).isRequired,
+  fetchNextSet: PropTypes.func.isRequired,
+};
 
 export default Gallery;

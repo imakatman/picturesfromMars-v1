@@ -26,11 +26,9 @@ class RoversApp extends React.Component {
     const { dispatch, selectedCamera } = this.props;
 
     if(selectedCamera.selected == true){
-      console.log("camera is still selecte");
       dispatch(fetchAllRoverDataIfNeeded());
       return dispatch(unselectedCamera());
     } else {
-      console.log("camera is not selecte");
       return dispatch(fetchAllRoverDataIfNeeded());
     }
   }
@@ -64,8 +62,25 @@ function mapStateToProps(state) {
 
 RoversApp.propTypes = {
   routeParams: PropTypes.objectOf(PropTypes.string).isRequired,
-  selectedRover: PropTypes.string.isRequired,
   dispatch: PropTypes.func.isRequired,
+  selectedCamera: PropTypes.object,
+  getAllRoversData: PropTypes.shape({
+    AllRover: PropTypes.shape({
+      didInvalidateAll: PropTypes.bool.isRequired,
+      isFetchingAll: PropTypes.bool.isRequired,
+      lastUpdatedAll: PropTypes.number.isRequired,
+      simpleDataAboutAllRovers: PropTypes.arrayOf(PropTypes.shape({
+        cameras: PropTypes.array.isRequired,
+        id: PropTypes.number.isRequired,
+        landing_date: PropTypes.string.isRequired,
+        launch_date: PropTypes.string.isRequired,
+        max_date: PropTypes.string.isRequired,
+        max_sol: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        total_photos: PropTypes.number.isRequired,
+      }))
+    })
+  })
 };
 
 export default connect(mapStateToProps)(RoversApp);

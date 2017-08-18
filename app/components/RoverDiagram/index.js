@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router';
 import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left';
@@ -66,23 +67,8 @@ class RoverDiagram extends React.Component { // eslint-disable-line react/prefer
 }
 
 RoverDiagram.propTypes = {
-  // cameras: PropTypes.objectOf(PropTypes.shape({
-  //   didInvalidate: PropTypes.bool,
-  //   isFetching: PropTypes.bool,
-  //   lastUpdated: PropTypes.number,
-  //   name: PropTypes.string,
-  //   data: PropTypes.shape({
-  //     cameras: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
-  //     id: PropTypes.number,
-  //     landing_date: PropTypes.string,
-  //     launch_date: PropTypes.string,
-  //     max_date: PropTypes.string,
-  //     max_sol: PropTypes.number,
-  //     name: PropTypes.string,
-  //     status: PropTypes.string,
-  //     total_photos: PropTypes.number,
-  //   }),
-  // })
+  cameras: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
+  unmountGallery: PropTypes.func,
 };
 
 export default RoverDiagram;
