@@ -118,7 +118,7 @@ Gallery.propTypes = {
   cameraFullName: PropTypes.string.isRequired,
   fetchingImagesState: PropTypes.bool.isRequired,
   sol: PropTypes.number.isRequired,
-  earthDate: PropTypes.string.isRequired,
+  earthDate: PropTypes.string,
   photos: PropTypes.arrayOf(PropTypes.shape({
     camera: PropTypes.object,
     earth_date: PropTypes.string,

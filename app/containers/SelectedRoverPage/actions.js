@@ -218,6 +218,8 @@ export function fetchRoverImagesIfNeeded(rover, sol, page, camera, cameraFullNam
 export function fetchRoverImagesOnce(rover, sol, page, camera, cameraFullName, cameraIndex) {
   return function (dispatch) {
     dispatch(requestRoversImages(rover, camera, sol));
+    console.log("should select a camera");
+    dispatch(selectedACamera(...[rover, cameraIndex, camera, cameraFullName, sol, ]));
     return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
       if (json.photos.length > 0) {
         const earthDate = json.photos[0].earth_date;
