@@ -162,7 +162,7 @@ class SelectedRoverPage extends React.Component {
   }
 
   render() {
-    const { selectedRover, getDataByRover, selectedCamera } = this.props;
+    const { dispatch, selectedRover, getDataByRover, selectedCamera } = this.props;
 
     return (
       <div>
@@ -230,13 +230,13 @@ class SelectedRoverPage extends React.Component {
             <Gallery
               fetchingImagesState={getDataByRover[selectedRover][selectedCamera['camera']]['isFetching']}
               cameraAbbrev={selectedCamera['camera']}
-              cameraFullName={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['cameraFullName']}
+              cameraFullName={selectedCamera['cameraFullName']}
               sol={selectedCamera['sol']}
               earthDate={selectedCamera['earthDate']}
               photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['photoData']}
               returnToPreviousDate={() => this.returnToPreviousDate()}
               fetchNextAvailablePhotos={() => this.fetchNextAvailablePhotos()}
-              fetchNextSet={() => this.fetchNextPhotoSet()} />
+              fetchNextSet={() => dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']))} />
           </GalleryContain>
         </ActiveCameraLayer>
         }
