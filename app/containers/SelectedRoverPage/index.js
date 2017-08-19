@@ -169,7 +169,7 @@ class SelectedRoverPage extends React.Component {
         <Helmet
           title="Pictures From Mars"
           meta={[
-            { name: 'description', content: 'Description of SelectedRoverPage' },
+            { name: 'description', content: 'Go through the collection of photos that are taken by rovers on Mars.' },
           ]}
         />
 
@@ -229,7 +229,8 @@ class SelectedRoverPage extends React.Component {
           <GalleryContain flex={2}>
             <Gallery
               fetchingImagesState={getDataByRover[selectedRover][selectedCamera['camera']]['isFetching']}
-              cameraFullName={selectedCamera['cameraFullName']}
+              cameraAbbrev={selectedCamera['camera']}
+              cameraFullName={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['cameraFullName']}
               sol={selectedCamera['sol']}
               earthDate={selectedCamera['earthDate']}
               photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['photoData']}
