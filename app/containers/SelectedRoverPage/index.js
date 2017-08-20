@@ -90,7 +90,7 @@ class SelectedRoverPage extends React.Component {
     const { selectedCamera } = this.props;
 
     if (selectedCamera.selected === true) {
-      return this.mountGallery(selectedCamera['rover'], selectedCamera['cameraIndex'], selectedCamera['camera'], selectedCamera['sol']);
+      return this.mountGallery(selectedCamera['rover'], selectedCamera['cameraIndex'], selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['sol']);
     }
   }
 
@@ -167,7 +167,6 @@ class SelectedRoverPage extends React.Component {
         {selectedRover && <RoverName>{selectedRover}</RoverName>}
 
         { typeof getDataByRover[selectedRover] !== 'undefined'
-        && Object.keys(getDataByRover[selectedRover]['data']).length !== 0
         && getDataByRover[selectedRover]['isFetching'] === false
         && selectedCamera['selected'] === false ? (
             <IntroLayer>
