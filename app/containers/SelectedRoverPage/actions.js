@@ -4,7 +4,7 @@
 
 import fetch from 'isomorphic-fetch';
 
-import { selectedACamera } from '../../actions';
+import { selectedACamera, unselectedCamera } from '../../actions';
 
 export const SELECT_ROVER = 'selectRover';
 
@@ -36,17 +36,14 @@ function requestRoversData(rover) {
 export const RECEIVE_ROVERS_DATA = 'receiveRoversData';
 
 function receiveRoversData(rover, json) {
-  let dateReceivedOn = new Date();
-  console.log(dateReceivedOn);
-  dateReceivedOn = dateReceivedOn.toDateString();
-  console.log(dateReceivedOn);
+  const dateReceivedOn = new Date();
   return {
     type: RECEIVE_ROVERS_DATA,
     rover,
     name: json.rover.name,
     id: json.rover.id,
     data: json.rover,
-    receivedAt: dateReceivedOn,
+    dateDataReceived: dateReceivedOn,
   };
 }
 
@@ -59,15 +56,20 @@ export function fetchRoversData(rover) {
 
 function shouldFetchRoverData(state, rover) {
   const data = state.getDataByRover[rover];
-  let today = new Date();
-  today = today.toDateString();
-  console.log(today);
-  console.log(data.receivedAt);
+  let today;
+  let dayAfterReceivedAt;
+  if (typeof data !== 'undefined'){
+    today = Date.now();
+    const dateReceived = new Date(data.dateDataReceived);
+    const time = dateReceived.getTime();
+    dayAfterReceivedAt = new Date(time + 24*60*60*1000);
+    dayAfterReceivedAt = Date.parse(dayAfterReceivedAt);
+  }
+
   if (typeof data === 'undefined') {
-    console.log("hasnt fetched images");
     return true;
-  } else if (data.receivedAt < today) {
-    console.log("today is a new day");
+  } else if (today >= dayAfterReceivedAt) {
+    console.log("today is greater than received at");
     return true;
   } else if (data.isFetching) {
     return false;
@@ -85,6 +87,7 @@ export function fetchRoverDataIfNeeded(rover) {
   return (dispatch, getState) => {
     if (shouldFetchRoverData(getState(), rover)) {
       // Dispatch a thunk from thunk!
+      dispatch(unselectedCamera());
       return dispatch(fetchRoversData(rover));
     } else {
       // Let the calling code know there's nothing to wait for.
