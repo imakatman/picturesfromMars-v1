@@ -56,6 +56,8 @@ export function fetchRoversData(rover) {
 
 function shouldFetchRoverData(state, rover) {
   const data = state.getDataByRover[rover];
+
+  // ** Check if today is at least 24 hours greater than the dateDataReceived time inside of rover Object
   let today;
   let dayAfterReceivedAt;
   if (typeof data !== 'undefined'){
@@ -65,6 +67,7 @@ function shouldFetchRoverData(state, rover) {
     dayAfterReceivedAt = new Date(time + 24*60*60*1000);
     dayAfterReceivedAt = Date.parse(dayAfterReceivedAt);
   }
+  // ** End
 
   if (typeof data === 'undefined') {
     return true;
