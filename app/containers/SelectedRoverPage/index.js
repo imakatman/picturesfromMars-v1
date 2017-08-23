@@ -166,19 +166,13 @@ class SelectedRoverPage extends React.Component {
     const earthDate = data['earth_date'];
     const sol = data['sol'];
 
-
-    console.log(id);
-    console.log(src);
-    console.log(name);
-    console.log(fullName);
-    console.log(earthDate);
-    console.log(sol);
-
-    // return dispatch(selectImage(selectedRover, ))
+    return dispatch(selectImage(id, src, selectedRover, name, fullName, earthDate, sol));
   }
 
   render() {
-    const { dispatch, selectedRover, getDataByRover, selectedCamera } = this.props;
+    const { dispatch, selectedRover, getDataByRover, selectedCamera, selectedImage } = this.props;
+
+    console.log(selectedImage);
 
     return (
       <div>
@@ -252,7 +246,8 @@ class SelectedRoverPage extends React.Component {
               returnToPreviousDate={() => this.returnToPreviousDate()}
               fetchNextAvailablePhotos={() => dispatch(fetchNextRoverImages(selectedRover, selectedCamera['sol'] - 1, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']))}
               fetchNextSet={() => dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']))}
-              mountImageDetails={(i) => this.mountImageDetails(i)} />
+              mountImageDetails={(i) => this.mountImageDetails(i)}
+              selectedImage={selectedImage} />
           </GalleryContain>
         </ActiveCameraLayer>
         }
@@ -262,12 +257,13 @@ class SelectedRoverPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { selectedRover, getDataByRover, selectedCamera } = state;
+  const { selectedRover, getDataByRover, selectedCamera, selectedImage } = state;
 
   return {
     selectedRover,
     getDataByRover,
     selectedCamera,
+    selectedImage,
   };
 }
 

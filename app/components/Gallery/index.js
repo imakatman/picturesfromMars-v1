@@ -8,10 +8,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Flex, Box } from 'grid-styled';
-import { Button } from 'components/StyledComponents/Button';
 import Masonry from 'react-masonry-component';
 import FaAngleLeft from 'react-icons/lib/fa/angle-left';
 import FaAngleDoubleRight from 'react-icons/lib/fa/angle-double-right';
+
+import { Button } from 'components/StyledComponents/Button';
+import PhotoDetails from 'components/PhotoDetails';
 
 const GalleryContainer = styled.div`
     position:relative;
@@ -72,10 +74,11 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
                 <Box flex='1'>
                   <Navigation>
                     <GalleryBtn title="Previous Date" onClick={() => this.props.returnToPreviousDate()}>
-                      <FaAngleLeft/><span>Prev</span>
+                      <FaAngleLeft /><span>Prev</span>
                     </GalleryBtn>
-                    <GalleryBtn title="Next Available Date with Photos" onClick={(i) => this.props.fetchNextAvailablePhotos(i)}>
-                      <span>Next</span><FaAngleDoubleRight/>
+                    <GalleryBtn title="Next Available Date with Photos"
+                      onClick={(i) => this.props.fetchNextAvailablePhotos(i)}>
+                      <span>Next</span><FaAngleDoubleRight />
                     </GalleryBtn>
                   </Navigation>
                 </Box>
@@ -105,6 +108,8 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
               <LoadMore onClick={(i) => this.props.fetchNextSet(i)}>
                 Load more photos
               </LoadMore>
+              {this.props.selectedImage.selected &&
+              <PhotoDetails details={this.props.selectedImage} />}
             </div>
           )}
       </GalleryContainer>
