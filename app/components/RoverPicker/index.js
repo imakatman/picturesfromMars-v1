@@ -14,9 +14,9 @@ import Curiosity from 'assets/rovers/Curiosity.jpg';
 import Opportunity from 'assets/rovers/Opportunity.jpg';
 import Spirit from 'assets/rovers/Spirit.jpg';
 
-import { TopLayer, Overlay } from '../StyledComponents/Overlay';
-import { Heading, SubHeading } from '../StyledComponents/Headings';
-import { SmallLabel } from '../StyledComponents/SmallLabel';
+import { TopLayer, Overlay } from 'components/StyledComponents/Overlay';
+import { Heading, SubHeading } from 'components/StyledComponents/Headings';
+import { SmallLabel } from 'components/StyledComponents/SmallLabel';
 
 
 const HeadingLink = styled(Link)`

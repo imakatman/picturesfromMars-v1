@@ -189,7 +189,7 @@ function roversData(state = {
         didInvalidate: false,
         name: action.name,
         data: action.data,
-        lastUpdated: action.receivedAt,
+        dateDataReceived: action.dateDataReceived,
       });
     default:
       return state;

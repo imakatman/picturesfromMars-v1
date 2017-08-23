@@ -8,7 +8,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Flex, Box } from 'grid-styled';
+import { Button } from 'components/StyledComponents/Button';
 import Masonry from 'react-masonry-component';
+import FaAngleLeft from 'react-icons/lib/fa/angle-left';
+import FaAngleDoubleRight from 'react-icons/lib/fa/angle-double-right';
 
 const GalleryContainer = styled.div`
     position:relative;
@@ -17,22 +20,24 @@ const GalleryContainer = styled.div`
     background: #000;
 `;
 
-const Next = styled.div`
-    position: absolute;
-    top: 0;
-    right: 1%;
-    color: #ececec;
-    font-size: 20px;
-    span{
-      &:hover{
-        color: #fff;
-        cursor: pointer;
-      }
-    }
+const Navigation = styled.div`
+    flex: 1;
+    text-align: right;   
 `;
 
-const LoadMore = styled.p`
+const GalleryBtn = styled(Button)`    
+    font-size: 2rem;
+    margin: 0 0.5em;
+    span{
+      font-size: 1.3rem;
+    } 
+`;
+
+const LoadMore = styled(GalleryBtn)`
   text-align:right;
+  display:block;
+  margin: 2rem 1.5rem 1rem;
+  font-size: 1.3rem;
 `;
 
 const Img = styled.img`
@@ -51,19 +56,29 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
     return (
       <GalleryContainer>
         <h1>
-          {this.props.cameraFullName} {this.props.cameraAbbrev}
+          {this.props.cameraFullName}
         </h1>
         {this.props.fetchingImagesState ? (
             <p>Loading... looking for the latest sol in which this camera took photos</p>
           ) : (
             <div>
-              <h3>
-                Sol: {this.props.sol} || {this.props.earthDate}
-              </h3>
-              <Next>
-                <span onClick={() => this.props.returnToPreviousDate()}>Previous Date</span>
-                <span onClick={(i) => this.props.fetchNextAvailablePhotos(i)}>Next Available Date with Photos</span>
-              </Next>
+              <Flex>
+                <Box flex='1'>
+                  <h3>
+                    Sol: {this.props.sol} || {this.props.earthDate}
+                  </h3>
+                </Box>
+                <Box flex='1'>
+                  <Navigation>
+                    <GalleryBtn title="Previous Date" onClick={() => this.props.returnToPreviousDate()}>
+                      <FaAngleLeft/><span>Prev</span>
+                    </GalleryBtn>
+                    <GalleryBtn title="Next Available Date with Photos" onClick={(i) => this.props.fetchNextAvailablePhotos(i)}>
+                      <span>Next</span><FaAngleDoubleRight/>
+                    </GalleryBtn>
+                  </Navigation>
+                </Box>
+              </Flex>
               <Flex wrap={true}>
                 <Masonry style={{ width: '100%' }}>
                   {this.props.photos ? (
@@ -97,10 +112,9 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
 
 Gallery.propTypes = {
   cameraFullName: PropTypes.string.isRequired,
-  cameraAbbrev: PropTypes.string.isRequired,
   fetchingImagesState: PropTypes.bool.isRequired,
   sol: PropTypes.number.isRequired,
-  earthDate: PropTypes.string.isRequired,
+  earthDate: PropTypes.string,
   photos: PropTypes.arrayOf(PropTypes.shape({
     camera: PropTypes.object,
     earth_date: PropTypes.string,
