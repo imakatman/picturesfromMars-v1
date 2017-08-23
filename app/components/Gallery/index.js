@@ -45,6 +45,7 @@ const Img = styled.img`
     max-width: 100%;
     height: auto;
     display:block;
+    cursor: pointer;
 `;
 
 class Gallery extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -82,13 +83,14 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
               <Flex wrap={true}>
                 <Masonry style={{ width: '100%' }}>
                   {this.props.photos ? (
-                      this.props.photos.map(photo =>
+                      this.props.photos.map((photo, i) =>
                         <Box
                           w={1 / 4}
                           m='10px 0'
                           p='0 15px'
                           key={photo.id}>
                           <Img
+                            onClick={() => this.props.mountImageDetails(i)}
                             src={photo.img_src}
                             alt={photo.roverName + ':' + photo.camera + '-' + photo.id} />
                         </Box>)

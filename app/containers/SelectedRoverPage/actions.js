@@ -188,7 +188,7 @@ function receiveRoverImages(rover, json) {
 // ***********
 function findSolNotInEmptySols(state, rover, cameraIndex, camera, cameraFullName, sol) {
   if (state.getDataByRover[rover][camera]['emptySols'].includes(sol)) {
-    return findSolNotInEmptySols(state, rover, camera, sol - 1);
+    return findSolNotInEmptySols(state, rover, cameraIndex, camera, cameraFullName, sol - 1);
   } else {
     return function (dispatch) {
       dispatch(requestRoversImages(rover, camera, sol));
@@ -346,3 +346,37 @@ export function fetchNextPhotoSet(rover, sol, camera, cameraFullName, cameraInde
 }
 
 // LOOK AT http://redux.js.org/docs/introduction/Examples.html#real-world for ERROR MESSAGE HANDLING
+
+
+// ************************************************************
+// ******
+//
+//  Actions specific to Image Selection Functionality
+//
+// ******
+// ***********************
+// ************************************************************
+
+export const SELECT_IMAGE = 'selectImage';
+
+export function selectImage(photoId, imgSrc, rover, camera, cameraFullName, earthDate, sol) {
+  return {
+    type: SELECT_IMAGE,
+    photoId,
+    imgSrc,
+    rover,
+    camera,
+    cameraFullName,
+    earthDate,
+    sol,
+  };
+}
+
+export const UNSELECT_IMAGE = 'unselectImage';
+
+export function unselectImage() {
+  return {
+    type: UNSELECT_IMAGE,
+  };
+}
+
