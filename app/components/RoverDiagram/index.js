@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router';
+import { Button } from 'components/StyledComponents/Button';
 import FaLongArrowLeft from 'react-icons/lib/fa/long-arrow-left';
 
 const Container = styled.div`
@@ -25,45 +26,47 @@ const CameraBtn = styled.a`
     }
 `;
 
-const BackLink = styled(Link)`
-    text-decoration: none;
-    cursor:pointer;
-    color: #fff;
-`;
-
 const Back = styled.div`
     position: absolute;
     bottom: 1%;
     left: 1%;
-    color: #fff;
     font-size: 36px;
 `;
 
+const BackLink = styled(Link)`
+    text-decoration: none;
+    cursor:pointer;
+`;
+
 class RoverDiagram extends React.Component { // eslint-disable-line react/prefer-stateless-function
-    render() {
-        return (
-            <Container>
-                {this.props.cameras.map((camera, i) =>
-                    <CameraBtn
-                        key={camera.full_name}
-                        data-camera={camera.name}
-                        onClick={() => this.props.mountGallery(i)}>
-                        {camera.full_name}
-                    </CameraBtn>
-                )}
-                {this.props.landing ? (
-                    <Back>
-                        <BackLink to={'/'}>
-                            <FaLongArrowLeft />
-                        </BackLink>
-                    </Back> ) : (
-                    <Back onClick={() => this.props.unmountGallery()}>
-                        <FaLongArrowLeft />
-                    </Back>
-                )}
-            </Container>
-        );
-    }
+  render() {
+    return (
+      <Container>
+        {this.props.cameras.map((camera, i) =>
+          <CameraBtn
+            key={camera.full_name}
+            data-camera={camera.name}
+            onClick={() => this.props.mountGallery(i)}>
+            {camera.full_name}
+          </CameraBtn>
+        )}
+        {this.props.landing ? (
+            <Back>
+              <BackLink to={'/'}>
+                <Button>
+                  <FaLongArrowLeft />
+                </Button>
+              </BackLink>
+            </Back> ) : (
+            <Back onClick={() => this.props.unmountGallery()}>
+              <Button>
+                <FaLongArrowLeft />
+              </Button>
+            </Back>
+          )}
+      </Container>
+    );
+  }
 }
 
 RoverDiagram.propTypes = {

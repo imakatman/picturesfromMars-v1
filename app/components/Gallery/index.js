@@ -8,6 +8,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Flex, Box } from 'grid-styled';
+import { Button } from 'components/StyledComponents/Button';
 import Masonry from 'react-masonry-component';
 import FaAngleLeft from 'react-icons/lib/fa/angle-left';
 import FaAngleDoubleRight from 'react-icons/lib/fa/angle-double-right';
@@ -24,17 +25,12 @@ const Navigation = styled.div`
     text-align: right;   
 `;
 
-const GalleryBtn = styled.span`
-    color: #ececec;
+const GalleryBtn = styled(Button)`    
     font-size: 2rem;
     margin: 0 0.5em;
     span{
       font-size: 1.3rem;
-    }
-    &:hover{
-      color: #fff;
-      cursor: pointer;
-    }    
+    } 
 `;
 
 const LoadMore = styled(GalleryBtn)`
