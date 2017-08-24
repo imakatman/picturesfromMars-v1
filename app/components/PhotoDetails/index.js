@@ -7,7 +7,9 @@
 import React from 'react';
 import { Flex, Box } from 'grid-styled';
 import styled from 'styled-components';
+import FaTimes from 'react-icons/lib/fa/times-circle';
 
+import { Button } from 'components/StyledComponents/Button';
 import { Heading, SubHeading } from 'components/StyledComponents/Headings';
 
 const Container = styled.div`
@@ -19,10 +21,16 @@ const Container = styled.div`
   background-color: #000;
 `;
 
+const Close = styled(FaTimes)`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+`;
+
 const Image = styled.img`
   max-width: 700px;
   width: 80%;
-`
+`;
 
 class PhotoDetails extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -40,6 +48,9 @@ class PhotoDetails extends React.Component { // eslint-disable-line react/prefer
 
     return (
       <Container>
+        <Button>
+          <Close />
+        </Button>
         <Flex align="center" style={{ height: '100%' }}>
           <Box flex='1' p='20px'>
             <Image
