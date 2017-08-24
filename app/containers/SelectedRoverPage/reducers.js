@@ -53,9 +53,11 @@ function addSolImageData(state, action) {
   switch (action.type) {
     case ADD_MEANINGFUL_SOL:
       if (!state.meaningfulSols.includes(action.sol)) {
+        let sols = state.meaningfulSols.concat(action.sol);
+        sols.sort((a, b) => b - a);
         return Object.assign({}, state, {
           latestMeaningfulSol: action.sol,
-          meaningfulSols: state.meaningfulSols.concat(action.sol),
+          meaningfulSols: sols,
         });
       } else {
         return state;

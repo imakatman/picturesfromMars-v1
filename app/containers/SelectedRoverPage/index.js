@@ -142,7 +142,11 @@ class SelectedRoverPage extends React.Component {
     const meaningfulSols = getDataByRover[selectedRover][selectedCamera['camera']]['meaningfulSols'];
     const i              = meaningfulSols.indexOf(selectedCamera['sol']);
 
-    return dispatch(selectedACamera(selectedRover, selectedCamera['cameraIndex'], selectedCamera['camera'], selectedCamera['cameraFullName'], meaningfulSols[i - 1], selectedCamera['earthDate']));
+    if(i !== 0){
+      return dispatch(selectedACamera(selectedRover, selectedCamera['cameraIndex'], selectedCamera['camera'], selectedCamera['cameraFullName'], meaningfulSols[i - 1], selectedCamera['earthDate']));
+    } else {
+      return;
+    }
   }
 
   datePicker(e) {
