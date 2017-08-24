@@ -167,7 +167,7 @@ class SelectedRoverPage extends React.Component {
     const earthDate = data['earth_date'];
     const sol       = data['sol'];
 
-    return dispatch(selectImage(id, src, selectedRover, name, fullName, earthDate, sol));
+    return dispatch(selectImage(i, id, src, selectedRover, name, fullName, earthDate, sol));
   }
 
   render() {
@@ -243,7 +243,7 @@ class SelectedRoverPage extends React.Component {
               earthDate={selectedCamera['earthDate']}
               photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['photoData']}
               returnToPreviousDate={() => this.returnToPreviousDate()}
-              fetchNextAvailablePhotos={() => dispatch(fetchNextRoverImages(selectedRover, selectedCamera['sol'] - 1, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']))}
+              fetchNextAvailablePhotos={() => dispatch(fetchRoverImagesIfNeeded(...[selectedRover, selectedCamera['sol'] - 1, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex'],]))}
               fetchNextSet={() => dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']))}
               mountImageDetails={(i) => this.mountImageDetails(i)}
               selectedImage={selectedImage}

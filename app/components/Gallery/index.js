@@ -111,7 +111,9 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
               {this.props.selectedImage.selected &&
               <PhotoDetails
                 details={this.props.selectedImage}
-                exitPhotoDetails={() => this.props.unselectImage()}/>}
+                exitPhotoDetails={() => this.props.unselectImage()}
+                viewPrevPhoto={() => this.props.mountImageDetails(this.props.selectedImage.index - 1)}
+                viewNextPhoto={() => this.props.mountImageDetails(this.props.selectedImage.index + 1)}/>}
             </div>
           )}
       </GalleryContainer>

@@ -249,6 +249,7 @@ export function getDataByRover(state = {}, action) {
 
 export function selectedImage(state = {
   selected: false,
+  index: undefined,
   src: undefined,
   rover: undefined,
   camera: undefined,
@@ -260,6 +261,7 @@ export function selectedImage(state = {
     case SELECT_IMAGE:
       return Object.assign({}, state, {
         selected: true,
+        index: action.index,
         id: action.photoId,
         src: action.imgSrc,
         rover: action.rover,
@@ -271,6 +273,7 @@ export function selectedImage(state = {
     case UNSELECT_IMAGE:
       return Object.assign({}, state, {
         selected: false,
+        index: undefined,
         id: undefined,
         src: undefined,
         rover: undefined,

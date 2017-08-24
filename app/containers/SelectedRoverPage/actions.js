@@ -222,10 +222,13 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
 
 function shouldFetchRoverImages(state, rover, sol, camera) {
   if (typeof state.getDataByRover[rover][camera] === null || typeof state.getDataByRover[rover][camera] === 'undefined') {
+    console.log('camera data does not exist');
     return true;
   } else if (typeof state.getDataByRover[rover][camera][sol] === 'undefined') {
+    console.log('sol data does not exist');
     return true;
   } else {
+    console.log('this exists');
     return false;
   }
 }
@@ -359,9 +362,10 @@ export function fetchNextPhotoSet(rover, sol, camera, cameraFullName, cameraInde
 
 export const SELECT_IMAGE = 'selectImage';
 
-export function selectImage(photoId, imgSrc, rover, camera, cameraFullName, earthDate, sol) {
+export function selectImage(index, photoId, imgSrc, rover, camera, cameraFullName, earthDate, sol) {
   return {
     type: SELECT_IMAGE,
+    index,
     photoId,
     imgSrc,
     rover,
