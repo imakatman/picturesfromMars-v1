@@ -109,7 +109,9 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
                 Load more photos
               </LoadMore>
               {this.props.selectedImage.selected &&
-              <PhotoDetails details={this.props.selectedImage} />}
+              <PhotoDetails
+                details={this.props.selectedImage}
+                exitPhotoDetails={() => this.props.unselectImage()}/>}
             </div>
           )}
       </GalleryContainer>

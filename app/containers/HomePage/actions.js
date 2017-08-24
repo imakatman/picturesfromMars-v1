@@ -46,7 +46,7 @@ function shouldFetchAllRoverData(state) {
   // the dateDataReceived time inside of rover Object
   let today;
   let dayAfterReceivedAt;
-  if (!data) {
+  if (data) {
     today              = Date.now();
     const dateReceived = new Date(data.dateReceived);
     const time         = dateReceived.getTime();

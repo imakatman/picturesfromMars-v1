@@ -8,6 +8,7 @@ import React from 'react';
 import { Flex, Box } from 'grid-styled';
 import styled from 'styled-components';
 import FaTimes from 'react-icons/lib/fa/times-circle';
+import FaAngleRight from 'react-icons/lib/fa/angle-right';
 
 import { Button } from 'components/StyledComponents/Button';
 import { Heading, SubHeading } from 'components/StyledComponents/Headings';
@@ -24,6 +25,12 @@ const Container = styled.div`
 const Close = styled(FaTimes)`
   position: absolute;
   top: 20px;
+  right: 20px;
+`;
+
+const Next = styled.div`
+  position: absolute;
+  bottom: 20px;
   right: 20px;
 `;
 
@@ -49,7 +56,7 @@ class PhotoDetails extends React.Component { // eslint-disable-line react/prefer
     return (
       <Container>
         <Button>
-          <Close />
+          <Close onClick={() => this.props.exitPhotoDetails()} />
         </Button>
         <Flex align="center" style={{ height: '100%' }}>
           <Box flex='1' p='20px'>
@@ -63,6 +70,11 @@ class PhotoDetails extends React.Component { // eslint-disable-line react/prefer
             <SubHeading>{rover}</SubHeading>
             <SubHeading>{cameraFullName} -- {camera}</SubHeading>
           </Box>
+          <Next>
+            <Button>
+              <p>Next <FaAngleRight/></p>
+            </Button>
+          </Next>
         </Flex>
       </Container>
     );

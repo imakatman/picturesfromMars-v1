@@ -23,6 +23,7 @@ import {
   fetchNextRoverImages,
   fetchNextPhotoSet,
   selectImage,
+  unselectImage,
 } from './actions';
 
 import { selectedACamera, unselectedCamera } from '../../actions';
@@ -154,25 +155,23 @@ class SelectedRoverPage extends React.Component {
     return dispatch(fetchRoverImagesIfNeededOnce(selectedRover, desiredSol, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']));
   }
 
-  mountImageDetails(i){
+  mountImageDetails(i) {
     const { dispatch, getDataByRover, selectedRover, selectedCamera } = this.props;
 
     const data = getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['photoData'][i];
 
-    const id = data['id'];
-    const src = data['img_src'];
-    const name = data['camera']['name'];
-    const fullName = data['camera']['full_name'];
+    const id        = data['id'];
+    const src       = data['img_src'];
+    const name      = data['camera']['name'];
+    const fullName  = data['camera']['full_name'];
     const earthDate = data['earth_date'];
-    const sol = data['sol'];
+    const sol       = data['sol'];
 
     return dispatch(selectImage(id, src, selectedRover, name, fullName, earthDate, sol));
   }
 
   render() {
     const { dispatch, selectedRover, getDataByRover, selectedCamera, selectedImage } = this.props;
-
-    console.log(selectedImage);
 
     return (
       <div>
@@ -247,7 +246,8 @@ class SelectedRoverPage extends React.Component {
               fetchNextAvailablePhotos={() => dispatch(fetchNextRoverImages(selectedRover, selectedCamera['sol'] - 1, 1, selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']))}
               fetchNextSet={() => dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']))}
               mountImageDetails={(i) => this.mountImageDetails(i)}
-              selectedImage={selectedImage} />
+              selectedImage={selectedImage}
+              unselectImage={() => dispatch(unselectImage())} />
           </GalleryContain>
         </ActiveCameraLayer>
         }
