@@ -48,7 +48,7 @@ function shouldFetchAllRoverData(state) {
   let dayAfterReceivedAt;
   if (!data) {
     today              = Date.now();
-    const dateReceived = new Date(data.dateDataReceived);
+    const dateReceived = new Date(data.dateReceived);
     const time         = dateReceived.getTime();
     dayAfterReceivedAt = new Date(time + 24 * 60 * 60 * 1000);
     dayAfterReceivedAt = Date.parse(dayAfterReceivedAt);
@@ -58,7 +58,7 @@ function shouldFetchAllRoverData(state) {
   if (!data) {
     return true;
   } else if (today >= dayAfterReceivedAt) {
-    console.log("today is greater than received at")
+    console.log("today is greater than received at");
     return true;
   } else if (data.isFetching) {
     return false;
