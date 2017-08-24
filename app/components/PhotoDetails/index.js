@@ -8,6 +8,7 @@ import React from 'react';
 import { Flex, Box } from 'grid-styled';
 import styled from 'styled-components';
 import FaTimes from 'react-icons/lib/fa/times-circle';
+import FaAngleLeft from 'react-icons/lib/fa/angle-left';
 import FaAngleRight from 'react-icons/lib/fa/angle-right';
 
 import { Button } from 'components/StyledComponents/Button';
@@ -32,6 +33,11 @@ const Next = styled.div`
   position: absolute;
   bottom: 20px;
   right: 20px;
+`;
+
+const Prev = styled(Next)`
+  right: auto;
+  left: 20px;
 `;
 
 const Image = styled.img`
@@ -70,9 +76,14 @@ class PhotoDetails extends React.Component { // eslint-disable-line react/prefer
             <SubHeading>{rover}</SubHeading>
             <SubHeading>{cameraFullName} -- {camera}</SubHeading>
           </Box>
+          <Prev>
+            <Button onClick={() => this.props.viewPrevPhoto()}>
+              <p><FaAngleLeft /> Previous</p>
+            </Button>
+          </Prev>
           <Next>
-            <Button>
-              <p>Next <FaAngleRight/></p>
+            <Button onClick={() => this.props.viewNextPhoto()}>
+              <p>Next <FaAngleRight /></p>
             </Button>
           </Next>
         </Flex>

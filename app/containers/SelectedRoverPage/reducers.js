@@ -53,9 +53,11 @@ function addSolImageData(state, action) {
   switch (action.type) {
     case ADD_MEANINGFUL_SOL:
       if (!state.meaningfulSols.includes(action.sol)) {
+        let sols = state.meaningfulSols.concat(action.sol);
+        sols.sort((a, b) => b - a);
         return Object.assign({}, state, {
           latestMeaningfulSol: action.sol,
-          meaningfulSols: state.meaningfulSols.concat(action.sol),
+          meaningfulSols: sols,
         });
       } else {
         return state;
@@ -249,6 +251,7 @@ export function getDataByRover(state = {}, action) {
 
 export function selectedImage(state = {
   selected: false,
+  index: undefined,
   src: undefined,
   rover: undefined,
   camera: undefined,
@@ -260,6 +263,7 @@ export function selectedImage(state = {
     case SELECT_IMAGE:
       return Object.assign({}, state, {
         selected: true,
+        index: action.index,
         id: action.photoId,
         src: action.imgSrc,
         rover: action.rover,
@@ -271,6 +275,7 @@ export function selectedImage(state = {
     case UNSELECT_IMAGE:
       return Object.assign({}, state, {
         selected: false,
+        index: undefined,
         id: undefined,
         src: undefined,
         rover: undefined,
