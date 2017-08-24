@@ -7,7 +7,47 @@ import {
   REQUEST_MORE_ROVER_IMAGES, RECEIVE_MORE_ROVER_IMAGES, NO_MORE_ROVER_IMAGES,
   ADD_EMPTY_SOL, ADD_MEANINGFUL_SOL,
   DISPLAY_NOT_FOUND,
+  SELECT_IMAGE, UNSELECT_IMAGE
 } from './actions';
+
+export function selectedRover(state = '', action) {
+  switch (action.type) {
+    case SELECT_ROVER:
+      return action.rover;
+    default:
+      return state;
+  }
+}
+
+function roversData(state = {
+  isFetching: false,
+  didInvalidate: false,
+  name: '',
+  data: {},
+  status: '',
+}, action) {
+  switch (action.type) {
+    case INVALIDATE_ROVER:
+      return Object.assign({}, state, {
+        didInvalidate: true,
+      });
+    case REQUEST_ROVERS_DATA:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false,
+      });
+    case RECEIVE_ROVERS_DATA:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        name: action.name,
+        data: action.data,
+        dateDataReceived: action.dateDataReceived,
+      });
+    default:
+      return state;
+  }
+}
 
 function addSolImageData(state, action) {
   switch (action.type) {
@@ -166,45 +206,6 @@ function roversImages(state = {
   }
 }
 
-function roversData(state = {
-  isFetching: false,
-  didInvalidate: false,
-  name: '',
-  data: {},
-  status: '',
-}, action) {
-  switch (action.type) {
-    case INVALIDATE_ROVER:
-      return Object.assign({}, state, {
-        didInvalidate: true,
-      });
-    case REQUEST_ROVERS_DATA:
-      return Object.assign({}, state, {
-        isFetching: true,
-        didInvalidate: false,
-      });
-    case RECEIVE_ROVERS_DATA:
-      return Object.assign({}, state, {
-        isFetching: false,
-        didInvalidate: false,
-        name: action.name,
-        data: action.data,
-        dateDataReceived: action.dateDataReceived,
-      });
-    default:
-      return state;
-  }
-}
-
-export function selectedRover(state = '', action) {
-  switch (action.type) {
-    case SELECT_ROVER:
-      return action.rover;
-    default:
-      return state;
-  }
-}
-
 export function getDataByRover(state = {}, action) {
   switch (action.type) {
     case RECEIVE_ROVERS_DATA:
@@ -240,6 +241,43 @@ export function getDataByRover(state = {}, action) {
     case NO_MORE_ROVER_IMAGES:
       return Object.assign({}, state, {
         [action.rover]: roversImages(state[action.rover], action),
+      });
+    default:
+      return state;
+  }
+}
+
+export function selectedImage(state = {
+  selected: false,
+  src: undefined,
+  rover: undefined,
+  camera: undefined,
+  cameraFullName: undefined,
+  earthDate: undefined,
+  sol: undefined,
+}, action) {
+  switch (action.type) {
+    case SELECT_IMAGE:
+      return Object.assign({}, state, {
+        selected: true,
+        id: action.photoId,
+        src: action.imgSrc,
+        rover: action.rover,
+        camera: action.camera,
+        cameraFullName: action.cameraFullName,
+        earthDate: action.earthDate,
+        sol: action.sol,
+      });
+    case UNSELECT_IMAGE:
+      return Object.assign({}, state, {
+        selected: false,
+        id: undefined,
+        src: undefined,
+        rover: undefined,
+        camera: undefined,
+        cameraFullName: undefined,
+        earthDate: undefined,
+        sol: undefined,
       });
     default:
       return state;
