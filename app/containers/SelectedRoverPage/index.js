@@ -105,7 +105,7 @@ class SelectedRoverPage extends React.Component {
     if (!getDataByRover[selectedRover]['isFetching']) {
       const mgfSelectedCamera = getDataByRover[selectedRover]['data']['cameras'][cameraIndex]['name'];
 
-      console.log(mgfSelectedCamera);
+      console.log(getDataByRover[selectedRover][mgfSelectedCamera]['hasFetchedImages']);
 
       if (typeof getDataByRover[selectedRover][mgfSelectedCamera] === 'undefined') {
         console.log('has not fetched images from this camera');
@@ -115,7 +115,7 @@ class SelectedRoverPage extends React.Component {
         const mgfSol            = currentSol || getDataByRover[selectedRover]['data']['max_sol'];
 
         return dispatch(fetchRoverImagesIfNeeded(...[selectedRover, mgfSol, 1, mgfCamera, mgfCameraFullName, cameraIndex,]));
-      } else if (!getDataByRover[selectedRover]['isFetching'] && getDataByRover[selectedRover][mgfSelectedCamera]['hasFetchedImages']) {
+      } else if (!getDataByRover[selectedRover]['isFetching'] && Object.keys(getDataByRover[selectedRover][mgfSelectedCamera]).length >= 1) {
         console.log('has fetched images from this camera');
 
         const mgfCamera         = camera || mgfSelectedCamera;

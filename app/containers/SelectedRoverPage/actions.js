@@ -224,7 +224,7 @@ function shouldFetchRoverImages(state, rover, sol, camera) {
   if (typeof state.getDataByRover[rover][camera] === null || typeof state.getDataByRover[rover][camera] === 'undefined') {
     console.log('camera data does not exist');
     return true;
-  } else if (typeof state.getDataByRover[rover][camera][sol] === 'undefined' || Object.keys(state.getDataByRover[rover][camera][sol]).length <= 1) {
+  } else if (typeof state.getDataByRover[rover][camera][sol] === 'undefined' || !state.getDataByRover[rover][camera][sol]['hasFetchedImages']) {
     console.log('sol data does not exist');
     return true;
   } else {
