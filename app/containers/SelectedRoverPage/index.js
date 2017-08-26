@@ -93,35 +93,37 @@ class SelectedRoverPage extends React.Component {
     const { selectedCamera } = this.props;
 
     if (selectedCamera.selected === true) {
-      return this.mountGallery(selectedCamera['rover'], selectedCamera['cameraIndex'], selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['sol']);
+      return this.mountGallery(selectedCamera['cameraIndex'], selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['sol']);
     }
   }
 
-  mountGallery(rover, cameraIndex, camera, cameraFullName, currentSol) {
+  mountGallery(cameraIndex, camera, cameraFullName, currentSol) {
     const { dispatch, selectedRover, getDataByRover, isFetching } = this.props;
 
-    if (!isFetching) {
+    console.log(getDataByRover[selectedRover]['isFetching']);
+
+    if (!getDataByRover[selectedRover]['isFetching']) {
       const mgfSelectedCamera = getDataByRover[selectedRover]['data']['cameras'][cameraIndex]['name'];
+
+      console.log(mgfSelectedCamera);
 
       if (typeof getDataByRover[selectedRover][mgfSelectedCamera] === 'undefined') {
         console.log('has not fetched images from this camera');
 
-        const mgfRover          = rover || selectedRover;
         const mgfCamera         = camera || mgfSelectedCamera;
         const mgfCameraFullName = cameraFullName || getDataByRover[selectedRover].data.cameras[cameraIndex].full_name;
         const mgfSol            = currentSol || getDataByRover[selectedRover]['data']['max_sol'];
 
-        return dispatch(fetchRoverImagesIfNeeded(...[mgfRover, mgfSol, 1, mgfCamera, mgfCameraFullName, cameraIndex,]));
-      } else if (!isFetching && getDataByRover[selectedRover][mgfSelectedCamera]['hasFetchedImages'] === true) {
+        return dispatch(fetchRoverImagesIfNeeded(...[selectedRover, mgfSol, 1, mgfCamera, mgfCameraFullName, cameraIndex,]));
+      } else if (!getDataByRover[selectedRover]['isFetching'] && getDataByRover[selectedRover][mgfSelectedCamera]['hasFetchedImages']) {
         console.log('has fetched images from this camera');
 
-        const mgfRover          = rover || selectedRover;
         const mgfCamera         = camera || mgfSelectedCamera;
         const mgfCameraFullName = cameraFullName || getDataByRover[selectedRover].data.cameras[cameraIndex].full_name;
         const mgfSol            = currentSol || getDataByRover[selectedRover]['data']['max_sol'];
         const mgfEarthDate      = getDataByRover[selectedRover]['data']['max_date'];
 
-        return dispatch(fetchRoverImagesIfNeeded(mgfRover, mgfSol, 1, mgfCamera, mgfCameraFullName, cameraIndex, mgfEarthDate));
+        return dispatch(fetchRoverImagesIfNeeded(selectedRover, mgfSol, 1, mgfCamera, mgfCameraFullName, cameraIndex, mgfEarthDate));
       }
     }
   }
@@ -142,7 +144,7 @@ class SelectedRoverPage extends React.Component {
     const meaningfulSols = getDataByRover[selectedRover][selectedCamera['camera']]['meaningfulSols'];
     const i              = meaningfulSols.indexOf(selectedCamera['sol']);
 
-    if(i !== 0){
+    if (i !== 0) {
       return dispatch(selectedACamera(selectedRover, selectedCamera['cameraIndex'], selectedCamera['camera'], selectedCamera['cameraFullName'], meaningfulSols[i - 1], selectedCamera['earthDate']));
     } else {
       return;
@@ -195,7 +197,7 @@ class SelectedRoverPage extends React.Component {
               <RoverDiagram
                 cameras={getDataByRover[selectedRover]['data']['cameras']}
                 mountGallery={(i) =>
-                  this.mountGallery(...[, i, , ,])}
+                  this.mountGallery(...[i, , ,])}
                 landing
               />
             </IntroLayer>
@@ -214,13 +216,13 @@ class SelectedRoverPage extends React.Component {
                 rover={selectedRover}
                 cameras={getDataByRover[selectedRover]['data']['cameras']}
                 mountGallery={(i) =>
-                  this.mountGallery(...[, i, , ,])}
+                  this.mountGallery(...[i, , ,])}
               />
             </NavigationBox>
             <NavigationBox>
               <RoverDiagram
                 cameras={getDataByRover[selectedRover]['data']['cameras']}
-                mountGallery={(i) => this.mountGallery(...[, i, , ,])}
+                mountGallery={(i) => this.mountGallery(...[i, , ,])}
                 unmountGallery={() => this.unmountGallery()}
                 landing={false}
               />
