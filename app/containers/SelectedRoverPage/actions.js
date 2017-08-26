@@ -66,11 +66,11 @@ function shouldFetchRoverData(state, rover) {
   // the dateDataReceived time inside of rover Object
   let today;
   let dayAfterReceivedAt;
-  if (typeof data !== 'undefined'){
-    today = Date.now();
+  if (typeof data !== 'undefined') {
+    today              = Date.now();
     const dateReceived = new Date(data.dateDataReceived);
-    const time = dateReceived.getTime();
-    dayAfterReceivedAt = new Date(time + 24*60*60*1000);
+    const time         = dateReceived.getTime();
+    dayAfterReceivedAt = new Date(time + 24 * 60 * 60 * 1000);
     dayAfterReceivedAt = Date.parse(dayAfterReceivedAt);
   }
   // ** End
@@ -101,7 +101,6 @@ export function fetchRoverDataIfNeeded(rover) {
     }
   };
 }
-
 
 // ************************************************************
 // ******
@@ -197,7 +196,6 @@ function findSolNotInEmptySols(state, rover, cameraIndex, camera, cameraFullName
   }
 }
 
-
 export function fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex) {
   return function (dispatch, getState) {
     if (typeof getState().getDataByRover[rover][camera] !== 'undefined' && getState().getDataByRover[rover][camera]['emptySols'].includes(sol)) {
@@ -206,7 +204,7 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
       dispatch(requestRoversImages(rover, camera, sol));
       dispatch(selectedACamera(...[rover, cameraIndex, camera, cameraFullName, sol,]));
     }
-    return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
+    return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).catch((e) => console.log(e)).then(response => response.json()).then(json => {
       if (json.photos.length > 0) {
         const earthDate = json.photos[0].earth_date;
         dispatch(selectedACamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
@@ -349,7 +347,6 @@ export function fetchNextPhotoSet(rover, sol, camera, cameraFullName, cameraInde
 }
 
 // LOOK AT http://redux.js.org/docs/introduction/Examples.html#real-world for ERROR MESSAGE HANDLING
-
 
 // ************************************************************
 // ******

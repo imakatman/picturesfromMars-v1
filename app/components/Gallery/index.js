@@ -61,7 +61,7 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
         <h1>
           {this.props.cameraFullName}
         </h1>
-        {this.props.fetchingImagesState ? (
+        {this.props.fetchingImagesState || this.props.searchingAvailablePhotos ? (
             <p>Loading... looking for the latest sol in which this camera took photos</p>
           ) : (
             <div>

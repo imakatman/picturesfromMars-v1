@@ -65,6 +65,7 @@ function addSolImageData(state, action) {
     case ADD_EMPTY_SOL:
       if (!state.emptySols.includes(action.sol)) {
         return Object.assign({}, state, {
+          isSearching: true,
           emptySols: state.emptySols.concat(action.sol),
           [action.sol]: {
             isFetching: false,
@@ -139,6 +140,7 @@ function putRoverImageDataIntoSolObjects(state = {
   switch (action.type) {
     case REQUEST_ROVERS_IMAGES:
       return Object.assign({}, state, {
+        isSearching: false,
         isFetching: true,
         [action.sol]: receiveRoversImages(state[action.sol], action),
       });

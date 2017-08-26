@@ -242,6 +242,7 @@ class SelectedRoverPage extends React.Component {
           </Flex>
           <GalleryContain flex={2}>
             <Gallery
+              searchingAvailablePhotos={getDataByRover[selectedRover][selectedCamera['camera']]['isSearching']}
               fetchingImagesState={getDataByRover[selectedRover][selectedCamera['camera']]['isFetching']}
               cameraAbbrev={selectedCamera['camera']}
               cameraFullName={selectedCamera['cameraFullName']}
