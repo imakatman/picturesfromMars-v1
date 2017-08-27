@@ -239,7 +239,7 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
       const apiKey = getState().apiKeys.keys[apiKeyIndex];
       return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=` + apiKey).then(response => {
         const parameters = [rover, sol, page, camera, cameraFullName, cameraIndex];
-        handleErrors(response, fetchRoverImages, ...parameters);
+        return handleErrors(response, fetchRoverImages, ...parameters);
       }).then(response => response.json()).then(json => {
         if (json.photos.length > 0) {
           const earthDate = json.photos[0].earth_date;
