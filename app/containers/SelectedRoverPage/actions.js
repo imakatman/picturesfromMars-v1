@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 
-import { selectedACamera, unselectedCamera } from '../../actions';
+import { selectedACamera, unselectedCamera, handleErrors } from '../../actions';
+
 
 // ************************************************************
 // ******
@@ -55,12 +56,12 @@ function receiveRoversData(rover, json) {
 export function fetchRoversData(rover) {
   return function (dispatch) {
     dispatch(requestRoversData(rover));
-    return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => dispatch(receiveRoversData(rover, json)));
+    return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => handleErrors(response)).then(response => response.json()).then(json => dispatch(receiveRoversData(rover, json)));
   };
 }
 
 function shouldFetchRoverData(state, rover) {
-  const data = state.getDataByRover[rover];
+  const data = state.getDataByRover[rover]['data'];
 
   // Check if today is at least 24 hours greater than
   // the dateDataReceived time inside of rover Object
@@ -209,7 +210,10 @@ export function unabortFetchLoop(rover, camera){
 // ***********
 function findSolNotInEmptySols(state, rover, cameraIndex, camera, cameraFullName, sol) {
   if (state.getDataByRover[rover][camera]['emptySols'].includes(sol)) {
-    return findSolNotInEmptySols(state, rover, cameraIndex, camera, cameraFullName, sol - 1);
+    return function (dispatch) {
+      dispatch(requestRoversImages(rover, camera, sol - 1));
+      findSolNotInEmptySols(state, rover, cameraIndex, camera, cameraFullName, sol - 1);
+    }
   } else {
     return function (dispatch) {
       dispatch(requestRoversImages(rover, camera, sol));
@@ -229,7 +233,9 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
         dispatch(requestRoversImages(rover, camera, sol));
         dispatch(selectedACamera(...[rover, cameraIndex, camera, cameraFullName, sol,]));
       }
-      return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
+      const apiKeyIndex = getState().apiKeys['index'];
+      const apiKey = getState().apiKeys.keys[apiKeyIndex];
+      return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=` + apiKey).then(response => handleErrors(response, fetchRoverImages, rover, sol, page, camera, cameraFullName, cameraIndex)).then(response => response.json()).then(json => {
         if (json.photos.length > 0) {
           const earthDate = json.photos[0].earth_date;
           dispatch(selectedACamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
@@ -281,7 +287,7 @@ export function fetchRoverImagesOnce(rover, sol, page, camera, cameraFullName, c
     dispatch(requestRoversImages(rover, camera, sol));
     console.log("should select a camera");
     dispatch(selectedACamera(...[rover, cameraIndex, camera, cameraFullName, sol,]));
-    return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => {
+    return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/` + rover + `/photos?sol=` + sol + `&camera=` + camera + `&page=` + page + `&api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => handleErrors(response)).then(response => response.json()).then(json => {
       if (json.photos.length > 0) {
         const earthDate = json.photos[0].earth_date;
         dispatch(selectedACamera(rover, cameraIndex, camera, cameraFullName, sol, earthDate));
@@ -351,11 +357,11 @@ function noMoreRoverImages(rover, camera, sol) {
   };
 }
 
-export function fetchNextRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex) {
-  // Note that the function also receives getState()
-  // which lets you choose what to dispatch next.
-  return dispatch => dispatch(fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex));
-}
+// export function fetchNextRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex) {
+//   // Note that the function also receives getState()
+//   // which lets you choose what to dispatch next.
+//   return dispatch => dispatch(fetchRoverImages(rover, sol, page, camera, cameraFullName, cameraIndex));
+// }
 
 export function fetchNextPhotoSet(rover, sol, camera, cameraFullName, cameraIndex) {
   return function (dispatch, getState) {

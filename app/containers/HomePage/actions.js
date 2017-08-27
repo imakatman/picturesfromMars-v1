@@ -3,6 +3,18 @@
 //
 
 import fetch from 'isomorphic-fetch';
+import { handleErrors } from '../../actions';
+
+
+
+// ************************************************************
+// ******
+//
+//  Actions specific to fetching All Rover's basic Data
+//
+// ******
+// ***********************
+// ************************************************************
 
 export const INVALIDATE_ALL_ROVERS = 'invalidateAllRovers';
 
@@ -33,9 +45,10 @@ function receiveAllRoversData(json) {
 }
 
 export function fetchAllRoversData() {
+  const apiKey = apiKeys[0];
   return function (dispatch) {
     dispatch(requestAllRoversData());
-    return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => response.json()).then(json => dispatch(receiveAllRoversData(json)));
+    return fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU`).then(response => handleErrors(response)).then(response => response.json()).then(json => dispatch(receiveAllRoversData(json)));
   };
 }
 

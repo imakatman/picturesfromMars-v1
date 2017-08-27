@@ -32,3 +32,32 @@ export function selectedCamera(state = {
             return state;
     }
 }
+
+export function apiKeys(state={
+  keys: ['8m8bkcVYqxE5j0vQL2wk1bpiBGibgaqCrOvwZVyU', 'a4q0jhngYKp9kn0cuwvKMHtKz7IrkKtFBRaiMv5t'],
+  index: 0,
+  keyIsExhausted: false,
+}, action){
+  switch(action.type.exhaustedKey){
+    case 0:
+      return Object.assign({}, state, {
+        exhaustedKey: action.exhaustedKey,
+        index: 1,
+        keyIsExhausted: true,
+      });
+    case 1:
+      return Object.assign({}, state, {
+        exhaustedKey: action.exhaustedKey,
+        index: 0,
+        keyIsExhausted: true,
+      });
+    case 2:
+      return Object.assign({}, state, {
+        exhaustedKey: action.exhaustedKey,
+        index: 0,
+        keyIsExhausted: true,
+      });
+    default:
+      return state;
+  }
+}

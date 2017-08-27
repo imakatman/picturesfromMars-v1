@@ -252,7 +252,7 @@ class SelectedRoverPage extends React.Component {
               cameraFullName={selectedCamera['cameraFullName']}
               sol={selectedCamera['sol']}
               earthDate={selectedCamera['earthDate']}
-              photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['photoData']}
+              photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]}
               selectedImage={selectedImage}
               searchingAvailablePhotos={getDataByRover[selectedRover][selectedCamera['camera']]['isSearching']}
               fetchingImagesState={getDataByRover[selectedRover][selectedCamera['camera']]['isFetching']}
