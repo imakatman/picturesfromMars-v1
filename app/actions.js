@@ -43,7 +43,7 @@ export function switchApiKey(currentIndex){
   }
 }
 
-export function handleErrors(response, correspondingAction, rover, sol, page, camera, cameraFullName, cameraIndex) {
+export function handleErrors(response, correspondingAction, parameters) {
   console.log(response);
   if (!response.ok) {
     console.log('response is not ok');
@@ -51,7 +51,7 @@ export function handleErrors(response, correspondingAction, rover, sol, page, ca
     if(response.status === 429){
       return function(getState, dispatch){
         dispatch(switchApiKey(getState.apiKeys.index));
-        return dispatch(correspondingAction(rover, sol, page, camera, cameraFullName, cameraIndex));
+        return dispatch(correspondingAction(parameters));
       }
     }
   } else {
