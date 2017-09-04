@@ -92,7 +92,7 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
               </Flex>
               <Flex wrap={true}>
                 <Masonry style={{ width: '100%' }}>
-                  {typeof this.props.photos !== 'undefined' && this.props.photos.photoData ? (
+                  {typeof this.props.photos !== 'undefined'? (
                       this.props.photos.map((photo, i) =>
                         <Box
                           w={1 / 4}
