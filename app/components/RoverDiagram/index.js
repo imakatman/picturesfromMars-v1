@@ -18,8 +18,9 @@ const Container = styled.div`
 `;
 
 const CameraBtn = styled.a`
-    color: #fff;
+    font-family: 'Roboto Mono', monospace;
     cursor:pointer;
+    display: block;
     &:hover{
         color: rgba(231, 125, 17, 0.77);
         transition: all 0.2s ease;

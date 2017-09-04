@@ -51,7 +51,6 @@ const GalleryContain = styled(Box)`
 `;
 
 const RoverName = styled.h1`
-    color: #fff;
     position:absolute;
 `;
 
@@ -61,7 +60,7 @@ const SearchForm = styled.form`
 `;
 
 const Label = styled.label`
-    color: #fff;
+    
 `;
 
 class SelectedRoverPage extends React.Component {

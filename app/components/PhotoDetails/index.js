@@ -75,28 +75,30 @@ class PhotoDetails extends React.Component { // eslint-disable-line react/prefer
         <Button>
           <Close onClick={() => this.props.exitPhotoDetails()} />
         </Button>
-        <Flex align="center" style={{ height: '100%', width: '90%', margin: 'auto' }}>
-          <Box flex='1' p='20px' style={{textAlign: 'center'}}>
-            <Prev>
-              <Button onClick={() => this.props.viewPrevPhoto()}>
-                <FaAngleLeft />
-              </Button>
-            </Prev>
-            <Photo
-              src={src}
-              alt={rover + ' ' + camera + ' ' + sol + ' ' + id} />
-          </Box>
-          <Box flex="1">
-            <Heading>#{id}</Heading>
-            <h2>taken on sol {sol} earth date {earthDate}</h2>
-            <SubHeading>{rover}</SubHeading>
-            <SubHeading>{cameraFullName} -- {camera}</SubHeading>
-            <Next>
-              <Button onClick={() => this.props.viewNextPhoto()}>
-                <FaAngleRight />
-              </Button>
-            </Next>
-          </Box>
+        <Flex align="center" style={{ height: '100%' }}>
+          <Flex style={{ width: '90%', margin: 'auto' }}>
+            <Box flex='2' m='20px' style={{ textAlign: 'center' }}>
+              <Prev>
+                <Button onClick={() => this.props.viewPrevPhoto()}>
+                  <FaAngleLeft />
+                </Button>
+              </Prev>
+              <Photo
+                src={src}
+                alt={rover + ' ' + camera + ' ' + sol + ' ' + id} />
+            </Box>
+            <Box flex="1" m='20px'>
+              <Heading>#{id}</Heading>
+              <h2>taken on sol {sol} earth date {earthDate}</h2>
+              <SubHeading>{rover}</SubHeading>
+              <SubHeading>{cameraFullName} -- {camera}</SubHeading>
+              <Next>
+                <Button onClick={() => this.props.viewNextPhoto()}>
+                  <FaAngleRight />
+                </Button>
+              </Next>
+            </Box>
+          </Flex>
         </Flex>
       </Container>
     );
