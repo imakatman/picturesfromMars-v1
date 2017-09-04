@@ -54,7 +54,7 @@ function receiveRoversData(rover, json) {
 }
 
 export function fetchRoversData(rover) {
-  return function (dispatch) {
+  return function (dispatch, getState) {
     dispatch(requestRoversData(rover));
     const apiKeyIndex = getState().apiKeys['index'];
     const apiKey = getState().apiKeys.keys[apiKeyIndex];
@@ -63,30 +63,29 @@ export function fetchRoversData(rover) {
 }
 
 function shouldFetchRoverData(state, rover) {
-  const data = state.getDataByRover[rover]['data'];
-
-  // Check if today is at least 24 hours greater than
-  // the dateDataReceived time inside of rover Object
-  let today;
-  let dayAfterReceivedAt;
-  if (typeof data !== 'undefined') {
-    today              = Date.now();
-    const dateReceived = new Date(data.dateDataReceived);
-    const time         = dateReceived.getTime();
-    dayAfterReceivedAt = new Date(time + 24 * 60 * 60 * 1000);
-    dayAfterReceivedAt = Date.parse(dayAfterReceivedAt);
-  }
-  // ** End
-
-  if (typeof data === 'undefined') {
+  if (typeof state.getDataByRover[rover] === 'undefined') {
     return true;
-  } else if (today >= dayAfterReceivedAt) {
-    console.log("today is greater than received at");
-    return true;
-  } else if (data.isFetching) {
-    return false;
-  } else {
-    return data.didInvalidate;
+  } else{
+    const data = state.getDataByRover[rover]['data'];
+    // Check if today is at least 24 hours greater than
+    // the dateDataReceived time inside of rover Object
+    let today;
+    let dayAfterReceivedAt;
+    if (typeof data !== 'undefined') {
+      today              = Date.now();
+      const dateReceived = new Date(data.dateDataReceived);
+      const time         = dateReceived.getTime();
+      dayAfterReceivedAt = new Date(time + 24 * 60 * 60 * 1000);
+      dayAfterReceivedAt = Date.parse(dayAfterReceivedAt);
+    }
+    // ** End
+    if (today >= dayAfterReceivedAt) {
+      return true;
+    } else if (data.isFetching) {
+      return false;
+    } else {
+      return data.didInvalidate;
+    }
   }
 }
 
