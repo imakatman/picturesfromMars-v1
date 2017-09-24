@@ -23,3 +23,38 @@ export function unselectedCamera() {
         type: UNSELECTED_CAMERA,
     };
 }
+
+
+// ************************************************************
+// ******
+//
+//  Error Handling Function
+//
+// ******
+// ***********************
+// ************************************************************
+
+export const SWITCH_API_KEY = 'switchApiKey';
+
+export function switchApiKey(currentIndex){
+  return{
+    type: SWITCH_API_KEY,
+    exhaustedKey: currentIndex
+  }
+}
+
+export function handleErrors(response, correspondingAction, parameters) {
+  console.log(response);
+  if (!response.ok) {
+    console.log('response is not ok');
+    console.log(response.status);
+    if(response.status === 429){
+      return function(getState, dispatch){
+        dispatch(switchApiKey(getState.apiKeys.index));
+        return dispatch(correspondingAction(parameters));
+      }
+    }
+  } else {
+    return response;
+  }
+}

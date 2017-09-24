@@ -26,12 +26,15 @@ const Container = styled.div`
 const Close = styled(FaTimes)`
   position: absolute;
   top: 20px;
-  right: 20px;
+  left: 20px;
+  font-size: 2em;
 `;
 
 const Next = styled.div`
-  position: absolute;
-  bottom: 20px;
+  font-size: 2em;
+  position:absolute;
+  top: 50%;
+  font-size: 3em;
   right: 20px;
 `;
 
@@ -40,7 +43,15 @@ const Prev = styled(Next)`
   left: 20px;
 `;
 
-const Image = styled.img`
+// const AlignSelfEnd = styled(Box)`
+//   align-self: flex-end;
+// `;
+//
+// const AlignSelfCenter = styled(Box)`
+//   align-self: center;
+// `;
+
+const Photo = styled.img`
   max-width: 700px;
   width: 80%;
 `;
@@ -64,9 +75,14 @@ class PhotoDetails extends React.Component { // eslint-disable-line react/prefer
         <Button>
           <Close onClick={() => this.props.exitPhotoDetails()} />
         </Button>
-        <Flex align="center" style={{ height: '100%' }}>
-          <Box flex='1' p='20px'>
-            <Image
+        <Flex align="center" style={{ height: '100%', width: '90%', margin: 'auto' }}>
+          <Box flex='1' p='20px' style={{textAlign: 'center'}}>
+            <Prev>
+              <Button onClick={() => this.props.viewPrevPhoto()}>
+                <FaAngleLeft />
+              </Button>
+            </Prev>
+            <Photo
               src={src}
               alt={rover + ' ' + camera + ' ' + sol + ' ' + id} />
           </Box>
@@ -75,17 +91,12 @@ class PhotoDetails extends React.Component { // eslint-disable-line react/prefer
             <h2>taken on sol {sol} earth date {earthDate}</h2>
             <SubHeading>{rover}</SubHeading>
             <SubHeading>{cameraFullName} -- {camera}</SubHeading>
+            <Next>
+              <Button onClick={() => this.props.viewNextPhoto()}>
+                <FaAngleRight />
+              </Button>
+            </Next>
           </Box>
-          <Prev>
-            <Button onClick={() => this.props.viewPrevPhoto()}>
-              <p><FaAngleLeft /> Previous</p>
-            </Button>
-          </Prev>
-          <Next>
-            <Button onClick={() => this.props.viewNextPhoto()}>
-              <p>Next <FaAngleRight /></p>
-            </Button>
-          </Next>
         </Flex>
       </Container>
     );

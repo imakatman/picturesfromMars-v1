@@ -61,8 +61,15 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
         <h1>
           {this.props.cameraFullName}
         </h1>
-        {this.props.fetchingImagesState ? (
-            <p>Loading... looking for the latest sol in which this camera took photos</p>
+        {this.props.fetchingImagesState || this.props.searchingAvailablePhotos ? (
+            !this.props.abortState ?
+              <div>
+                <p>Loading... looking for the latest sol in which this camera took photos</p>
+                <Button onClick={() => this.props.abortFetchLoop()}>
+                  Cancel search?
+                </Button>
+              </div> :
+              <b>Search was cancelled.</b>
           ) : (
             <div>
               <Flex>
@@ -85,7 +92,7 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
               </Flex>
               <Flex wrap={true}>
                 <Masonry style={{ width: '100%' }}>
-                  {this.props.photos ? (
+                  {typeof this.props.photos !== 'undefined' && this.props.photos.photoData ? (
                       this.props.photos.map((photo, i) =>
                         <Box
                           w={1 / 4}
@@ -113,7 +120,7 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
                 details={this.props.selectedImage}
                 exitPhotoDetails={() => this.props.unselectImage()}
                 viewPrevPhoto={() => this.props.mountImageDetails(this.props.selectedImage.index - 1)}
-                viewNextPhoto={() => this.props.mountImageDetails(this.props.selectedImage.index + 1)}/>}
+                viewNextPhoto={() => this.props.mountImageDetails(this.props.selectedImage.index + 1)} />}
             </div>
           )}
       </GalleryContainer>

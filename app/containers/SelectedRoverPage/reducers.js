@@ -5,6 +5,7 @@ import {
   SELECT_ROVER, INVALIDATE_ROVER, REQUEST_ROVERS_DATA, RECEIVE_ROVERS_DATA,
   RECEIVE_ROVER_IMAGES, REQUEST_ROVERS_IMAGES,
   REQUEST_MORE_ROVER_IMAGES, RECEIVE_MORE_ROVER_IMAGES, NO_MORE_ROVER_IMAGES,
+  ABORT_FETCH_LOOP, UNABORT_FETCH_LOOP,
   ADD_EMPTY_SOL, ADD_MEANINGFUL_SOL,
   DISPLAY_NOT_FOUND,
   SELECT_IMAGE, UNSELECT_IMAGE
@@ -65,6 +66,7 @@ function addSolImageData(state, action) {
     case ADD_EMPTY_SOL:
       if (!state.emptySols.includes(action.sol)) {
         return Object.assign({}, state, {
+          isSearching: true,
           emptySols: state.emptySols.concat(action.sol),
           [action.sol]: {
             isFetching: false,
@@ -135,10 +137,12 @@ function putRoverImageDataIntoSolObjects(state = {
   emptySols: [],
   isFetching: false,
   hasFetchedImages: false,
+  abortLoop: false,
 }, action) {
   switch (action.type) {
     case REQUEST_ROVERS_IMAGES:
       return Object.assign({}, state, {
+        isSearching: false,
         isFetching: true,
         [action.sol]: receiveRoversImages(state[action.sol], action),
       });
@@ -160,6 +164,14 @@ function putRoverImageDataIntoSolObjects(state = {
       return Object.assign({}, state, {
         isFetching: false,
         [action.sol]: receiveRoversImages(state[action.sol], action),
+      });
+    case ABORT_FETCH_LOOP:
+      return Object.assign({}, state, {
+        abortLoop: true,
+      });
+    case UNABORT_FETCH_LOOP:
+      return Object.assign({}, state, {
+        abortLoop: false,
       });
     default:
       return state;
@@ -203,6 +215,14 @@ function roversImages(state = {
       return Object.assign({}, state, {
         [action.camera]: putRoverImageDataIntoSolObjects(state[action.camera], action),
       });
+    case ABORT_FETCH_LOOP:
+      return Object.assign({}, state, {
+        [action.camera]: putRoverImageDataIntoSolObjects(state[action.camera], action),
+      });
+    case UNABORT_FETCH_LOOP:
+      return Object.assign({}, state, {
+        [action.camera]: putRoverImageDataIntoSolObjects(state[action.camera], action),
+      });
     default:
       return state;
   }
@@ -241,6 +261,14 @@ export function getDataByRover(state = {}, action) {
         [action.rover]: roversImages(state[action.rover], action),
       });
     case NO_MORE_ROVER_IMAGES:
+      return Object.assign({}, state, {
+        [action.rover]: roversImages(state[action.rover], action),
+      });
+    case ABORT_FETCH_LOOP:
+      return Object.assign({}, state, {
+        [action.rover]: roversImages(state[action.rover], action),
+      });
+    case UNABORT_FETCH_LOOP:
       return Object.assign({}, state, {
         [action.rover]: roversImages(state[action.rover], action),
       });
