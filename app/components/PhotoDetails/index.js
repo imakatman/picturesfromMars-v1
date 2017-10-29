@@ -26,7 +26,7 @@ const Container = styled.div`
 const Close = styled(FaTimes)`
   position: absolute;
   top: 20px;
-  left: 20px;
+  right: 20px;
   font-size: 2em;
 `;
 
@@ -88,10 +88,10 @@ class PhotoDetails extends React.Component { // eslint-disable-line react/prefer
                 alt={rover + ' ' + camera + ' ' + sol + ' ' + id} />
             </Box>
             <Box flex="1" m='20px'>
-              <Heading>#{id}</Heading>
-              <h2>taken on sol {sol} earth date {earthDate}</h2>
-              <SubHeading>{rover}</SubHeading>
+              <Heading>{rover}</Heading>
               <SubHeading>{cameraFullName} -- {camera}</SubHeading>
+              <SubHeading>#{id}</SubHeading>
+              <h2>taken on sol {sol} earth date {earthDate}</h2>
               <Next>
                 <Button onClick={() => this.props.viewNextPhoto()}>
                   <FaAngleRight />
