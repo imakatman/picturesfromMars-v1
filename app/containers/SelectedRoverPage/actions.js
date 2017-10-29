@@ -63,7 +63,7 @@ export function fetchRoversData(rover) {
 }
 
 function shouldFetchRoverData(state, rover) {
-  if (typeof state.getDataByRover[rover] === 'undefined') {
+  if (typeof state.getDataByRover[rover] === 'undefined' || typeof state.getDataByRover[rover]['name'] === 'undefined') {
     return true;
   } else{
     const data = state.getDataByRover[rover]['data'];
