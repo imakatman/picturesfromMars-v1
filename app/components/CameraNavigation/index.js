@@ -23,6 +23,7 @@ const CameraNavItem = styled.li`
     position:relative;
     z-index: 1;
     cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
     &:after{
         content: ' ';
         position: absolute;

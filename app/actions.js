@@ -44,10 +44,7 @@ export function switchApiKey(currentIndex){
 }
 
 export function handleErrors(response, correspondingAction, parameters) {
-  console.log(response);
   if (!response.ok) {
-    console.log('response is not ok');
-    console.log(response.status);
     if(response.status === 429){
       return function(getState, dispatch){
         dispatch(switchApiKey(getState.apiKeys.index));

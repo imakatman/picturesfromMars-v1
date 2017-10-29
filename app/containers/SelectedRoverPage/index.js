@@ -51,7 +51,6 @@ const GalleryContain = styled(Box)`
 `;
 
 const RoverName = styled.h1`
-    color: #fff;
     position:absolute;
 `;
 
@@ -61,7 +60,7 @@ const SearchForm = styled.form`
 `;
 
 const Label = styled.label`
-    color: #fff;
+    
 `;
 
 class SelectedRoverPage extends React.Component {
@@ -100,12 +99,10 @@ class SelectedRoverPage extends React.Component {
   mountGallery(cameraIndex, camera, cameraFullName, currentSol) {
     const { dispatch, selectedRover, getDataByRover, isFetching } = this.props;
 
-    console.log(getDataByRover[selectedRover]['isFetching']);
-
     if (!getDataByRover[selectedRover]['isFetching']) {
       const mgfSelectedCamera = getDataByRover[selectedRover]['data']['cameras'][cameraIndex]['name'];
 
-      console.log(getDataByRover[selectedRover][mgfSelectedCamera]['hasFetchedImages']);
+      console.log(mgfSelectedCamera);
 
       if (typeof getDataByRover[selectedRover][mgfSelectedCamera] === 'undefined') {
         console.log('has not fetched images from this camera');
@@ -143,9 +140,10 @@ class SelectedRoverPage extends React.Component {
 
     const meaningfulSols = getDataByRover[selectedRover][selectedCamera['camera']]['meaningfulSols'];
     const i              = meaningfulSols.indexOf(selectedCamera['sol']);
+    const earthDate = getDataByRover[selectedRover][selectedCamera['camera']][meaningfulSols[i - 1]]['earthDate'];
 
     if (i !== 0) {
-      return dispatch(selectedACamera(selectedRover, selectedCamera['cameraIndex'], selectedCamera['camera'], selectedCamera['cameraFullName'], meaningfulSols[i - 1], selectedCamera['earthDate']));
+      return dispatch(selectedACamera(selectedRover, selectedCamera['cameraIndex'], selectedCamera['camera'], selectedCamera['cameraFullName'], meaningfulSols[i - 1], earthDate));
     } else {
       return;
     }
@@ -252,7 +250,7 @@ class SelectedRoverPage extends React.Component {
               cameraFullName={selectedCamera['cameraFullName']}
               sol={selectedCamera['sol']}
               earthDate={selectedCamera['earthDate']}
-              photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]}
+              photos={getDataByRover[selectedRover][selectedCamera['camera']][selectedCamera['sol']]['photoData']}
               selectedImage={selectedImage}
               searchingAvailablePhotos={getDataByRover[selectedRover][selectedCamera['camera']]['isSearching']}
               fetchingImagesState={getDataByRover[selectedRover][selectedCamera['camera']]['isFetching']}

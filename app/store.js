@@ -7,7 +7,7 @@ import { autoRehydrate } from 'redux-persist';
 import { getAllRoversData } from './containers/HomePage/reducers';
 import { selectedRover, getDataByRover, selectedImage } from './containers/SelectedRoverPage/reducers';
 import { selectedCamera, apiKeys } from './reducers';
-import { emptySols } from './emptySols';
+import { emptySols as initialState } from './emptySols';
 
 const rootReducer = combineReducers({
   getAllRoversData,
@@ -24,7 +24,7 @@ const loggerMiddleware = createLogger();
 export default function configureStore() {
   return createStore(
     rootReducer,
-    emptySols,
+    initialState,
     compose(
       autoRehydrate(),
       applyMiddleware(
