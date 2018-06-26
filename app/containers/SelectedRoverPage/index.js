@@ -102,8 +102,6 @@ class SelectedRoverPage extends React.Component {
     if (!getDataByRover[selectedRover]['isFetching']) {
       const mgfSelectedCamera = getDataByRover[selectedRover]['data']['cameras'][cameraIndex]['name'];
 
-      console.log(mgfSelectedCamera);
-
       if (typeof getDataByRover[selectedRover][mgfSelectedCamera] === 'undefined') {
         console.log('has not fetched images from this camera');
 
@@ -122,6 +120,8 @@ class SelectedRoverPage extends React.Component {
 
         return dispatch(fetchRoverImagesIfNeeded(selectedRover, mgfSol, 1, mgfCamera, mgfCameraFullName, cameraIndex, mgfEarthDate));
       }
+    } else {
+      dispatch(abortFetchLoop(selectedRover, [selectedCamera['camera']]))
     }
   }
 
@@ -245,7 +245,7 @@ class SelectedRoverPage extends React.Component {
               fetchNextSet={() => dispatch(fetchNextPhotoSet(selectedRover, selectedCamera['sol'], selectedCamera['camera'], selectedCamera['cameraFullName'], selectedCamera['cameraIndex']))}
               mountImageDetails={(i) => this.mountImageDetails(i)}
               unselectImage={() => dispatch(unselectImage())}
-              abortFetchLoop={() => dispatch(abortFetchLoop(selectedRover, [selectedCamera['camera']]))}
+              abortFetchLoop={() => dispatch(abortFetchLoop(selectedRover, [selectedCamera['camera']][0]))}
               cameraAbbrev={selectedCamera['camera']}
               cameraFullName={selectedCamera['cameraFullName']}
               sol={selectedCamera['sol']}

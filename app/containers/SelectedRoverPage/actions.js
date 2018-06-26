@@ -231,6 +231,10 @@ export function fetchRoverImages(rover, sol, page, camera, cameraFullName, camer
         dispatch(selectedACamera(...[rover, cameraIndex, camera, cameraFullName, sol,]));
         findSolNotInEmptySols(getState(), rover, cameraIndex, camera, cameraFullName, sol - 1);
       } else {
+        if(getState().selectedCamera.camera !== camera){
+          const previouslySelectedCamera = getState().selectedCamera.camera
+          dispatch(abortFetchLoop(rover, previouslySelectedCamera))
+        }
         dispatch(requestRoversImages(rover, camera, sol));
         dispatch(selectedACamera(...[rover, cameraIndex, camera, cameraFullName, sol,]));
       }
