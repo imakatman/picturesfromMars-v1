@@ -2,7 +2,8 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import { autoRehydrate } from 'redux-persist';
+// import { autoRehydrate } from 'redux-persist';
+
 
 import { getAllRoversData } from './containers/HomePage/reducers';
 import { selectedRover, getDataByRover, selectedImage } from './containers/SelectedRoverPage/reducers';
@@ -26,7 +27,7 @@ export default function configureStore() {
     rootReducer,
     initialState,
     compose(
-      autoRehydrate(),
+      // autoRehydrate(),
       applyMiddleware(
         thunkMiddleware,
         routerMiddleware(history),
